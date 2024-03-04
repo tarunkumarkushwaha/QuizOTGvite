@@ -29,13 +29,16 @@ const Result = () => {
   //   if (items) {
   //     setItems(items);
   //   }
-  // }, []);
+  // }, []);Number(Math.round(correctresponse + 'e2') + 'e-2')
 
   const percentage = useRef((correctresponse / questions.length) * 100)
 
   // const Improvement = useRef(`${Number(Math.round((percentage.current - parseInt(items[0] / questions.length)) + 'e2') + 'e-2')} %`)
 
-
+  // useEffect(() => {
+  //   localStorage.setItem('result', JSON.stringify(percentage.current))
+  // }, [])
+  
   return (
     <>
       <Navbar />
@@ -58,7 +61,7 @@ const Result = () => {
           total question - {questions.length}
         </div>
         <div className="flex">
-          Percentage - {percentage.current}
+          Percentage - {Number(Math.round(percentage.current + 'e2') + 'e-2')} %
         </div>
         {/* <div className="flex">
           Percentage - {Improvement}

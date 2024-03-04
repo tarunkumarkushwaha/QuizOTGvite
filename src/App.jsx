@@ -26,8 +26,10 @@ function App() {
   const [signIn, setsignIn] = useState(false)
   const [name, setName] = useState("");
   const [pwd, setPwd] = useState("");
+  const [Questions, setQuestions] = useState([]);
   const [correctresponse, setcorrectresponse] = useState(0)
   const [incorrectresponse, setincorrectresponse] = useState(0)
+  const [pastpercentage, setpastpercentage] = useState(0)
 
   const themeChange = () => {
     dark ? localStorage.setItem('Theme', JSON.stringify(false)) : localStorage.setItem('Theme', JSON.stringify(true));
@@ -37,18 +39,20 @@ function App() {
 
   // console.log(signIn)
 
-  const responseCheck = () => {
-    setcorrectresponse(prev => prev + 1)
-  }
-  const responseCross = () => {
-    setincorrectresponse(prev => prev + 1)
-  }
+  // const responseCheck = () => {
+  //   setcorrectresponse(prev => prev + 1)
+  // }
+  // const responseCross = () => {
+  //   setincorrectresponse(prev => prev + 1)
+  // }
 
   useEffect(() => {
     const item1 = localStorage.getItem('Name');
     const item2 = localStorage.getItem('Password');
     const item3 = localStorage.getItem('login');
+    const QUESTION = localStorage.getItem('questions');
     const THEME = localStorage.getItem('Theme');
+    const PERCENT = localStorage.getItem('result');
     if (item1) {
       setName(JSON.parse(item1));
     }
@@ -60,12 +64,23 @@ function App() {
     }
     if (THEME) {
       setdark(JSON.parse(THEME));
-     }
+    }
+    if (QUESTION) {
+      setQuestions(JSON.parse(QUESTION));
+    }
+    if (PERCENT) {
+      setpastpercentage(JSON.parse(PERCENT));
+    }
   }, []);
 
   return (
     <>
-      <Context.Provider value={{ name, setName, pwd, setPwd, signIn, setsignIn, dark, themeChange, correctresponse, responseCheck, responseCross, incorrectresponse }}>
+      <Context.Provider value={{
+        name, setName, pwd, pastpercentage,
+        setPwd, signIn, setsignIn, dark, themeChange,
+        correctresponse, setcorrectresponse, setincorrectresponse,
+        incorrectresponse, Questions, setQuestions
+      }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -77,9 +92,9 @@ function App() {
             <Route path="/result" element={<Result />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/termsandconditions" element={<Termsandconditions/>} />
+            <Route path="/termsandconditions" element={<Termsandconditions />} />
             {/* <Route path="/termsandcondition" element={<Termsandcondition />} /> */}
-            <Route path="/discussions" element={<Discussions/>} />
+            <Route path="/discussions" element={<Discussions />} />
           </Routes>
         </BrowserRouter>
         <ToastContainer

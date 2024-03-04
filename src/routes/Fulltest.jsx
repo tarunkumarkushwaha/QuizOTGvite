@@ -1,7 +1,7 @@
 import Navbar from "../components/Navbar.jsx"
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
-import questions from "../questions/questions.js"
+// import questions from "../questions/questions.js"
 import { toast } from "react-toastify"
 import Foot from "../components/Foot.jsx"
 import { useRef, useState } from "react"
@@ -10,11 +10,10 @@ import { Context } from '../MyContext';
 import { useNavigate } from "react-router-dom"
 
 const Fulltest = () => {
-  
-  const [question, setquestion] = useState(questions[0])
+  const [questionNo, setquestionNo] = useState(0)
   const [response, setresponse] = useState("")
   const [disabled, setdisabled] = useState(false)
-  const { responseCheck ,responseCross } = useContext(Context);
+  const {setincorrectresponse, setcorrectresponse, Questions } = useContext(Context);
 
   let navigate = useNavigate()
 
@@ -37,7 +36,7 @@ const Fulltest = () => {
 
   const checkAns = () => {
     setdisabled(true)
-    if (question.correctresponse == response) {
+    if (Questions[questionNo].correctresponse == response) {
       responseCheck()
       currentsong.current.play()
       toast.success("correct")
@@ -51,31 +50,34 @@ const Fulltest = () => {
 
   const yourNext = () => {
     setdisabled(false)
-    if (response != question.correctresponse) {
-      response == "" ? toast.warn("no response submitted") : responseCross();
+    if (response != Questions[questionNo].correctresponse) {
+      response == "" ? questionNo <= Questions.length - 1 && toast.warn("no response submitted") : questionNo <= Questions.length - 1 && responseCross();
     }
-    else if (question.correctresponse == response) {
+    else if (Questions[questionNo].correctresponse == response) {
       responseCheck()
     }
     else { toast.error("some error occured") }
-
-    questions.indexOf(question) < questions.length - 1 ?
-      setquestion((prevQues) => questions[questions.indexOf(prevQues) + 1])
-      :
-      toast.warn("it is last question")
+    questionNo <= Questions.length - 1 ?  toast.warn("it is last question") : setquestionNo((prev)=>{return prev + 1 })
   }
 
+  // console.log("log",Questions[questionNo],questionNo)
+
   const finalSubmit = () => {
-    if (response != question.correctresponse) {
+    if (response != Questions[questionNo].correctresponse) {
       response == "" ? toast.warn("blank response") : responseCross();
     }
-    else if (question.correctresponse == response) {
+    else if (Questions[questionNo].correctresponse == response) {
       responseCheck()
     }
     else { toast.error("some error occured") }
     toast.success("test submitted successfully")
     navigate("/result")
   }
+
+  // useEffect(() => {
+  //   setquestion()
+  // }, [])
+  
 
   return (
     <>
@@ -84,7 +86,7 @@ const Fulltest = () => {
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
         <Timer />
-        <SingleQuestion question={question} disabled={disabled} response={response} setresponse={setresponse} />
+        <SingleQuestion question={Questions[questionNo]} disabled={disabled} response={response} setresponse={setresponse} />
         <div className="flex">
           <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
             Next
