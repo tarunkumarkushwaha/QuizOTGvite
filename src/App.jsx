@@ -21,7 +21,7 @@ import Termsandconditions from "./routes/Termsandconditions";
 import Discussions from './routes/Discussions';
 
 function App() {
-
+  const [testSub, settestSub] = useState("Javascript test")
   const [dark, setdark] = useState(false)
   const [signIn, setsignIn] = useState(false)
   const [name, setName] = useState("");
@@ -34,17 +34,7 @@ function App() {
   const themeChange = () => {
     dark ? localStorage.setItem('Theme', JSON.stringify(false)) : localStorage.setItem('Theme', JSON.stringify(true));
     setdark(prevtheme => !prevtheme)
-    // console.log(dark)
   }
-
-  // console.log(signIn)
-
-  // const responseCheck = () => {
-  //   setcorrectresponse(prev => prev + 1)
-  // }
-  // const responseCross = () => {
-  //   setincorrectresponse(prev => prev + 1)
-  // }
 
   useEffect(() => {
     const item1 = localStorage.getItem('Name');
@@ -79,7 +69,8 @@ function App() {
         name, setName, pwd, pastpercentage,
         setPwd, signIn, setsignIn, dark, themeChange,
         correctresponse, setcorrectresponse, setincorrectresponse,
-        incorrectresponse, Questions, setQuestions
+        incorrectresponse, Questions, setQuestions,
+        testSub, settestSub
       }}>
         <BrowserRouter>
           <Routes>

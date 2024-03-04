@@ -5,8 +5,8 @@ const Contact = () => {
     return (
         <>
             <Navbar />
-            <div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left h-[87vh] flex justify-center items-center p-10 flex-col">
-               email- tkk.tarunkumar02@gmail.com
+            <div className="bg-[url('src/assets/mainbg.jpg')] text-xl text-slate-900 bg-no-repeat bg-left min-h-[87vh] flex justify-center items-center p-10 flex-col">
+               email- tkk_tarunkumar04@gmail.com
             </div>
             <Foot/>
         </>

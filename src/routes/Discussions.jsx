@@ -1,21 +1,22 @@
 import Foot from "../components/Foot"
 import Navbar from "../components/Navbar"
 import { useState } from 'react';
-// import { CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 // import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AddNewsModal from "../components/AddNewsModal";
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import NewsObject from "../components/NewsObject";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import { Link } from "react-router-dom"
 
 const Discussions = () => {
   // const [discuss, setdiscuss] = useState(false)
   const [postitems, setpostitems] = useState([])
   const [post, setpost] = useState("")
   const [showAddNewsModal, setShowAddNewsModal] = useState(false);
-  const { dark } = useContext(Context);
+  const { dark, signIn } = useContext(Context);
 
   const style = {
     ui: dark ?
@@ -24,32 +25,23 @@ const Discussions = () => {
       "bg-gradient-to-b from-green-50 to-green-200 "
   }
 
-  useEffect(() => {
-    postitems.length && localStorage.setItem("Posts", JSON.stringify(postitems))
-  }, [postitems])
+  // useEffect(() => {
+  //   postitems.length && localStorage.setItem("Posts", JSON.stringify(postitems))
+  // }, [postitems])
 
-  useEffect(() => {
-    const POSTS = JSON.parse(localStorage.getItem('Posts'));
-    if (POSTS) {
-      setpostitems(POSTS);
-    }
-  }, [])
+  // useEffect(() => {
+  //   const POSTS = JSON.parse(localStorage.getItem('Posts'));
+  //   if (POSTS) {
+  //     setpostitems(POSTS);
+  //   }
+  // }, [])
 
 
   return (
 
     <>
       <Navbar />
-      <div className={`${style.ui} min-h-[87vh] flex justify-center items-center p-10 flex-col`}>
-        {/* <div className="flex justify-center">
-          <h1 className="text-3xl text-lime-900 font-sans">discussions</h1>
-        </div> */}
-        {/* <button className="flex m-10 p-5 rounder-md border bg-black text-white" onClick={() => { !discuss ? setdiscuss(true) : setdiscuss(false) }}>test circular</button>
-        {discuss ?
-          <div className="mx-auto h-[70vh] flex items-center justify-center">
-            <CircularProgress />
-          </div>
-          : */}
+      {signIn ? <div className={`${style.ui} min-h-[87vh] flex justify-center items-center p-10 flex-col`}>
         <div className='mx-2 flex xl:flex-row justify-center item-center gap-4 flex-col'>
           <div className='w-full max-w-xl xl:mx-0 mx-auto'>
             <div onClick={() => { setShowAddNewsModal(true) }} className='w-[30vw] shadow mx-auto my-0 p-1.5 rounded-lg border bg-white border-[#D1D5DB] flex items-center flex-col no-scrollbar'>
@@ -98,7 +90,14 @@ const Discussions = () => {
           </div>
         </div>
         {/* } */}
-      </div>
+      </div> : <><div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
+        <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
+        <CircularProgress />
+        <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+          <Link to={"/login"}>login</Link>
+        </button>
+      </div></>
+      }
       <Foot />
     </>
   )

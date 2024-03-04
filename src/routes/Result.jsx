@@ -4,15 +4,10 @@ import Navbar from "../components/Navbar"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import questions from "../questions/questions"
-// import { useEffect, useRef, useState } from "react";
-import {useRef} from "react";
+import { useRef } from "react";
 
 const Result = () => {
-  // const [items, setItems] = useState([correctresponse, incorrectresponse]);
-
-  const { correctresponse } = useContext(Context);
-  const { incorrectresponse } = useContext(Context);
-  const { dark } = useContext(Context);
+  const { correctresponse, incorrectresponse, dark, Questions, testSub,signIn } = useContext(Context);
 
   const style = {
     ui: dark ?
@@ -20,29 +15,14 @@ const Result = () => {
       :
       "bg-gradient-to-b from-green-50 to-green-200 "
   }
-  // useEffect(() => {
-  //   localStorage.setItem('items', JSON.stringify(items));
-  // }, [items]);
 
-  // useEffect(() => {
-  //   const items = JSON.parse(localStorage.getItem('items'));
-  //   if (items) {
-  //     setItems(items);
-  //   }
-  // }, []);Number(Math.round(correctresponse + 'e2') + 'e-2')
+  const questionlength = useRef(testSub == "Javascript test" ? questions.length : Questions.length)
+  const percentage = useRef((correctresponse / questionlength.current) * 100)
 
-  const percentage = useRef((correctresponse / questions.length) * 100)
-
-  // const Improvement = useRef(`${Number(Math.round((percentage.current - parseInt(items[0] / questions.length)) + 'e2') + 'e-2')} %`)
-
-  // useEffect(() => {
-  //   localStorage.setItem('result', JSON.stringify(percentage.current))
-  // }, [])
-  
   return (
     <>
       <Navbar />
-      <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
+      {signIn ? <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
 
         <h1 className="text-3xl text-lime-500 font-sans">Result</h1>
         <div className="flex">
@@ -55,23 +35,26 @@ const Result = () => {
           incorrect responses - {incorrectresponse}
         </div>
         <div className="flex">
-          unattemped question - {questions.length - (incorrectresponse + correctresponse)}
+          unattemped question - {questionlength.current - (incorrectresponse + correctresponse)}
         </div>
         <div className="flex">
-          total question - {questions.length}
+          total question - {questionlength.current}
         </div>
         <div className="flex">
           Percentage - {Number(Math.round(percentage.current + 'e2') + 'e-2')} %
         </div>
-        {/* <div className="flex">
-          Percentage - {Improvement}
-        </div> */}
         <div className="flex justify-between">
           <button type="button" className="h-10 m-[5%] text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
             <Link to={"/discussions"}>discussions</Link>
           </button>
         </div>
-      </div>
+      </div>: <><div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
+          <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
+          <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+            <Link to={"/login"}>login</Link>
+          </button>
+        </div></>
+      }
       <Foot />
     </>
   )

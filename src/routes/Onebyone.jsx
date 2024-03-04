@@ -7,7 +7,7 @@ import Foot from "../components/Foot.jsx"
 import { useRef, useState } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 const Onebyone = () => {
   const [question, setquestion] = useState(questions[0])
@@ -17,7 +17,7 @@ const Onebyone = () => {
 
   let navigate = useNavigate()
 
-  const { dark } = useContext(Context);
+  const { dark, signIn } = useContext(Context);
   const currentsong = useRef()
   const currentsong2 = useRef()
 
@@ -84,7 +84,7 @@ const Onebyone = () => {
       <Navbar />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
-      <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
+      {signIn ? <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
         <Timer />
         <SingleQuestion question={question} disabled={disabled} response={response} setresponse={setresponse} />
         <div className="flex">
@@ -98,7 +98,13 @@ const Onebyone = () => {
             Final Submit
           </button>
         </div>
-      </div>
+      </div> : <><div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
+        <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
+        <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+          <Link to={"/login"}>login</Link>
+        </button>
+      </div></>
+      }
       <Foot />
     </>
   )
