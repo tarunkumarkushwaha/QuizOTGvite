@@ -3,11 +3,10 @@ import Foot from "../components/Foot"
 import Navbar from "../components/Navbar"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
-import questions from "../questions/questions"
 import { useRef } from "react";
 
 const Result = () => {
-  const { correctresponse, incorrectresponse, dark, Questions, testSub,signIn } = useContext(Context);
+  const { TestQuestion, correctresponse, incorrectresponse, dark, CustomQuestions, testSub, signIn } = useContext(Context);
 
   const style = {
     ui: dark ?
@@ -16,7 +15,7 @@ const Result = () => {
       "bg-gradient-to-b from-green-50 to-green-200 "
   }
 
-  const questionlength = useRef(testSub == "Javascript test" ? questions.length : Questions.length)
+  const questionlength = useRef(testSub !== "Your Questions" ? TestQuestion.length : CustomQuestions.length)
   const percentage = useRef((correctresponse / questionlength.current) * 100)
 
   return (
@@ -48,12 +47,12 @@ const Result = () => {
             <Link to={"/discussions"}>discussions</Link>
           </button>
         </div>
-      </div>: <><div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-          <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
-          <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-            <Link to={"/login"}>login</Link>
-          </button>
-        </div></>
+      </div> : <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
+        <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
+        <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+          <Link to={"/login"}>login</Link>
+        </button>
+      </div></>
       }
       <Foot />
     </>

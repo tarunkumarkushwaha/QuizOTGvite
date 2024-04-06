@@ -16,9 +16,9 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className=" bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left h-[87vh] flex justify-between m-0 item-center gap-4 flex-col">
-        <div className="flex justify-center item-center p-[15%]">
-          <h3 className="text-3xl text-slate-800 font-sans">The app that makes it easy to create and take tests.</h3>
+      <div className="mainbg bg-no-repeat bg-left h-[87vh] flex justify-between m-0 item-center gap-4 flex-col">
+        <div className="flex justify-center item-center p-[13%]">
+          <h3 className="text-3xl text-slate-800 font-sans bg-green-100 rounded-2xl p-10">The app that makes it easy to create and take tests.</h3>
         </div>
 
         <div className="flex flex-row justify-end">

@@ -14,19 +14,22 @@ import Contact from './routes/Contact';
 import Login from './routes/Login';
 import Signup from './routes/Signup';
 import Testsetting from './routes/Testsetting';
-import Onebyone from "./routes/Onebyone";
-import Fulltest from './routes/Fulltest';
 import Result from './routes/Result';
 import Termsandconditions from "./routes/Termsandconditions";
 import Discussions from './routes/Discussions';
+import Test from "./routes/Test";
+import CustomTest from "./routes/CustomTest";
+import Javascriptquestions from "./questions/Javascriptquestions";
 
 function App() {
-  const [testSub, settestSub] = useState("Javascript test")
+  const [testSub, settestSub] = useState("Javascript")
+  const [min, setmin] = useState(10)
+  const [TestQuestion, setTestQuestion] = useState(Javascriptquestions.Javascript)
   const [dark, setdark] = useState(false)
   const [signIn, setsignIn] = useState(false)
   const [name, setName] = useState("");
   const [pwd, setPwd] = useState("");
-  const [Questions, setQuestions] = useState([]);
+  const [CustomQuestions, setCustomQuestions] = useState([]);
   const [correctresponse, setcorrectresponse] = useState(0)
   const [incorrectresponse, setincorrectresponse] = useState(0)
   const [pastpercentage, setpastpercentage] = useState(0)
@@ -66,10 +69,11 @@ function App() {
   return (
     <>
       <Context.Provider value={{
+        TestQuestion, setTestQuestion, min, setmin,
         name, setName, pwd, pastpercentage,
         setPwd, signIn, setsignIn, dark, themeChange,
         correctresponse, setcorrectresponse, setincorrectresponse,
-        incorrectresponse, Questions, setQuestions,
+        incorrectresponse, CustomQuestions, setCustomQuestions,
         testSub, settestSub
       }}>
         <BrowserRouter>
@@ -78,13 +82,12 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/testsetting" element={<Testsetting />} />
-            <Route path="/onebyone" element={<Onebyone />} />
-            <Route path="/fulltest" element={<Fulltest />} />
+            <Route path="/test" element={<Test />} />
+            <Route path="/customtest" element={<CustomTest />} />
             <Route path="/result" element={<Result />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/termsandconditions" element={<Termsandconditions />} />
-            {/* <Route path="/termsandcondition" element={<Termsandcondition />} /> */}
             <Route path="/discussions" element={<Discussions />} />
           </Routes>
         </BrowserRouter>

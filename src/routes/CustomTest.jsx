@@ -1,19 +1,18 @@
 import Navbar from "../components/Navbar.jsx"
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
-import questions from "../questions/questions.js"
 import { toast } from "react-toastify"
 import Foot from "../components/Foot.jsx"
 import { useRef, useState } from "react"
 import { useContext } from 'react';
-import { Context } from '../MyContext';
+import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
 
-const Onebyone = () => {
-  const [question, setquestion] = useState(questions[0])
+const CustomTest = () => {
+  const [questionNo, setquestionNo] = useState(0)
   const [response, setresponse] = useState("")
   const [disabled, setdisabled] = useState(false)
-  const { setincorrectresponse, setcorrectresponse } = useContext(Context);
+  const { setincorrectresponse, setcorrectresponse, CustomQuestions } = useContext(Context);
 
   let navigate = useNavigate()
 
@@ -35,7 +34,7 @@ const Onebyone = () => {
   }
 
   const checkAns = () => {
-    if (question.correctresponse == response) {
+    if (CustomQuestions[questionNo].correctresponse == response) {
       setcorrectresponse(prev => prev + 1)
       currentsong.current.play()
       toast.success("correct")
@@ -43,37 +42,24 @@ const Onebyone = () => {
     else {
       setincorrectresponse(prev => prev + 1)
       currentsong2.current.play()
-      toast.error("apka jawap galat hai")
+      toast.error("apka jawap galat tha")
     }
     setdisabled(true)
   }
 
   const yourNext = () => {
-    if (disabled == false) {
-      if (response != question.correctresponse) {
-        response == "" ? toast.warn("no response submitted") : setincorrectresponse(prev => prev + 1);
-      }
-      else if (question.correctresponse == response) {
-        setcorrectresponse(prev => prev + 1)
-      }
-      else { toast.error("some error occured") }
+    if (!disabled && questionNo < CustomQuestions.length - 1) {
+      setquestionNo((prev) => { return prev + 1 })
+      checkAns()
+      setresponse("")
+      setdisabled(false)
     }
-    setdisabled(false)
-    setresponse("")
-    questions.indexOf(question) < questions.length - 1 ?
-      setquestion((prevQues) => questions[questions.indexOf(prevQues) + 1])
-      :
-      toast.warn("it is last question")
+    else { toast.warn("it is last question") }
   }
 
   const finalSubmit = () => {
-    if (disabled == false) {
-      if (response != question.correctresponse) {
-        response == "" ? toast.warn("blank response") : setincorrectresponse(prev => prev + 1);
-      }
-      else if (question.correctresponse == response) {
-        setcorrectresponse(prev => prev + 1)
-      }
+    if (!disabled) {
+      checkAns()
     }
     toast.success("test submitted successfully")
     navigate("/result")
@@ -86,7 +72,7 @@ const Onebyone = () => {
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
         <Timer />
-        <SingleQuestion question={question} disabled={disabled} response={response} setresponse={setresponse} />
+        <SingleQuestion question={CustomQuestions[questionNo]} disabled={disabled} response={response} setresponse={setresponse} />
         <div className="flex">
           <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
             Next
@@ -98,7 +84,7 @@ const Onebyone = () => {
             Final Submit
           </button>
         </div>
-      </div> : <><div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
+      </div> : <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
         <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
         <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
           <Link to={"/login"}>login</Link>
@@ -110,4 +96,4 @@ const Onebyone = () => {
   )
 }
 
-export default Onebyone
+export default CustomTest

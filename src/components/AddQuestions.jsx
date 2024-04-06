@@ -11,16 +11,16 @@ const AddQuestions = () => {
     const [option3, setoption3] = useState("")
     const [option4, setoption4] = useState("")
     const [correctAnswer, setcorrectAnswer] = useState("")
-    const { setQuestions, Questions } = useContext(Context);
+    const { CustomQuestions, setCustomQuestions, } = useContext(Context);
 
     const removePreviousQues = () => {
         toast.success("previous questions removed")
-        setQuestions([])
+        setCustomQuestions([])
         localStorage.setItem('questions', JSON.stringify([]))
     }
 
     const addquestiontotest = () => {
-        setQuestions((prevques) => {
+        setCustomQuestions((prevques) => {
             return [...prevques,
             {
                 question: ques,
@@ -47,7 +47,7 @@ const AddQuestions = () => {
     return (
         <>
             <div className="flex flex-col">
-                {Questions.length > 0 && <div className="flex flex-col">
+                {CustomQuestions.length > 0 && <div className="flex flex-col">
                     <h1 className="text-l p-1 text-lime-900 font-sans">there are some previous questions</h1>
                     <button onClick={removePreviousQues} type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
                         remove Previous Questions
@@ -55,7 +55,7 @@ const AddQuestions = () => {
                 <div className="flex flex-col">
                     <div className="mb-6 mt-6">
                         <label htmlFor="large-input" className="block mb-2 text-sm font-medium text-gray-900 ">Enter Question</label>
-                        <input onChange={(e) => setques(e.target.value)} value={ques} type="text" id="large-input" className="block  bg-grey-50 w-full p-4 text-gray-900 border border-gray-300 rounded-lg block min-w-96" />
+                        <input onChange={(e) => setques(e.target.value)} value={ques} type="text" id="large-input" className="bg-grey-50 w-full p-4 text-gray-900 border border-gray-300 rounded-lg block min-w-96" />
                     </div>
                     <div className="mb-6">
                         <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900">option 1</label>

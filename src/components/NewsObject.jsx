@@ -188,8 +188,8 @@ const NewsObject = ({ item, postitems, setpostitems }) => {
 
                     {/* no of likes  */}
 
-                    {totalLikes > 0 ? <div className={Like ? 'bg-[#1055eb80] text-[#FFFFFF] rounded-xl mx-2 px-2 py-1' : 'bg-[#E9E9EA] text-[#6B7280] rounded-xl mx-2 px-2 py-1'}>{totalLikes}</div> :
-                        <div className='bg-white rounded-xl mx-2 px-2 py-1'></div>}
+                    {/* {totalLikes > 0 ? <div className={Like ? 'bg-[#1055eb80] text-[#FFFFFF] rounded-xl mx-2 px-2 py-1' : 'bg-[#E9E9EA] text-[#6B7280] rounded-xl mx-2 px-2 py-1'}>{totalLikes}</div> :
+                        <div className='bg-white rounded-xl mx-2 px-2 py-1'></div>} */}
 
                 </button>
                 <button className="flex items-center" onClick={dislikeClick}>
@@ -205,8 +205,8 @@ const NewsObject = ({ item, postitems, setpostitems }) => {
 
                     {/* no of dislikes */}
 
-                    {totalDislikes > 0 ? <div className={dislike ? 'bg-[#ef444494] text-[#FFFFFF] rounded-xl mx-2 px-2 py-1' : 'bg-[#E9E9EA] text-[#6B7280] rounded-xl mx-2 px-2 py-1'}>{totalDislikes}</div> :
-                        <div className='bg-white rounded-xl mx-2 px-2 py-1'></div>}
+                    {/* {totalDislikes > 0 ? <div className={dislike ? 'bg-[#ef444494] text-[#FFFFFF] rounded-xl mx-2 px-2 py-1' : 'bg-[#E9E9EA] text-[#6B7280] rounded-xl mx-2 px-2 py-1'}>{totalDislikes}</div> :
+                        <div className='bg-white rounded-xl mx-2 px-2 py-1'></div>} */}
 
                 </button>
                 <button className="flex items-center" onClick={commentboxhandler}>
@@ -221,8 +221,8 @@ const NewsObject = ({ item, postitems, setpostitems }) => {
 
                     {/* no of comments */}
 
-                    {commentitems.length > 0 ? <div className='bg-[#E9E9EA] rounded-xl mx-2 px-2 py-1'>{commentitems.length}</div> :
-                        <div className='bg-white rounded-xl mx-2 px-2 py-1'></div>}
+                    {/* {commentitems.length > 0 ? <div className='bg-[#E9E9EA] rounded-xl mx-2 px-2 py-1'>{commentitems.length}</div> :
+                        <div className='bg-white rounded-xl mx-2 px-2 py-1'></div>} */}
 
                 </button>
             </div>

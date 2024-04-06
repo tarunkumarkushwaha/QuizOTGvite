@@ -5,7 +5,7 @@ const About = () => {
     return (
         <>
             <Navbar />
-            <div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] p-8 flex xl:flex-col h-[80vh] justify-center item-center gap-4 flex-col">
+            <div className="mainbg bg-no-repeat bg-left min-h-[87vh] p-8 flex xl:flex-col h-[80vh] justify-center item-center gap-4 flex-col">
 
                 <div className="flex justify-center item-center">
                     <h2 className="text-4xl text-slate-800 font-bold ">Quiz on the go</h2>

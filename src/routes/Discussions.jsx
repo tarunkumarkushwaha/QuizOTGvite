@@ -90,7 +90,7 @@ const Discussions = () => {
           </div>
         </div>
         {/* } */}
-      </div> : <><div className="bg-[url('src/assets/mainbg.jpg')] bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
+      </div> : <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
         <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
         <CircularProgress />
         <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
