@@ -1,4 +1,5 @@
 let CSSquestions = {
+    time : 10 , //in minutes
     CSS: [{
         question: "1. CSS means ?",
         option1: "Code Style Sheets",

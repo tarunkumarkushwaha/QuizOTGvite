@@ -11,6 +11,7 @@ import Javascriptquestion from '../questions/Javascriptquestions.js'
 import CSSquestion from '../questions/CSSquestion.js'
 import htmlquestion from '../questions/htmlquestions.js'
 import Reactquestion from '../questions/Reactquestions.js'
+import Timeover from "../components/Timeover.jsx"
 
 
 const Test = () => {
@@ -20,7 +21,8 @@ const Test = () => {
   const [timeover, settimeover] = useState(false)
 
 
-  const { setincorrectresponse, setmin, min, setcorrectresponse, testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
+  const { setincorrectresponse, setmin, min, setcorrectresponse,
+     testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
 
   let navigate = useNavigate()
   const currentsong = useRef()
@@ -85,10 +87,22 @@ const Test = () => {
   }
 
   useEffect(() => {
-    if (testSub == "Javascript") { setTestQuestion(Javascriptquestion.Javascript) }
-    else if (testSub == "CSS") { setTestQuestion(CSSquestion.CSS) }
-    else if (testSub == "HTML") { setTestQuestion(htmlquestion.HTML) }
-    else if (testSub == "React") { setTestQuestion(Reactquestion.React) }
+    if (testSub == "Javascript") {
+      setTestQuestion(Javascriptquestion.Javascript)
+      setmin(Javascriptquestion.time)
+    }
+    else if (testSub == "CSS") {
+      setTestQuestion(CSSquestion.CSS)
+      setmin(CSSquestion.CSS)
+    }
+    else if (testSub == "HTML") {
+      setTestQuestion(htmlquestion.HTML)
+      setmin(htmlquestion.time)
+    }
+    else if (testSub == "React") {
+      setTestQuestion(Reactquestion.React)
+      setmin(Reactquestion.time)
+    }
   }, [testSub])
 
   return (
@@ -97,8 +111,8 @@ const Test = () => {
       <Timer min={min} settimeover={settimeover} setmin={setmin} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
-      {signIn ? timeover ? <div>timeover</div> :
-        <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
+      {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/> :
+        <div className={`${style.ui} h-[87vh] smooth-entry flex justify-center items-center p-10 flex-col`}>
           <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
           <div className="flex">
             <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">

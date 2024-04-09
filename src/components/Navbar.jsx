@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
-import logo from "../assets/logo.png"
+// import logo from "../assets/logo.png"
+import logo from '/assets/logo.png'
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import { toast } from "react-toastify";

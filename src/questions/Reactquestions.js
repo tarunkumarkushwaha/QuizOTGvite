@@ -1,4 +1,5 @@
 let Reactquestions = {
+    time : 10 , //in minutes
     React: [{
         question: "1. What is useeffect in react?",
         option1: "a react hook",

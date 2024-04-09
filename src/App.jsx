@@ -1,4 +1,3 @@
-// import { useState } from 'react'
 import {
   BrowserRouter,
   Route,
@@ -20,6 +19,7 @@ import Discussions from './routes/Discussions';
 import Test from "./routes/Test";
 import CustomTest from "./routes/CustomTest";
 import Javascriptquestions from "./questions/Javascriptquestions";
+// import Usercontext from "./context/Usercontext";
 
 function App() {
   const [testSub, settestSub] = useState("Javascript")
@@ -33,6 +33,7 @@ function App() {
   const [correctresponse, setcorrectresponse] = useState(0)
   const [incorrectresponse, setincorrectresponse] = useState(0)
   const [pastpercentage, setpastpercentage] = useState(0)
+  const [start, setstart] = useState(false)
 
   const themeChange = () => {
     dark ? localStorage.setItem('Theme', JSON.stringify(false)) : localStorage.setItem('Theme', JSON.stringify(true));
@@ -59,7 +60,7 @@ function App() {
       setdark(JSON.parse(THEME));
     }
     if (QUESTION) {
-      setQuestions(JSON.parse(QUESTION));
+      setTestQuestion(JSON.parse(QUESTION));
     }
     if (PERCENT) {
       setpastpercentage(JSON.parse(PERCENT));
@@ -68,7 +69,9 @@ function App() {
 
   return (
     <>
+    {/* <Usercontext> */}
       <Context.Provider value={{
+        start, setstart,
         TestQuestion, setTestQuestion, min, setmin,
         name, setName, pwd, pastpercentage,
         setPwd, signIn, setsignIn, dark, themeChange,
@@ -102,6 +105,7 @@ function App() {
           draggable
           pauseOnHover={false}
         />
+        {/* </Usercontext> */}
       </Context.Provider>
     </>
   )

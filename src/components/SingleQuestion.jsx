@@ -9,7 +9,7 @@ const SingleQuestion = ({ question, response, setresponse, disabled }) => {
 
     return (
         <>
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center smooth-entry">
                 <h2 className="text-xl p-10 text-lime-500 font-bold">{question.question}</h2>
 
                 <ul className="w-[50rem] text-sm font-medium rounded-lg">

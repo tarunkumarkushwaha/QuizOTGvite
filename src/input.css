@@ -3,5 +3,44 @@
 @tailwind utilities;
 
 .mainbg{
-    background-image: url("src/assets/mainbg.jpg");
+    background-image: url("/assets/mainbg.jpg");
 }
+
+.smooth-entry {
+    animation-name: entry;
+    animation-duration: 0.25s;
+  }
+  
+  @keyframes entry {
+    0% {
+      opacity: 0;
+    }
+  
+    10% {
+      opacity: 0.1;
+    }
+  
+    15% {
+      opacity: 0.2;
+    }
+  
+    25% {
+      opacity: 0.25;
+    }
+  
+    35% {
+      opacity: 0.35;
+    }
+  
+    50% {
+      opacity: 0.5;
+    }
+  
+    75% {
+      opacity: 0.75;
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }

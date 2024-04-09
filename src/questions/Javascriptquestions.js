@@ -1,5 +1,6 @@
 let Javascriptquestions =
-{
+{   
+    time : 10 , //in minutes
     Javascript: [
         {
             question: "1. What will be the output of the following code snippet var a = \"Scaler\" \n var result = a.substring(2, 4)\ndocument.write(result)",
