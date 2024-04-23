@@ -46,9 +46,9 @@ const AddQuestions = () => {
     return (
         <>
             <div className="flex flex-col smooth-entry items-center">
-                {CustomQuestions.length > 0 && <div className="flex flex-col">
+                {CustomQuestions.length > 0 && <div className="flex flex-col items-center justify-center">
                     <h1 className="text-l p-1 text-lime-900 font-sans">there are some previous questions</h1>
-                    <button onClick={removePreviousQues} type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
+                    <button onClick={removePreviousQues} type="button" className="h-10 md:w-60 w-28 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
                         remove Previous Questions
                     </button></div>}
                     <ViewQuestions
@@ -56,10 +56,10 @@ const AddQuestions = () => {
                     questions={CustomQuestions}
                     onCancelClick={()=>setViewques(false)}
                     />
-                <button onClick={() => setViewques(true)} className="h-10 w-60 m-4 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
+                <button onClick={() => setViewques(true)} className="h-10 md:w-60 w-40 m-4 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     View Questions
                 </button>
-                <div className="flex flex-col min-w-[50rem]">
+                <div className="flex flex-col md:min-w-[50rem] min-w-48">
                     <div className="mb-6">
                         <label htmlFor="large-input" className=" mb-2 text-sm font-medium text-gray-900 ">Enter Question</label>
                         <textarea onChange={(e) => setques(e.target.value)} value={ques} type="text" id="large-input" className="resize-none bg-grey-50 w-full outline-none p-4 text-gray-900 border border-gray-300 rounded-lg block min-w-96" />

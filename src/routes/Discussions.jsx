@@ -1,5 +1,5 @@
-import Foot from "../components/Foot"
-import Navbar from "../components/Navbar"
+// import Foot from "../components/Foot"
+// import Navbar from "../components/Navbar"
 import { useState } from 'react';
 import { CircularProgress } from "@mui/material";
 // import { toast } from "react-toastify";
@@ -40,7 +40,7 @@ const Discussions = () => {
   return (
 
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       {signIn ? <div className={`${style.ui} min-h-[87vh] flex justify-center items-center p-10 flex-col`}>
         <div className='smooth-entry mx-2 flex xl:flex-row justify-center item-center gap-4 flex-col'>
           <div className='w-full max-w-xl xl:mx-0 mx-auto'>
@@ -98,7 +98,7 @@ const Discussions = () => {
         </button>
       </div></>
       }
-      <Foot />
+      {/* <Foot /> */}
     </>
   )
 }

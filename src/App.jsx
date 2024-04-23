@@ -19,6 +19,8 @@ import Discussions from './routes/Discussions';
 import Test from "./routes/Test";
 import CustomTest from "./routes/CustomTest";
 import Javascriptquestions from "./questions/Javascriptquestions";
+import Navbar from "./components/Navbar";
+import Foot from "./components/Foot";
 // import Usercontext from "./context/Usercontext";
 
 function App() {
@@ -69,7 +71,7 @@ function App() {
 
   return (
     <>
-    {/* <Usercontext> */}
+      {/* <Usercontext> */}
       <Context.Provider value={{
         start, setstart,
         TestQuestion, setTestQuestion, min, setmin,
@@ -80,6 +82,7 @@ function App() {
         testSub, settestSub
       }}>
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
@@ -93,6 +96,7 @@ function App() {
             <Route path="/termsandconditions" element={<Termsandconditions />} />
             <Route path="/discussions" element={<Discussions />} />
           </Routes>
+          <Foot/>
         </BrowserRouter>
         <ToastContainer
           position="top-right"

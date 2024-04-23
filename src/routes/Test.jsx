@@ -1,14 +1,14 @@
-import Navbar from "../components/Navbar.jsx"
+// import Navbar from "../components/Navbar.jsx"
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
 import { toast } from "react-toastify"
-import Foot from "../components/Foot.jsx"
+// import Foot from "../components/Foot.jsx"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
 import Javascriptquestion from '../questions/Javascriptquestions.js'
-import CSSquestion from '../questions/CSSquestion.js'
+import CSSquestion from '../questions/CSSquestions.js'
 import htmlquestion from '../questions/htmlquestions.js'
 import Reactquestion from '../questions/Reactquestions.js'
 import Timeover from "../components/Timeover.jsx"
@@ -93,7 +93,7 @@ const Test = () => {
     }
     else if (testSub == "CSS") {
       setTestQuestion(CSSquestion.CSS)
-      setmin(CSSquestion.CSS)
+      setmin(CSSquestion.time)
     }
     else if (testSub == "HTML") {
       setTestQuestion(htmlquestion.HTML)
@@ -107,7 +107,7 @@ const Test = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Timer min={min} settimeover={settimeover} setmin={setmin} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
@@ -136,7 +136,7 @@ const Test = () => {
           </button>
         </div></>
       }
-      <Foot />
+      {/* <Foot /> */}
     </>
   )
 }

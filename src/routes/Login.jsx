@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
-import Foot from "../components/Foot"
-import Navbar from "../components/Navbar"
+// import Foot from "../components/Foot"
+// import Navbar from "../components/Navbar"
 import { useEffect, useState } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
@@ -36,10 +36,10 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="mainbg bg-no-repeat bg-left h-[87vh] flex justify-between items-center p-10 flex-col">
-
-        <section className="smooth-entry flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      {/* <Navbar /> */}
+      <div className="mainbg bg-no-repeat bg-left h-[86vh]">
+        <div className="bg-slate-950/60 h-[86vh] flex justify-center m-0 item-center flex-col">
+          <section className="smooth-entry flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -75,7 +75,8 @@ const Login = () => {
           <Link to={"/testsetting"}>test setting</Link>
         </button> */}
       </div>
-      <Foot />
+      </div>
+      {/* <Foot /> */}
     </>
   )
 }

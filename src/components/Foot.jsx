@@ -13,8 +13,8 @@ const Foot = () => {
   }
   return (
     <>
-       <footer>
-       <span className={`block text-sm ${style.uiMode} sm:text-center`}>© 2023 quiz OTG™<Link to="/termsandconditions" className="hover:underline">. All Rights Reserved.</Link></span>
+       <footer className="">
+       <span className={`block md:text-sm text-xs ${style.uiMode} text-center`}>© 2023 quiz OTG™<Link to="/termsandconditions" className="hover:underline">. All Rights Reserved.</Link></span>
        </footer>
     </>
   )
