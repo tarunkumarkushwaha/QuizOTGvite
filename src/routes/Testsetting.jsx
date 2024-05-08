@@ -4,11 +4,6 @@ import { useContext, useEffect } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import AddQuestions from "../components/AddQuestions";
 import { toast } from "react-toastify";
-import Javascriptquestion from '../questions/Javascriptquestions.js'
-import CSSquestion from '../questions/CSSquestions.js'
-import htmlquestion from '../questions/htmlquestions.js'
-import Reactquestion from '../questions/Reactquestions.js'
-import wordpressquestions from "../questions/Wordpressquestions.js";
 import PleaseLogin from "../components/PleaseLogin.jsx";
 
 const Testsetting = () => {
@@ -26,24 +21,6 @@ const Testsetting = () => {
     toast.warn("test has started")
     navigate("/test")
   }
-
-  useEffect(() => {
-    if (testSub == "Javascript") {
-      setmin(Javascriptquestion.time)
-    }
-    else if (testSub == "CSS") {
-      setmin(CSSquestion.time)
-    }
-    else if (testSub == "HTML") {
-      setmin(htmlquestion.time)
-    }
-    else if (testSub == "React") {
-      setmin(Reactquestion.time)
-    }
-    else if (testSub == "wordpress") {
-      setmin(wordpressquestions.time)
-    }
-  }, [testSub])
 
   return (
     <>
@@ -68,8 +45,8 @@ const Testsetting = () => {
                   }
                   }
                 >
-                  <MenuItem value={"HTML"}>HTML</MenuItem>
-                  <MenuItem value={"CSS"}>CSS</MenuItem>
+                  <MenuItem value={"html"}>HTML</MenuItem>
+                  <MenuItem value={"css"}>CSS</MenuItem>
                   <MenuItem value={"Javascript"}>Javascript</MenuItem>
                   <MenuItem value={"React"}>React</MenuItem>
                   <MenuItem value={"wordpress"}>wordpress</MenuItem>

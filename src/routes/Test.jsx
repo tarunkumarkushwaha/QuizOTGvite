@@ -1,4 +1,3 @@
-
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
 import { toast } from "react-toastify"
@@ -6,12 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
-import Javascriptquestion from '../questions/Javascriptquestions.js'
-import CSSquestion from '../questions/CSSquestions.js'
-import htmlquestion from '../questions/htmlquestions.js'
-import Reactquestion from '../questions/Reactquestions.js'
-import wordpressquestions from "../questions/Wordpressquestions.js";
 import Timeover from "../components/Timeover.jsx"
+import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
 
 
 const Test = () => {
@@ -20,9 +15,8 @@ const Test = () => {
   const [disabled, setdisabled] = useState(false)
   const [timeover, settimeover] = useState(false)
 
-
   const { setincorrectresponse, setmin, min, setcorrectresponse,
-     testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
+    testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
 
   let navigate = useNavigate()
   const currentsong = useRef()
@@ -87,34 +81,41 @@ const Test = () => {
   }
 
   useEffect(() => {
-    if (testSub == "Javascript") {
-      setTestQuestion(Javascriptquestion.Javascript)
-      setmin(Javascriptquestion.time)
-    }
-    else if (testSub == "CSS") {
-      setTestQuestion(CSSquestion.CSS)
-      setmin(CSSquestion.time)
-    }
-    else if (testSub == "HTML") {
-      setTestQuestion(htmlquestion.HTML)
-      setmin(htmlquestion.time)
-    }
-    else if (testSub == "React") {
-      setTestQuestion(Reactquestion.React)
-      setmin(Reactquestion.time)
-    }
-    else if (testSub == "wordpress") {
-      setTestQuestion(wordpressquestions.wordpress)
-      setmin(wordpressquestions.time)
-    }
+
+    fetch(`http://localhost:3000/${testSub}`).then(
+      response => response.json()
+    ).then( data => {
+      setTestQuestion(data.question)
+      setmin(data.time)}
+    ).catch(error => console.log('Error fetching data:', error));
   }, [testSub])
 
+  // anti cheat 
+
+  const handleKeyPress = (event) => {
+    // console.log('Key pressed:', event.key);
+    navigate('/result')
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    }
+  }, []);
+
+  const focus = useWindowFocusDetector()
+
+  useEffect(() => {
+   !focus && navigate('/result')
+  }, [focus])
+  
   return (
     <>
       <Timer min={min} settimeover={settimeover} setmin={setmin} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
-      {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/> :
+      {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} /> :
         <div className={`${style.ui} h-[87vh] smooth-entry flex justify-center items-center p-10 flex-col`}>
           <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
           <div className="flex md:flex-row flex-col gap-2">

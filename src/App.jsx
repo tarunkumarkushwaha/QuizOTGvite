@@ -18,7 +18,6 @@ import Termsandconditions from "./routes/Termsandconditions";
 import Discussions from './routes/Discussions';
 import Test from "./routes/Test";
 import CustomTest from "./routes/CustomTest";
-import Javascriptquestions from "./questions/Javascriptquestions";
 import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
 // import Usercontext from "./context/Usercontext";
@@ -26,7 +25,7 @@ import Foot from "./components/Foot";
 function App() {
   const [testSub, settestSub] = useState("Javascript")
   const [min, setmin] = useState(10)
-  const [TestQuestion, setTestQuestion] = useState(Javascriptquestions.Javascript)
+  const [TestQuestion, setTestQuestion] = useState()
   const [dark, setdark] = useState(false)
   const [signIn, setsignIn] = useState(false)
   const [name, setName] = useState("");
@@ -69,6 +68,14 @@ function App() {
     }
   }, []);
 
+  // useEffect(() => {
+  //   fetch("http://localhost:3000/css").then(
+  //     response => response.json()
+  //   ).then(
+  //     data => console.log(data)
+  //   ).catch(error => console.log('Error fetching data:', error));
+  // }, []);
+
   return (
     <>
       {/* <Usercontext> */}
@@ -96,7 +103,7 @@ function App() {
             <Route path="/termsandconditions" element={<Termsandconditions />} />
             <Route path="/discussions" element={<Discussions />} />
           </Routes>
-          <Foot/>
+          <Foot />
         </BrowserRouter>
         <ToastContainer
           position="top-right"
