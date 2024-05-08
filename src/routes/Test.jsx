@@ -1,8 +1,7 @@
-// import Navbar from "../components/Navbar.jsx"
+
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
 import { toast } from "react-toastify"
-// import Foot from "../components/Foot.jsx"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext.js';
@@ -11,6 +10,7 @@ import Javascriptquestion from '../questions/Javascriptquestions.js'
 import CSSquestion from '../questions/CSSquestions.js'
 import htmlquestion from '../questions/htmlquestions.js'
 import Reactquestion from '../questions/Reactquestions.js'
+import wordpressquestions from "../questions/Wordpressquestions.js";
 import Timeover from "../components/Timeover.jsx"
 
 
@@ -103,18 +103,21 @@ const Test = () => {
       setTestQuestion(Reactquestion.React)
       setmin(Reactquestion.time)
     }
+    else if (testSub == "wordpress") {
+      setTestQuestion(wordpressquestions.wordpress)
+      setmin(wordpressquestions.time)
+    }
   }, [testSub])
 
   return (
     <>
-      {/* <Navbar /> */}
       <Timer min={min} settimeover={settimeover} setmin={setmin} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/> :
         <div className={`${style.ui} h-[87vh] smooth-entry flex justify-center items-center p-10 flex-col`}>
           <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
-          <div className="flex">
+          <div className="flex md:flex-row flex-col gap-2">
             <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
               Next
             </button>
@@ -136,7 +139,6 @@ const Test = () => {
           </button>
         </div></>
       }
-      {/* <Foot /> */}
     </>
   )
 }

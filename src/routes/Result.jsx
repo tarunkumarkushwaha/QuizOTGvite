@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom"
-// import Foot from "../components/Foot"
-// import Navbar from "../components/Navbar"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import { useRef } from "react";
@@ -20,7 +18,6 @@ const Result = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
       {signIn ? <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
 
         <h1 className="smooth-entry text-3xl text-lime-500 font-sans">Result</h1>
@@ -54,7 +51,6 @@ const Result = () => {
         </button>
       </div></>
       }
-      {/* <Foot /> */}
     </>
   )
 }

@@ -9,10 +9,10 @@ const SingleQuestion = ({ question, response, setresponse, disabled }) => {
 
     return (
         <>
-            <div className="flex flex-col justify-center smooth-entry">
-                <h2 className="text-xl p-10 text-lime-500 font-bold">{question.question}</h2>
+            <div className="flex flex-col justify-center items-center smooth-entry">
+                <h2 className="text-xl text-lime-500 font-bold m-10">{question.question}</h2>
 
-                <ul className="w-[50rem] text-sm font-medium rounded-lg">
+                <ul className=" self-start text-sm font-medium rounded-lg">
                     <li className="w-full rounded-t-lg">
                         <div className="flex items-center ps-3">
                             <input onChange={responseHandler} disabled={disabled} checked={(response == question.option1)}
