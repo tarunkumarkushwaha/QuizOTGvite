@@ -82,7 +82,7 @@ const Test = () => {
 
   useEffect(() => {
 
-    fetch(`http://localhost:3000/${testSub}`).then(
+    fetch(`/api/${testSub}`).then(
       response => response.json()
     ).then( data => {
       setTestQuestion(data.question)

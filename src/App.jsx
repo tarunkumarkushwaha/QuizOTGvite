@@ -69,7 +69,7 @@ function App() {
   }, []);
 
   // useEffect(() => {
-  //   fetch("http://localhost:3000/css").then(
+  //   fetch("/api/css").then(
   //     response => response.json()
   //   ).then(
   //     data => console.log(data)
