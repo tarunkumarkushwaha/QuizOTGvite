@@ -7,6 +7,11 @@ import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
 import Timeover from "../components/Timeover.jsx"
 import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
+import Javascriptquestion from '../questions/Javascriptquestions.js'
+import CSSquestion from '../questions/CSSquestions.js'
+import htmlquestion from '../questions/htmlquestions.js'
+import Reactquestion from '../questions/Reactquestions.js'
+import wordpressquestions from "../questions/Wordpressquestions.js";
 
 
 const Test = () => {
@@ -80,14 +85,37 @@ const Test = () => {
     navigate("/result")
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    fetch(`/api/${testSub}`).then(
-      response => response.json()
-    ).then( data => {
-      setTestQuestion(data.question)
-      setmin(data.time)}
-    ).catch(error => console.log('Error fetching data:', error));
+  //   fetch(`/api/${testSub}`).then(
+  //     response => response.json()
+  //   ).then( data => {
+  //     setTestQuestion(data.question)
+  //     setmin(data.time)}
+  //   ).catch(error => console.log('Error fetching data:', error));
+  // }, [testSub])
+
+  useEffect(() => {
+    if (testSub == "Javascript") {
+      setTestQuestion(Javascriptquestion.Javascript)
+      setmin(Javascriptquestion.time)
+    }
+    else if (testSub == "CSS") {
+      setTestQuestion(CSSquestion.CSS)
+      setmin(CSSquestion.time)
+    }
+    else if (testSub == "HTML") {
+      setTestQuestion(htmlquestion.HTML)
+      setmin(htmlquestion.time)
+    }
+    else if (testSub == "React") {
+      setTestQuestion(Reactquestion.React)
+      setmin(Reactquestion.time)
+    }
+    else if (testSub == "wordpress") {
+      setTestQuestion(wordpressquestions.wordpress)
+      setmin(wordpressquestions.time)
+    }
   }, [testSub])
 
   // anti cheat 
@@ -95,6 +123,7 @@ const Test = () => {
   const handleKeyPress = (event) => {
     // console.log('Key pressed:', event.key);
     navigate('/result')
+    toast.error("early submission, you tried to cheat")
   };
 
   useEffect(() => {
@@ -107,7 +136,10 @@ const Test = () => {
   const focus = useWindowFocusDetector()
 
   useEffect(() => {
-   !focus && navigate('/result')
+   if(!focus) { navigate('/result')
+   toast.error("early submission, you tried to cheat")
+   }
+
   }, [focus])
   
   return (

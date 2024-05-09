@@ -13,9 +13,9 @@ const Result = () => {
       "bg-gradient-to-b from-green-50 to-green-200 "
   }
 
-  const questionlength = useRef(testSub !== "Your Questions" ? TestQuestion.length : CustomQuestions.length)
+  const questionlength = useRef(testSub !== "Your Questions" ? TestQuestion ? TestQuestion.length : 1 : CustomQuestions ? CustomQuestions.length : 1)
   const percentage = useRef((correctresponse / questionlength.current) * 100)
-
+//  console.log(percentage)
   return (
     <>
       {signIn ? <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>

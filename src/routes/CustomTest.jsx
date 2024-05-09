@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
 import Timeover from "../components/Timeover.jsx"
+import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
 
 const CustomTest = () => {
   const [questionNo, setquestionNo] = useState(0)
@@ -68,6 +69,30 @@ const CustomTest = () => {
   }
 
   console.log(CustomQuestions[questionNo])
+
+    // anti cheat 
+
+    const handleKeyPress = (event) => {
+      // console.log('Key pressed:', event.key);
+      navigate('/result')
+      toast.error("early submission, you tried to cheat")
+    };
+  
+    useEffect(() => {
+      window.addEventListener('keydown', handleKeyPress);
+      return () => {
+        window.removeEventListener('keydown', handleKeyPress);
+      }
+    }, []);
+  
+    const focus = useWindowFocusDetector()
+  
+    useEffect(() => {
+     if(!focus) { navigate('/result')
+     toast.error("early submission, you tried to cheat")
+     }
+  
+    }, [focus])
 
   return (
     <>
