@@ -41,10 +41,10 @@ const Discussions = () => {
 
     <>
       {/* <Navbar /> */}
-      {signIn ? <div className={`${style.ui} min-h-[87vh] flex justify-center items-center p-10 flex-col`}>
-        <div className='smooth-entry mx-2 flex xl:flex-row justify-center item-center gap-4 flex-col'>
+      {signIn ? <div className={`${style.ui} h-screen flex md:flex-row justify-center items-center p-10 flex-col`}>
+        <div className='smooth-entry mx-2 flex sm:flex-row justify-center item-center gap-4 flex-col'>
           <div className='w-full max-w-xl xl:mx-0 mx-auto'>
-            <div onClick={() => { setShowAddNewsModal(true) }} className='w-[30vw] shadow mx-auto my-0 p-1.5 rounded-lg border bg-white border-[#D1D5DB] flex items-center flex-col no-scrollbar'>
+            <div onClick={() => { setShowAddNewsModal(true) }} className='md:w-[30vw] w-[80vw] shadow mx-auto my-0 p-1.5 rounded-lg border bg-white border-[#D1D5DB] flex items-center flex-col no-scrollbar'>
               <textarea
                 type="text"
                 rows={5}

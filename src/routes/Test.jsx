@@ -85,8 +85,9 @@ const Test = () => {
     navigate("/result")
   }
 
-  // useEffect(() => {
+  // for backend 
 
+  // useEffect(() => {
   //   fetch(`/api/${testSub}`).then(
   //     response => response.json()
   //   ).then( data => {
@@ -100,11 +101,11 @@ const Test = () => {
       setTestQuestion(Javascriptquestion.Javascript)
       setmin(Javascriptquestion.time)
     }
-    else if (testSub == "CSS") {
+    else if (testSub == "css") {
       setTestQuestion(CSSquestion.CSS)
       setmin(CSSquestion.time)
     }
-    else if (testSub == "HTML") {
+    else if (testSub == "html") {
       setTestQuestion(htmlquestion.HTML)
       setmin(htmlquestion.time)
     }
@@ -136,19 +137,20 @@ const Test = () => {
   const focus = useWindowFocusDetector()
 
   useEffect(() => {
-   if(!focus) { navigate('/result')
-   toast.error("early submission, you tried to cheat")
-   }
+    if (!focus) {
+      navigate('/result')
+      toast.error("Cheating detected. Consequences imminent.")
+    }
 
   }, [focus])
-  
+
   return (
     <>
       <Timer min={min} settimeover={settimeover} setmin={setmin} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} /> :
-        <div className={`${style.ui} h-[87vh] smooth-entry flex justify-center items-center p-10 flex-col`}>
+        <div className={`${style.ui} h-screen smooth-entry flex justify-center items-center p-10 gap-5 flex-col`}>
           <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
           <div className="flex md:flex-row flex-col gap-2">
             <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">

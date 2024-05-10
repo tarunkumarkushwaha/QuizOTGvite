@@ -101,7 +101,7 @@ const CustomTest = () => {
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/>
       :
-      <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
+      <div className={`${style.ui} h-screen flex justify-center items-center p-10 flex-col`}>
         <Timer min={min} settimeover={settimeover} setmin={setmin} />
         <SingleQuestion question={CustomQuestions[questionNo]} disabled={disabled} response={response} setresponse={setresponse} />
         <div className="flex">

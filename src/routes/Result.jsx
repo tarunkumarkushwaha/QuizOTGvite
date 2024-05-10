@@ -18,7 +18,7 @@ const Result = () => {
 //  console.log(percentage)
   return (
     <>
-      {signIn ? <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
+      {signIn ? <div className={`${style.ui} h-screen flex justify-center items-center p-10 flex-col`}>
 
         <h1 className="smooth-entry text-3xl text-lime-500 font-sans">Result</h1>
         <div className="smooth-entry flex">
