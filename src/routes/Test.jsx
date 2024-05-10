@@ -12,6 +12,7 @@ import CSSquestion from '../questions/CSSquestions.js'
 import htmlquestion from '../questions/htmlquestions.js'
 import Reactquestion from '../questions/Reactquestions.js'
 import wordpressquestions from "../questions/Wordpressquestions.js";
+import indianGKQuestions from "../questions/GSquestions.js"
 
 
 const Test = () => {
@@ -116,6 +117,10 @@ const Test = () => {
     else if (testSub == "wordpress") {
       setTestQuestion(wordpressquestions.wordpress)
       setmin(wordpressquestions.time)
+    }
+    else if (testSub == "generalknowledge") {
+      setTestQuestion(indianGKQuestions.GK)
+      setmin(indianGKQuestions.time)
     }
     else {
       setTestQuestion(Javascriptquestion.Javascript)

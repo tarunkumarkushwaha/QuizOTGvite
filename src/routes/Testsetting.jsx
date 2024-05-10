@@ -51,6 +51,7 @@ const Testsetting = () => {
                     <MenuItem value={"Javascript"}>Javascript</MenuItem>
                     <MenuItem value={"React"}>React</MenuItem>
                     <MenuItem value={"wordpress"}>wordpress</MenuItem>
+                    <MenuItem value={"generalknowledge"}>General Knowledge</MenuItem>
                     <MenuItem value={"Previous paper"}>Previous paper</MenuItem>
                     <MenuItem value={"Your Questions"}>Your Custom Questions</MenuItem>
                   </Select>
