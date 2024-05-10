@@ -1,0 +1,95 @@
+{
+    "time": 10,
+    "question": [
+        {
+            "question": "1. HTML stands for?",
+            "option1": "Hypertext Markup Language",
+            "option2": "Hyper Makeup Language",
+            "option3": "Web development",
+            "option4": "Hamara Mark Language",
+            "correctresponse": "Hypertext Markup Language",
+            "time": 1
+        },
+        {
+            "question": "2. Which HTML tag is used to define an unordered list?",
+            "option1": "<ul>",
+            "option2": "<ol>",
+            "option3": "<li>",
+            "option4": "<ul>",
+            "correctresponse": "<ul>",
+            "time": 1
+        },
+        {
+            "question": "3. What does the 'M' in HTML stand for?",
+            "option1": "Markup",
+            "option2": "Makeup",
+            "option3": "Model",
+            "option4": "Material",
+            "correctresponse": "Markup",
+            "time": 1
+        },
+        {
+            "question": "4. Which tag is used to create a hyperlink in HTML?",
+            "option1": "<a>",
+            "option2": "<link>",
+            "option3": "<href>",
+            "option4": "<hyperlink>",
+            "correctresponse": "<a>",
+            "time": 1
+        },
+        {
+            "question": "5. What is the correct HTML for creating a checkbox?",
+            "option1": "<input type='checkbox'>",
+            "option2": "<checkbox>",
+            "option3": "<check>",
+            "option4": "<input type='check'>",
+            "correctresponse": "<input type='checkbox'>",
+            "time": 1
+        },
+        {
+            "question": "6. Which tag is used to define a paragraph in HTML?",
+            "option1": "<p>",
+            "option2": "<paragraph>",
+            "option3": "<par>",
+            "option4": "<para>",
+            "correctresponse": "<p>",
+            "time": 1
+        },
+        {
+            "question": "7. What is the correct HTML for inserting an image?",
+            "option1": "<img src='image.jpg'>",
+            "option2": "<image href='image.jpg'>",
+            "option3": "<image src='image.jpg'>",
+            "option4": "<img href='image.jpg'>",
+            "correctresponse": "<img src='image.jpg'>",
+            "time": 1
+        },
+        {
+            "question": "8. Which tag is used to define the header of a document or section in HTML?",
+            "option1": "<header>",
+            "option2": "<head>",
+            "option3": "<h1>",
+            "option4": "<heading>",
+            "correctresponse": "<header>",
+            "time": 1
+        },
+        {
+            "question": "9. Which tag is used to define a table row in HTML?",
+            "option1": "<tr>",
+            "option2": "<table-row>",
+            "option3": "<td>",
+            "option4": "<th>",
+            "correctresponse": "<tr>",
+            "time": 1
+        },
+        {
+            "question": "10. What is the correct HTML for creating a hyperlink?",
+            "option1": "<a href='url'>link text</a>",
+            "option2": "<link href='url'>link text</link>",
+            "option3": "<href='url'>link text</href>",
+            "option4": "<hyperlink>link text</hyperlink>",
+            "correctresponse": "<a href='url'>link text</a>",
+            "time": 1
+        }
+    ]
+}
