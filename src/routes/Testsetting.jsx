@@ -25,8 +25,8 @@ const Testsetting = () => {
 
   return (
     <>
-      {signIn ? <div className="mainbg bg-no-repeat bg-left h-screen">
-        <div className="bg-slate-950/60 h-screen flex item-center p-10 flex-col">
+      {signIn ? <div className="mainbg bg-no-repeat bg-left min-h-screen">
+        <div className="bg-slate-950/60 min-h-screen flex item-center p-10 flex-col">
           <h1 className=" smooth-entry text-3xl m-1 p-5 mt-8 text-slate-100 text-center font-sans">
             Test settings</h1>
 

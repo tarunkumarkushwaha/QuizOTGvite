@@ -1,9 +1,7 @@
-// import Navbar from "../components/Navbar.jsx"
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
 import { toast } from "react-toastify"
-// import Foot from "../components/Foot.jsx"
-import { useRef, useState } from "react"
+import { useRef, useState , useEffect} from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
@@ -96,7 +94,6 @@ const CustomTest = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/>
@@ -123,7 +120,6 @@ const CustomTest = () => {
         </button>
       </div></>
       }
-      {/* <Foot /> */}
     </>
   )
 }
