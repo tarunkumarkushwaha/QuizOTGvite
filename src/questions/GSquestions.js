@@ -28,12 +28,12 @@ let indianGKQuestions = {
         time: 1
     },
     {
-        question: "4. Which Indian state is known as the 'Land of Five Rivers'?",
-        option1: "Punjab",
-        option2: "Haryana",
-        option3: "Uttar Pradesh",
+        question: "4. What is capital of bihar?",
+        option1: "I am capital",
+        option2: "Patna",
+        option3: "Gaya",
         option4: "Madhya Pradesh",
-        correctresponse: "Punjab",
+        correctresponse: "Patna",
         time: 1
     },
     {

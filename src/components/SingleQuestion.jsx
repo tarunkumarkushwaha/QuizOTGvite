@@ -6,6 +6,7 @@ const { PropTypes } = pkg;
 const SingleQuestion = ({ question, response, setresponse, disabled }) => {
     // const [checked, setchecked] = useState(false)
     const responseHandler = (e) => {setresponse(e.target.value)}
+    // console.log(response)
 
     return (
         <>
