@@ -162,7 +162,7 @@ const Test = () => {
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} />
         :
-        TestQuestion && <div className={`${style.ui} h-screen smooth-entry flex justify-center items-center p-10 gap-5 flex-col`}>
+        TestQuestion && <div className={`${style.ui} min-h-screen smooth-entry flex justify-center items-center p-10 mt-14 gap-5 flex-col`}>
           <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
           <div className="flex md:flex-row flex-col gap-2">
             <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
