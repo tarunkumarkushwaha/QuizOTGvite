@@ -132,28 +132,28 @@ const Test = () => {
 
   // anti cheat 
 
-  // const handleKeyPress = (event) => {
-  //   // console.log('Key pressed:', event.key);
-  //   navigate('/result')
-  //   toast.error("early submission, you tried to cheat")
-  // };
+  const handleKeyPress = (event) => {
+    // console.log('Key pressed:', event.key);
+    navigate('/result')
+    toast.error("early submission, you tried to cheat")
+  };
 
-  // useEffect(() => {
-  //   window.addEventListener('keydown', handleKeyPress);
-  //   return () => {
-  //     window.removeEventListener('keydown', handleKeyPress);
-  //   }
-  // }, []);
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    }
+  }, []);
 
-  // const focus = useWindowFocusDetector()
+  const focus = useWindowFocusDetector()
 
-  // useEffect(() => {
-  //   if (!focus) {
-  //     navigate('/result')
-  //     toast.error("Cheating detected. Consequences imminent.")
-  //   }
+  useEffect(() => {
+    if (!focus) {
+      navigate('/result')
+      toast.error("Cheating detected. Consequences imminent.")
+    }
 
-  // }, [focus])
+  }, [focus])
 
   return (
     <>
