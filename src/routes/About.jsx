@@ -1,6 +1,7 @@
-
+import { Link, useNavigate } from "react-router-dom"
 
 const About = () => {
+    let navigate = useNavigate()
     return (
         <>
             <div className="mainbg bg-no-repeat bg-left h-screen">
@@ -24,7 +25,11 @@ const About = () => {
                             <p>4. Discussion forums</p>
                         </div>
                     </div>
-
+                    <div className="absolute bottom-10 sm:right-5 right-1/2 sm:translate-x-0 translate-x-1/2 smooth-entry">
+                        <button type="button" className="h-10 sm:w-48 w-44 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg sm:text-sm text-xs px-5 py-2.5 text-center">
+                            <Link to={"/login"}>Lets go</Link>
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
