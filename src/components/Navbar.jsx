@@ -4,6 +4,7 @@ import logo from '/assets/logo.png'
 import React, { useContext, useEffect, useState } from 'react';
 import { Context } from '../MyContext';
 import { toast } from "react-toastify";
+import { logOut } from "../../api/firebase";
 
 const Navbar = () => {
   const [menu, setmenu] = useState(false)
@@ -17,11 +18,17 @@ const Navbar = () => {
 
   // console.log("rerendering")
 
-  const handleLogout = () => {
-    toast.success(`user ${name} has successfully signed out`)
-    localStorage.setItem('login', JSON.stringify(false));
-    navigate("/login")
-    setsignIn(false)
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast.success(`user ${name} has successfully signed out`)
+      localStorage.setItem('login', JSON.stringify(false));
+      navigate("/login")
+      setsignIn(false)
+    } catch (error) {
+      toast.error(`${error}`)
+    }
+    
   }
 
   const loginClick = () => {

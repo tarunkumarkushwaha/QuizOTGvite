@@ -100,6 +100,18 @@ function App() {
       })
   }
 
+  function discussionPost(post) {
+    const db = getDatabase();
+    set(ref(db, `discussion/${testSub}`), 
+    post
+    ).then(() => {
+      console.log("data sent");
+    })
+      .catch((error) => {
+        console.log("The write failed...");
+      })
+  }
+
   useEffect(() => {
     if (!data) {
       getdbQuestions()

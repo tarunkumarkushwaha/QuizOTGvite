@@ -2,14 +2,14 @@ import { Link, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { Context } from '../MyContext';
 import { useContext } from 'react';
-import { useState } from "react"
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../api/firebase";
 
 const Signup = () => {
-  const [naam, setnaam] = useState("")
-  const [password, setpassword] = useState("")
   const [showpass, setshowpass] = useState(false)
   const [checkpassword, setcheckpassword] = useState("")
-  const { setName, setPwd } = useContext(Context);
+  const { name, setName, pwd, setPwd } = useContext(Context);
 
   const passwordValidator = (pass) => {
     let passobject = { password: pass, error: false, errormessege: "" }
@@ -44,30 +44,33 @@ const Signup = () => {
     }
   }
 
-  const handle = () => {
-    setName(naam)
-    setPwd(password)
+  const handle = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, name, pwd);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   let navigate = useNavigate()
 
   const handleSignup = () => {
-    if (naam.length <= 3) {
+    if (name.length <= 3) {
       toast.error("name must be of 3 characters")
       return
     }
 
-    if (passwordValidator(password).error) {
-      let messege = passwordValidator(password).errormessege
+    if (passwordValidator(pwd).error) {
+      let messege = passwordValidator(pwd).errormessege
       toast.error(messege)
       return
     }
-    if (checkpassword == password) {
+    if (checkpassword == pwd) {
       handle()
       navigate("/login")
       toast.success("account created")
-      localStorage.setItem('Name', JSON.stringify(naam));
-      localStorage.setItem('Password', JSON.stringify(password));
+      localStorage.setItem('Name', JSON.stringify(name));
+      localStorage.setItem('Password', JSON.stringify(pwd));
     }
     else { toast.error("confirm password do not match") }
   }
@@ -86,15 +89,15 @@ const Signup = () => {
                   <div>
                     <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                     <input
-                      value={naam}
-                      onChange={(e) => setnaam(e.target.value)}
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
                   </div>
                   <div>
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <input
-                      value={password}
-                      onChange={(e) => setpassword(e.target.value)}
+                      value={pwd}
+                      onChange={(e) => setPwd(e.target.value)}
                       type={showpass ? "text" : "password"} name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                   </div>
                   <div>
