@@ -48,8 +48,8 @@ const Testsetting = () => {
                   >
                     <MenuItem value={"html"}>HTML</MenuItem>
                     <MenuItem value={"css"}>CSS</MenuItem>
-                    <MenuItem value={"Javascript"}>Javascript</MenuItem>
-                    <MenuItem value={"React"}>React</MenuItem>
+                    <MenuItem value={"javascript"}>Javascript</MenuItem>
+                    <MenuItem value={"react"}>React</MenuItem>
                     <MenuItem value={"wordpress"}>wordpress</MenuItem>
                     <MenuItem value={"generalknowledge"}>General Knowledge</MenuItem>
                     <MenuItem value={"Previous paper"}>Previous paper</MenuItem>

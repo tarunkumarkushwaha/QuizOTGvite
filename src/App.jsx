@@ -23,8 +23,14 @@ import Foot from "./components/Foot";
 import ErrorPage from "./components/ErrorPage";
 // import Usercontext from "./context/Usercontext";
 
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getDatabase, ref, set, get, child } from "firebase/database";
+import { getFirestore } from "firebase/firestore";
+
 function App() {
-  const [testSub, settestSub] = useState("Javascript")
+  const [data, setdata] = useState()
+  const [testSub, settestSub] = useState("javascript")
   const [min, setmin] = useState(10)
   const [TestQuestion, setTestQuestion] = useState()
   const [dark, setdark] = useState(false)
@@ -42,7 +48,62 @@ function App() {
     setdark(prevtheme => !prevtheme)
   }
 
+  // firebase 
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4bf4q5bhq_x8rttlQWpgQhMmdgbwjdwg",
+    authDomain: "quizotg-tarun.firebaseapp.com",
+    projectId: "quizotg-tarun",
+    storageBucket: "quizotg-tarun.appspot.com",
+    messagingSenderId: "692133132591",
+    appId: "1:692133132591:web:a25a3ccf74cd828c04c9da",
+    measurementId: "G-0XNKZT4FP2",
+    databaseURL: "https://quizotg-tarun-default-rtdb.firebaseio.com/",
+  };
+
+  // Initialize Firebase
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  const db = getFirestore(app);
+
+  // Get a list of cities from your database
+  async function getdbQuestions() {
+    // console.log("i m called");
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, `questions`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        // console.log(snapshot.val());
+        setdata(snapshot.val())
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
+
+  const database = getDatabase(app);
+
+  // console.log(data);
+
+  function setdbCustomQuestions() {
+    const db = getDatabase();
+    set(ref(db, 'questions/wordpress'), 
+    wordpress
+    ).then(() => {
+      console.log("data sent");
+    })
+      .catch((error) => {
+        console.log("The write failed...");
+      })
+  }
+
   useEffect(() => {
+    if (!data) {
+      getdbQuestions()
+    }
     const item1 = localStorage.getItem('Name');
     const item2 = localStorage.getItem('Password');
     const item3 = localStorage.getItem('login');
@@ -69,19 +130,11 @@ function App() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   fetch("/api/css").then(
-  //     response => response.json()
-  //   ).then(
-  //     data => console.log(data)
-  //   ).catch(error => console.log('Error fetching data:', error));
-  // }, []);
-
   return (
     <>
       {/* <Usercontext> */}
       <Context.Provider value={{
-        start, setstart,
+        start, setstart, setdbCustomQuestions, getdbQuestions, data,
         TestQuestion, setTestQuestion, min, setmin,
         name, setName, pwd, pastpercentage,
         setPwd, signIn, setsignIn, dark, themeChange,

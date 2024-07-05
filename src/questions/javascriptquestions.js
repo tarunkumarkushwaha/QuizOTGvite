@@ -1,7 +1,7 @@
-let Javascriptquestions =
+let javascript =
 {   
     time : 10 , //in minutes
-    Javascript: [
+    questions: [
         {
             question: "1. What will be the output of the following code snippet var a = \"Scaler\" \n var result = a.substring(2, 4)\ndocument.write(result)",
             option1: "calculate by your self, i can't do it",
@@ -120,24 +120,7 @@ let Javascriptquestions =
         //     time: 1
         // }
     ],
-    CSS : [{
-            question: "1. ?",
-            option1: "",
-            option2: "",
-            option3: "",
-            option4: "",
-            correctresponse: "",
-            time: 1
-        }],
-    React:[{
-            question: "1. ?",
-            option1: "",
-            option2: "",
-            option3: "",
-            option4: "",
-            correctresponse: "",
-            time: 1
-        }],
+    
 }
 
-export default Javascriptquestions
+export default javascript

@@ -7,12 +7,7 @@ import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
 import Timeover from "../components/Timeover.jsx"
 import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
-import Javascriptquestion from '../questions/Javascriptquestions.js'
-import CSSquestion from '../questions/CSSquestions.js'
-import htmlquestion from '../questions/htmlquestions.js'
-import Reactquestion from '../questions/Reactquestions.js'
-import wordpressquestions from "../questions/Wordpressquestions.js";
-import indianGKQuestions from "../questions/GSquestions.js"
+import javascript from "../questions/javascriptquestions.js";
 
 
 const Test = () => {
@@ -21,7 +16,7 @@ const Test = () => {
   const [disabled, setdisabled] = useState(false)
   const [timeover, settimeover] = useState(false)
 
-  const { setincorrectresponse, setmin, min, setcorrectresponse,correctresponse,
+  const { data,setincorrectresponse, setmin, min, setcorrectresponse,correctresponse,
     testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
 
     // console.log(correctresponse)
@@ -88,45 +83,16 @@ const Test = () => {
     navigate("/result")
   }
 
-  // for backend 
-
-  // useEffect(() => {
-  //   fetch(`/api/${testSub}`).then(
-  //     response => response.json()
-  //   ).then( data => {
-  //     setTestQuestion(data.question)
-  //     setmin(data.time)}
-  //   ).catch(error => console.log('Error fetching data:', error));
-  // }, [testSub])
+  // console.log(data[testSub]);
 
   useEffect(() => {
-    if (testSub == "Javascript") {
-      setTestQuestion(Javascriptquestion.Javascript)
-      setmin(Javascriptquestion.time)
-    }
-    else if (testSub == "css") {
-      setTestQuestion(CSSquestion.CSS)
-      setmin(CSSquestion.time)
-    }
-    else if (testSub == "html") {
-      setTestQuestion(htmlquestion.HTML)
-      setmin(htmlquestion.time)
-    }
-    else if (testSub == "React") {
-      setTestQuestion(Reactquestion.React)
-      setmin(Reactquestion.time)
-    }
-    else if (testSub == "wordpress") {
-      setTestQuestion(wordpressquestions.wordpress)
-      setmin(wordpressquestions.time)
-    }
-    else if (testSub == "generalknowledge") {
-      setTestQuestion(indianGKQuestions.GK)
-      setmin(indianGKQuestions.time)
+    if (data) {
+      setTestQuestion(data[testSub].questions)
+      setmin(data[testSub].time)
     }
     else {
-      setTestQuestion(Javascriptquestion.Javascript)
-      setmin(Javascriptquestion.time)
+      setTestQuestion(javascript.questions)
+      setmin(javascript.time)
     }
   }, [testSub])
 
