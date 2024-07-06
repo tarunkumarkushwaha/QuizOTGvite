@@ -1,22 +1,20 @@
 import { Link, useNavigate } from "react-router-dom"
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useState } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import { toast } from "react-toastify"
 import { auth } from "../../api/firebase";
 
 const Login = () => {
-  const { name, setName, pwd, setPwd, setsignIn } = useContext(Context);
+  const { email, setemail, pwd, setPwd, setsignIn, user } = useContext(Context);
 
   let navigate = useNavigate()
 
   const handleSignin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, name, pwd);
-      toast.success(`User - ${name} successfully login`)
+      await signInWithEmailAndPassword(auth, email, pwd);
+      toast.success(`User - ${user.displayName} successfully login`)
       setsignIn(true)
-      localStorage.setItem('login', JSON.stringify(true));
       navigate("/testsetting")
     } catch (error) {
       toast.error(`${error}`)
@@ -35,10 +33,10 @@ const Login = () => {
                 </h1>
                 <div className="space-y-4 md:space-y-6">
                   <div>
-                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email or Username</label>
+                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                     <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      value={email}
+                      onChange={(e) => setemail(e.target.value)}
                       type="email" name="email" id="email" className="bg-green-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
                   </div>
                   <div>

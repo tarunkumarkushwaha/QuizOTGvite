@@ -8,7 +8,8 @@ import { useNavigate, Link } from "react-router-dom"
 import Timeover from "../components/Timeover.jsx"
 import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
 import javascript from "../questions/javascriptquestions.js";
-
+import { ref, set } from "firebase/database";
+import { database } from "../../api/firebase.js";
 
 const Test = () => {
   const [questionNO, setquestionNO] = useState(0)
@@ -16,10 +17,37 @@ const Test = () => {
   const [disabled, setdisabled] = useState(false)
   const [timeover, settimeover] = useState(false)
 
-  const { data,setincorrectresponse, setmin, min, setcorrectresponse,correctresponse,
+  const { data, setincorrectresponse, setmin, min, setcorrectresponse, correctresponse, incorrectresponse, user,
     testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
 
-    // console.log(correctresponse)
+  const questionlength = useRef(testSub !== "Your Questions" ? TestQuestion ? TestQuestion.length : 1 : CustomQuestions ? CustomQuestions.length : 1)
+  const percentage = useRef((correctresponse / questionlength.current) * 100)
+
+  function resultToWeb() {
+    const db = database;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const dateTimeString = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+    set(ref(db, `user/${user.displayName}/result/${dateTimeString}`),
+      {
+        testSub: testSub,
+        correctresponse: correctresponse,
+        incorrectresponse: incorrectresponse,
+        percentage: `${percentage.current} %`
+      }
+    ).then(() => {
+      console.log("test completed, data sent");
+    })
+      .catch((error) => {
+        console.log("The write failed...", error);
+      })
+  }
 
   let navigate = useNavigate()
   const currentsong = useRef()
@@ -79,6 +107,7 @@ const Test = () => {
         setcorrectresponse(prev => prev + 1)
       }
     }
+    resultToWeb()
     toast.success("test submitted successfully")
     navigate("/result")
   }

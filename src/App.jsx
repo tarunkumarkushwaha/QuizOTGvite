@@ -21,14 +21,12 @@ import CustomTest from "./routes/CustomTest";
 import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
 import ErrorPage from "./components/ErrorPage";
-// import Usercontext from "./context/Usercontext";
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set, get, child } from "firebase/database";
-import { getFirestore } from "firebase/firestore";
+import { ref, set, get, child } from "firebase/database";
+import { auth, database } from "../api/firebase";
 
 function App() {
+  const [user, setUser] = useState(null);
   const [data, setdata] = useState()
   const [testSub, settestSub] = useState("javascript")
   const [min, setmin] = useState(10)
@@ -36,6 +34,7 @@ function App() {
   const [dark, setdark] = useState(false)
   const [signIn, setsignIn] = useState(false)
   const [name, setName] = useState("");
+  const [email, setemail] = useState("");
   const [pwd, setPwd] = useState("");
   const [CustomQuestions, setCustomQuestions] = useState([]);
   const [correctresponse, setcorrectresponse] = useState(0)
@@ -43,35 +42,16 @@ function App() {
   const [pastpercentage, setpastpercentage] = useState(0)
   const [start, setstart] = useState(false)
 
+  // console.log(user)
+
   const themeChange = () => {
     dark ? localStorage.setItem('Theme', JSON.stringify(false)) : localStorage.setItem('Theme', JSON.stringify(true));
     setdark(prevtheme => !prevtheme)
   }
 
-  // firebase 
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB4bf4q5bhq_x8rttlQWpgQhMmdgbwjdwg",
-    authDomain: "quizotg-tarun.firebaseapp.com",
-    projectId: "quizotg-tarun",
-    storageBucket: "quizotg-tarun.appspot.com",
-    messagingSenderId: "692133132591",
-    appId: "1:692133132591:web:a25a3ccf74cd828c04c9da",
-    measurementId: "G-0XNKZT4FP2",
-    databaseURL: "https://quizotg-tarun-default-rtdb.firebaseio.com/",
-  };
-
-  // Initialize Firebase
-
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  const db = getFirestore(app);
-
-  // Get a list of cities from your database
   async function getdbQuestions() {
     // console.log("i m called");
-    const dbRef = ref(getDatabase());
+    const dbRef = ref(database);
     get(child(dbRef, `questions`)).then((snapshot) => {
       if (snapshot.exists()) {
         // console.log(snapshot.val());
@@ -84,53 +64,51 @@ function App() {
     });
   }
 
-  const database = getDatabase(app);
-
-  // console.log(data);
-
   function setdbCustomQuestions() {
-    const db = getDatabase();
-    set(ref(db, 'questions/wordpress'), 
-    wordpress
+    const db = database;
+    set(ref(db, 'questions/wordpress'),
+      wordpress
     ).then(() => {
       console.log("data sent");
     })
       .catch((error) => {
-        console.log("The write failed...");
+        console.log("The write failed...", error);
       })
   }
 
-  function discussionPost(post) {
-    const db = getDatabase();
-    set(ref(db, `discussion/${testSub}`), 
-    post
-    ).then(() => {
-      console.log("data sent");
-    })
-      .catch((error) => {
-        console.log("The write failed...");
-      })
-  }
+  // function discussionPost(post) {
+  //   const db = database;
+  //   set(ref(db, `discussion/${testSub}`), 
+  //   post
+  //   ).then(() => {
+  //     console.log("data sent");
+  //   })
+  //     .catch((error) => {
+  //       console.log("The write failed...");
+  //     })
+  // }
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        setsignIn(true)
+      } else {
+        setsignIn(false)
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!data) {
       getdbQuestions()
     }
-    const item1 = localStorage.getItem('Name');
-    const item2 = localStorage.getItem('Password');
-    const item3 = localStorage.getItem('login');
     const QUESTION = localStorage.getItem('questions');
     const THEME = localStorage.getItem('Theme');
     const PERCENT = localStorage.getItem('result');
-    if (item1) {
-      setName(JSON.parse(item1));
-    }
-    if (item2) {
-      setPwd(JSON.parse(item2));
-    }
-    if (item3) {
-      setsignIn(JSON.parse(item3));
-    }
+
     if (THEME) {
       setdark(JSON.parse(THEME));
     }
@@ -144,11 +122,11 @@ function App() {
 
   return (
     <>
-      {/* <Usercontext> */}
       <Context.Provider value={{
+        email, setemail,
         start, setstart, setdbCustomQuestions, getdbQuestions, data,
         TestQuestion, setTestQuestion, min, setmin,
-        name, setName, pwd, pastpercentage,
+        name, setName, pwd, pastpercentage, user,
         setPwd, signIn, setsignIn, dark, themeChange,
         correctresponse, setcorrectresponse, setincorrectresponse,
         incorrectresponse, CustomQuestions, setCustomQuestions,
@@ -183,7 +161,6 @@ function App() {
           draggable
           pauseOnHover={false}
         />
-        {/* </Usercontext> */}
       </Context.Provider>
     </>
   )
