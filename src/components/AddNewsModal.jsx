@@ -11,13 +11,14 @@ export default function AddNewsModal(props) {
     const [file, setFile] = useState([]);
 
     function handleChange(e) {
+        // console.log(e,"hello");
         setFile((olditem) => {
             return [...olditem, URL.createObjectURL(e.target.files[0])]
         })
     }
 
     const addPost = () => {
-        if(inputNews === ""){
+        if (inputNews === "") {
             toast.error("empty post is not allowed")
             onCancelClick()
             return
@@ -111,8 +112,8 @@ export default function AddNewsModal(props) {
                                     <div className="flex items-center gap-3">
                                         <div className="flex flex-1 px-3 gap-4 items-center">
 
-                                            <label htmlFor="inputs" className="mx-1 cursor-pointer">
-                                                <input name="inputs" className="hidden" type="file" onChange={handleChange} />
+                                            <label className="mx-1 cursor-pointer">
+                                                <input className="hidden" type="file" onChange={handleChange} />
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" viewBox="0 0 16 14" fill="none">
                                                     <path fillRule="evenodd" clipRule="evenodd" d="M2.66645 0.777832C1.68461 0.777832 0.888672 1.57377 0.888672 2.55561V11.4445C0.888672 12.4263 1.68461 13.2223 2.66645 13.2223H13.3331C14.315 13.2223 15.1109 12.4263 15.1109 11.4445V2.55561C15.1109 1.57377 14.315 0.777832 13.3331 0.777832H2.66645ZM13.3331 11.4445H2.66645L6.22201 4.33339L8.88867 9.66672L10.6664 6.11117L13.3331 11.4445Z" fill="#6B7280" />
                                                 </svg>

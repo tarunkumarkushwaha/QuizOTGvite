@@ -1,18 +1,12 @@
-// import Foot from "../components/Foot"
-// import Navbar from "../components/Navbar"
 import { useState } from 'react';
-import { CircularProgress } from "@mui/material";
-// import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AddNewsModal from "../components/AddNewsModal";
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import NewsObject from "../components/NewsObject";
-// import { useEffect } from "react";
-import { Link } from "react-router-dom"
+import PleaseLogin from '../components/PleaseLogin';
 
 const Discussions = () => {
-  // const [discuss, setdiscuss] = useState(false)
   const [postitems, setpostitems] = useState([])
   const [post, setpost] = useState("")
   const [showAddNewsModal, setShowAddNewsModal] = useState(false);
@@ -25,22 +19,9 @@ const Discussions = () => {
       "bg-gradient-to-b from-green-50 to-green-200 "
   }
 
-  // useEffect(() => {
-  //   postitems.length && localStorage.setItem("Posts", JSON.stringify(postitems))
-  // }, [postitems])
-
-  // useEffect(() => {
-  //   const POSTS = JSON.parse(localStorage.getItem('Posts'));
-  //   if (POSTS) {
-  //     setpostitems(POSTS);
-  //   }
-  // }, [])
-
-
   return (
 
     <>
-      {/* <Navbar /> */}
       {signIn ? <div className={`${style.ui} h-screen flex md:flex-row justify-center items-center p-10 flex-col`}>
         <div className='smooth-entry mx-2 flex sm:flex-row justify-center item-center gap-4 flex-col'>
           <div className='w-full max-w-xl xl:mx-0 mx-auto'>
@@ -80,25 +61,14 @@ const Discussions = () => {
               setpostitems={setpostitems}
               onCancelClick={() => setShowAddNewsModal(false)}
             />
-
             {/* post items  */}
-
-
             {postitems.map((item, index) =>
               <NewsObject item={item} postitems={postitems} setpostitems={setpostitems} key={"post no - " + index} />
             )}
           </div>
         </div>
-        {/* } */}
-      </div> : <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-        <h1 className="smooth-entry text-3xl text-lime-800 font-sans">Please log in to use app</h1>
-        <CircularProgress />
-        <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-          <Link to={"/login"}>login</Link>
-        </button>
-      </div></>
+      </div> : <><PleaseLogin /></>
       }
-      {/* <Foot /> */}
     </>
   )
 }

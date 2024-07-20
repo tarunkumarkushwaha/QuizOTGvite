@@ -2,6 +2,7 @@ import { Link } from "react-router-dom"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import { useRef } from "react";
+import PleaseLogin from "../components/PleaseLogin";
 
 const Result = () => {
   const { TestQuestion, correctresponse, incorrectresponse, dark, CustomQuestions, testSub, signIn } = useContext(Context);
@@ -53,15 +54,7 @@ const Result = () => {
           </div>
         </div>
       ) : (
-        <div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-          <h1 className="text-3xl smooth-entry text-lime-800 font-sans">Please Log In to Use the App</h1>
-          <button
-            type="button"
-            className="smooth-entry h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-          >
-            <Link to={"/login"}>Login</Link>
-          </button>
-        </div>
+        <PleaseLogin/>
       )}
 
     </>

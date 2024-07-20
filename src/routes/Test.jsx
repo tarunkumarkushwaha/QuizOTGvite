@@ -10,6 +10,7 @@ import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
 import javascript from "../questions/javascriptquestions.js";
 import { ref, set } from "firebase/database";
 import { database } from "../../api/firebase.js";
+import PleaseLogin from "../components/PleaseLogin.jsx";
 
 const Test = () => {
   const [questionNO, setquestionNO] = useState(0)
@@ -174,12 +175,7 @@ const Test = () => {
 
         :
 
-        <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-          <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
-          <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-            <Link to={"/login"}>login</Link>
-          </button>
-        </div></>
+        <><PleaseLogin/></>
       }
     </>
   )
