@@ -6,12 +6,12 @@ import { getDatabase, ref, set, get, child } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyB4bf4q5bhq_x8rttlQWpgQhMmdgbwjdwg",
+    apiKey: import.meta.env.VITE_API_KEY,
     authDomain: "quizotg-tarun.firebaseapp.com",
     projectId: "quizotg-tarun",
     storageBucket: "quizotg-tarun.appspot.com",
     messagingSenderId: "692133132591",
-    appId: "1:692133132591:web:a25a3ccf74cd828c04c9da",
+    appId: import.meta.env.VITE_APP_ID,
     measurementId: "G-0XNKZT4FP2",
     databaseURL: "https://quizotg-tarun-default-rtdb.firebaseio.com/",
   };
