@@ -37,8 +37,8 @@ const Login = () => {
   return (
     <>
       {/* <Navbar /> */}
-      <div className="mainbg bg-no-repeat bg-left h-[86vh]">
-        <div className="bg-slate-950/60 h-[86vh] flex justify-center m-0 item-center flex-col">
+      <div className="mainbg bg-no-repeat bg-left h-screen">
+        <div className="bg-slate-950/60 h-screen flex justify-center m-0 item-center flex-col">
           <section className="smooth-entry flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

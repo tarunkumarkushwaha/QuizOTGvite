@@ -20,8 +20,10 @@ const Test = () => {
   const [disabled, setdisabled] = useState(false)
   const [timeover, settimeover] = useState(false)
 
-  const { setincorrectresponse, setmin, min, setcorrectresponse,
+  const { setincorrectresponse, setmin, min, setcorrectresponse,correctresponse,
     testSub, dark, signIn, TestQuestion, setTestQuestion } = useContext(Context);
+
+    // console.log(correctresponse)
 
   let navigate = useNavigate()
   const currentsong = useRef()
@@ -85,6 +87,8 @@ const Test = () => {
     navigate("/result")
   }
 
+  // for backend 
+
   // useEffect(() => {
   //   if (testSub == "Javascript") {
   //     setTestQuestion(Javascriptquestion.Javascript)
@@ -126,19 +130,21 @@ const Test = () => {
   const focus = useWindowFocusDetector()
 
   useEffect(() => {
-   if(!focus) { navigate('/result')
-   toast.error("early submission, you tried to cheat")
-   }
+    if (!focus) {
+      navigate('/result')
+      toast.error("Cheating detected. Consequences imminent.")
+    }
 
   }, [focus])
-  
+
   return (
     <>
       <Timer min={min} settimeover={settimeover} setmin={setmin} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
-      {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} /> :
-        <div className={`${style.ui} h-[87vh] smooth-entry flex justify-center items-center p-10 flex-col`}>
+      {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} />
+        :
+        TestQuestion && <div className={`${style.ui} min-h-screen smooth-entry flex justify-center items-center p-10 mt-14 gap-5 flex-col`}>
           <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
           <div className="flex md:flex-row flex-col gap-2">
             <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">

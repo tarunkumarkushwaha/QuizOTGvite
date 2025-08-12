@@ -1,9 +1,7 @@
-// import Navbar from "../components/Navbar.jsx"
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
 import { toast } from "react-toastify"
-// import Foot from "../components/Foot.jsx"
-import { useRef, useState } from "react"
+import { useRef, useState , useEffect} from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
@@ -96,12 +94,11 @@ const CustomTest = () => {
 
   return (
     <>
-      {/* <Navbar /> */}
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/>
       :
-      <div className={`${style.ui} h-[87vh] flex justify-center items-center p-10 flex-col`}>
+      <div className={`${style.ui} h-screen flex justify-center items-center p-10 flex-col`}>
         <Timer min={min} settimeover={settimeover} setmin={setmin} />
         <SingleQuestion question={CustomQuestions[questionNo]} disabled={disabled} response={response} setresponse={setresponse} />
         <div className="flex">
@@ -123,7 +120,6 @@ const CustomTest = () => {
         </button>
       </div></>
       }
-      {/* <Foot /> */}
     </>
   )
 }

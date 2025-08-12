@@ -5,11 +5,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/mater
 import AddQuestions from "../components/AddQuestions";
 import { toast } from "react-toastify";
 import PleaseLogin from "../components/PleaseLogin.jsx";
-import Javascriptquestion from '../questions/Javascriptquestions.js'
-import CSSquestion from '../questions/CSSquestions.js'
-import htmlquestion from '../questions/htmlquestions.js'
-import Reactquestion from '../questions/Reactquestions.js'
-import wordpressquestions from "../questions/Wordpressquestions.js";
+import TestRules from "../components/TestRules.jsx";
 
 const Testsetting = () => {
   const { signIn, CustomQuestions, testSub, settestSub, setstart, setmin, TestQuestion, setTestQuestion } = useContext(Context);
@@ -62,9 +58,9 @@ const Testsetting = () => {
 
   return (
     <>
-      {signIn ? <div className="mainbg bg-no-repeat bg-left min-h-[87vh]">
-        <div className="bg-slate-950/60 min-h-[87vh] flex item-center p-10 flex-col">
-          <h1 className=" smooth-entry text-3xl m-1 p-5 text-slate-100 text-center font-sans">
+      {signIn ? <div className="mainbg bg-no-repeat bg-left min-h-screen">
+        <div className="bg-slate-950/60 min-h-screen flex item-center p-10 flex-col">
+          <h1 className=" smooth-entry text-3xl m-1 p-5 mt-8 text-slate-100 text-center font-sans">
             Test settings</h1>
 
           <div className="flex flex-col justify-center items-center smooth-entry">
@@ -87,12 +83,8 @@ const Testsetting = () => {
                     <MenuItem value={"css"}>CSS</MenuItem>
                     <MenuItem value={"Javascript"}>Javascript</MenuItem>
                     <MenuItem value={"React"}>React</MenuItem>
-                    <MenuItem value={"Python"}>Python</MenuItem>
-                    <MenuItem value={"Science"}>Science</MenuItem>
-                    <MenuItem value={"Funny"}>Funny</MenuItem>
-                    <MenuItem value={"Reasoning"}>Reasoning</MenuItem>
-                    {/* <MenuItem value={"indianGS"}>indianGS</MenuItem> */}
                     <MenuItem value={"wordpress"}>wordpress</MenuItem>
+                    <MenuItem value={"generalknowledge"}>General Knowledge</MenuItem>
                     <MenuItem value={"Previous paper"}>Previous paper</MenuItem>
                     <MenuItem value={"Your Questions"}>Your Custom Questions</MenuItem>
                   </Select>
@@ -116,8 +108,7 @@ const Testsetting = () => {
                 </button>}
               </div>
             </div>
-            {testSub == "Your Questions" && <><AddQuestions />
-            </>}
+            {testSub == "Your Questions" ? <AddQuestions /> : <TestRules/>}
           </div>
         </div>
       </div>

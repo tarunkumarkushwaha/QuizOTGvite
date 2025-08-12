@@ -1,44 +1,79 @@
 import { Link, useNavigate } from "react-router-dom"
-// import Foot from "../components/Foot"
-// import Navbar from "../components/Navbar"
 import { toast } from "react-toastify"
 import { Context } from '../MyContext';
 import { useContext } from 'react';
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 const Signup = () => {
   const [naam, setnaam] = useState("")
-  const [pata, setpata] = useState("")
-  const [checkpata, setcheckpata] = useState("")
+  const [password, setpassword] = useState("")
+  const [showpass, setshowpass] = useState(false)
+  const [checkpassword, setcheckpassword] = useState("")
   const { setName, setPwd } = useContext(Context);
+
+  const passwordValidator = (pass) => {
+    let passobject = { password: pass, error: false, errormessege: "" }
+    if (pass.length > 8) {
+      let capital = []
+      let small = []
+      let specialordigit = []
+      pass.split('').map((char) => {
+        if (char.charCodeAt() >= 65 && char.charCodeAt() <= 90) {
+          capital.push(char)
+        }
+        else if (char.charCodeAt() >= 97 && char.charCodeAt() <= 122) {
+          small.push(char)
+        } else { specialordigit.push(char) }
+      })
+      if (capital.length < 1) {
+        passobject.error = true
+        passobject.errormessege = "password must contain a capital letter"
+        return passobject
+      }
+      if (specialordigit.length < 1) {
+        passobject.error = true
+        passobject.errormessege = "password must contain a special letter"
+        return passobject
+      }
+      else { return passobject }
+    }
+    else if (pass.length < 8 || pass.length == 0) {
+      passobject.error = true
+      passobject.errormessege = "password must be of 8 characters"
+      return passobject
+    }
+  }
 
   const handle = () => {
     setName(naam)
-    setPwd(pata)
+    setPwd(password)
   };
 
   let navigate = useNavigate()
 
   const handleSignup = () => {
-    if (checkpata == pata) {
+    if (naam.length <= 3) {
+      toast.error("name must be of 3 characters")
+      return
+    }
+
+    if (passwordValidator(password).error) {
+      let messege = passwordValidator(password).errormessege
+      toast.error(messege)
+      return
+    }
+    if (checkpassword == password) {
       handle()
       navigate("/login")
       toast.success("account created")
+      localStorage.setItem('Name', JSON.stringify(naam));
+      localStorage.setItem('Password', JSON.stringify(password));
     }
     else { toast.error("confirm password do not match") }
   }
 
-  useEffect(() => {
-    localStorage.setItem('Name', JSON.stringify(naam));
-  }, [naam]);
-
-  useEffect(() => {
-    localStorage.setItem('Password', JSON.stringify(pata));
-  }, [pata]);
-
   return (
     <>
-      {/* <Navbar /> */}
       <section className="mainbg bg-no-repeat bg-left">
         <div className="bg-slate-950/60">
           <div className="smooth-entry flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -58,16 +93,20 @@ const Signup = () => {
                   <div>
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <input
-                      value={pata}
-                      onChange={(e) => setpata(e.target.value)}
-                      type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                      value={password}
+                      onChange={(e) => setpassword(e.target.value)}
+                      type={showpass ? "text" : "password"} name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                   </div>
                   <div>
                     <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
                     <input
-                      value={checkpata}
-                      onChange={(e) => setcheckpata(e.target.value)}
+                      value={checkpassword}
+                      onChange={(e) => setcheckpassword(e.target.value)}
                       type="confirm-password" name="confirm-password" id="confirm-password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                  </div>
+                  <div className="flex text-white gap-2 text-sm">
+                    <input type="checkbox" name="check" id="check" value={showpass} onChange={(e) => setshowpass(e.target.checked)} />
+                    <p>view password</p>
                   </div>
                   <button onClick={handleSignup} className="w-full text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     Create an account
@@ -81,7 +120,6 @@ const Signup = () => {
           </div>
         </div>
       </section>
-      {/* <Foot /> */}
     </>
   )
 }

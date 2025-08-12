@@ -3,8 +3,8 @@
 const About = () => {
     return (
         <>
-            <div className="mainbg bg-no-repeat bg-left h-[85vh]">
-                <div className="bg-slate-950/60 h-[85vh] flex justify-center m-0 item-center flex-col">
+            <div className="mainbg bg-no-repeat bg-left h-screen">
+                <div className="bg-slate-950/60 h-screen flex justify-center m-0 item-center flex-col">
                     <div className="smooth-entry flex justify-center item-center">
                         <h2 className="sm:text-4xl text-3xl text-slate-100 font-bold p-2">Quiz on the go</h2>
                     </div>

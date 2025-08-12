@@ -20,6 +20,7 @@ import Test from "./routes/Test";
 import CustomTest from "./routes/CustomTest";
 import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
+import ErrorPage from "./components/ErrorPage";
 // import Usercontext from "./context/Usercontext";
 
 function App() {
@@ -102,6 +103,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/termsandconditions" element={<Termsandconditions />} />
             <Route path="/discussions" element={<Discussions />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
           <Foot />
         </BrowserRouter>

@@ -16,8 +16,8 @@ const Home = () => {
   return (
     <>
       {/* <Navbar /> */}
-      <div className="mainbg bg-no-repeat bg-left h-[86vh]">
-        <div className="bg-slate-950/60 h-[86vh] flex justify-center m-0 item-center flex-col">
+      <div className="mainbg bg-no-repeat bg-left h-screen">
+        <div className="bg-slate-950/60 h-screen flex justify-center m-0 item-center flex-col">
           <div className="flex flex-col smooth-entry justify-center item-center">
             <h1 className="md:text-5xl text-3xl text-white font-bold text-center font-sans p-5 w-full">
               Welcome to QuizOTG!

@@ -43,7 +43,7 @@ const Navbar = () => {
     text: dark ?
       "text-white"
       :
-      "text-grey-500"
+      "text-slate-900"
   }
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const Navbar = () => {
   return (
     <>
       <header className="">
-        <nav className={`${style.uiMode} sticky top-0 z-10 px-8 md:px-auto min-h-20`}>
+        <nav className={`${style.uiMode} absolute w-full top-0 z-10 px-8 md:px-auto min-h-20`}>
           <button className={`absolute top-5 left-4 h-8 w-8 md:hidden flex duration-200 ${menu ? "rotate-180" : "rotate-0"}`} onClick={changemenu}>
             <MenuIcon className="text-white" fontSize="large" />
           </button>
@@ -81,9 +81,9 @@ const Navbar = () => {
               <div className="h-12 w-28 m-4"></div>
               <div className={`${style.text}`}>
                 <ul className="flex font-semibold md:justify-between justify-center items-center md:flex-row flex-col gap-5">
-                  <li className={`${location.pathname == "/" ? "text-indigo-400" : "text-white"} hover:text-indigo-200`}><NavLink to="/" >Home</NavLink></li>
-                  <li className={`${location.pathname == "/about" ? "text-indigo-400" : "text-white"} hover:text-indigo-200`}><NavLink to="/about">About</NavLink></li>
-                  <li className={`${location.pathname == "/contact" ? "text-indigo-400" : "text-white"} hover:text-indigo-200`}><NavLink to="/contact">Contact</NavLink></li>
+                  <li className={`${location.pathname == "/" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/" >Home</NavLink></li>
+                  <li className={`${location.pathname == "/about" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/about">About</NavLink></li>
+                  <li className={`${location.pathname == "/contact" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/contact">Contact</NavLink></li>
                 </ul>
               </div>
               <div className="my-5 mr-0 md:mr-10">
