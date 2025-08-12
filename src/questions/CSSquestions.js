@@ -6,7 +6,7 @@ let CSSquestions = {
         option2: "Cardcasting Style Sheets",
         option3: "Corcading Style Sheets",
         option4: "Cascading Style Sheets",
-        correctresponse: "Cascading Style Sheets",
+        correctresponse: "Cascading Style Sheetss",
         time: 1
     }]
 }
