@@ -68,13 +68,13 @@ function App() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   fetch("/api/css").then(
-  //     response => response.json()
-  //   ).then(
-  //     data => console.log(data)
-  //   ).catch(error => console.log('Error fetching data:', error));
-  // }, []);
+ useEffect(() => {
+    fetch(`https://quiztimequestionapi.onrender.com/questions/javascriptquestions`).then(
+      response => response.json()
+    ).then( data => {
+      console.log("waking up app",data)}
+    ).catch(error => console.log('Error fetching data:', error," waking up due to cold start please wait ....."));
+  }, [])
 
   return (
     <>
