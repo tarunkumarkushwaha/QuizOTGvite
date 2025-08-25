@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useContext } from 'react';
 import { Context } from '../MyContext';
 import { useRef } from "react";
 
 const Result = () => {
   const { TestQuestion, correctresponse, incorrectresponse, dark, CustomQuestions, testSub, signIn } = useContext(Context);
-
+  let navigate = useNavigate()
   const style = {
     ui: dark ?
       "bg-slate-700"
@@ -44,6 +44,13 @@ const Result = () => {
             Percentage - {Number(Math.round(percentage.current + 'e2') + 'e-2')} %
           </div>
           <div className="smooth-entry flex justify-between">
+            <button
+              type="button"
+              onClick={() => navigate("/testsetting")}
+              className="h-10 m-[5%] text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
+            >
+              Restart
+            </button>
             <button
               type="button"
               className="h-10 m-[5%] text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
