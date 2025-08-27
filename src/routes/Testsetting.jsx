@@ -6,6 +6,7 @@ import AddQuestions from "../components/AddQuestions";
 import { toast } from "react-toastify";
 import PleaseLogin from "../components/PleaseLogin.jsx";
 import TestRules from "../components/TestRules.jsx";
+import FileUploadComponent from "../components/FileUploadComponent.jsx";
 
 const Testsetting = () => {
   const {
@@ -89,7 +90,7 @@ const Testsetting = () => {
   };
 
   useEffect(() => {
-    if (testSub !== "generate question") {
+    if (testSub !== "generate question" && testSub !== "Your Questions") {
       setLoading(true)
       fetch(
         `https://quiztimequestionapi.onrender.com/questions/${testSub.toLowerCase()}questions`
@@ -178,6 +179,8 @@ const Testsetting = () => {
                       label="Subject"
                       onChange={(e) => settestSub(e.target.value)}
                     >
+                      <MenuItem value="generate question">Generate Question (AI)</MenuItem>
+                      <MenuItem value="Your Questions">Your Custom Questions</MenuItem>
                       <MenuItem value="html">HTML</MenuItem>
                       <MenuItem value="css">CSS</MenuItem>
                       <MenuItem value="javascript">javascript</MenuItem>
@@ -187,9 +190,6 @@ const Testsetting = () => {
                       <MenuItem value="Science">Science</MenuItem>
                       <MenuItem value="Funny">Funny</MenuItem>
                       <MenuItem value="Reasoning">Reasoning</MenuItem>
-                      <MenuItem value="generate question">Generate Question (AI)</MenuItem>
-                      <MenuItem value="Previous paper">Previous Paper</MenuItem>
-                      <MenuItem value="Your Questions">Your Custom Questions</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
@@ -239,23 +239,24 @@ const Testsetting = () => {
                     </>
                   )}
 
-                  
+
                 </div>
                 {/* Start Test */}
-                  {testSub !== "Your Questions" && testSub !== "Previous paper" && (
-                    <button
-                      type="button"
-                      onClick={startTest}
-                      disabled={loading}
-                      className="text-white w-1/3 bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5"
-                    >
-                      Start Test
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={startTest}
+                    disabled={loading}
+                    className="text-white w-1/3 bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5"
+                  >
+                    Start Test
+                  </button>
               </div>
 
               {/* Conditional Render for Rules or Adding Questions */}
-              {testSub === "Your Questions" ? <AddQuestions /> : <TestRules />}
+              {testSub === "Your Questions" ? <FileUploadComponent
+                randomShuffle={randomShuffle}
+                setmaxquestionLength={setmaxquestionLength} />
+                : <TestRules />}
             </div>
           </div>
         </div>
