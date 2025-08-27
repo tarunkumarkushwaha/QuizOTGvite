@@ -53,13 +53,14 @@ const Testsetting = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        if (data?.question?.length) {
-          let shuffledQuestions = randomShuffle(data.questions)
+        if (data?.question) {
+          let shuffledQuestions = randomShuffle(data.question)
           setTestQuestion(shuffledQuestions);
           setTimeValue(String(data.time || 10));
           setmin(data.time || 10);
           toast.success("Questions generated successfully!");
         } else {
+          console.log(data)
           toast.error("No questions returned from AI");
         }
       })
@@ -104,6 +105,7 @@ const Testsetting = () => {
     } else { setquestionGenerateInput(true) }
   }, [testSub]);
 
+  // console.log(TestQuestion,"question",testSub)
   // local question files 
 
   //   const questionModules = {
@@ -178,7 +180,7 @@ const Testsetting = () => {
                     >
                       <MenuItem value="html">HTML</MenuItem>
                       <MenuItem value="css">CSS</MenuItem>
-                      <MenuItem value="Javascript">Javascript</MenuItem>
+                      <MenuItem value="javascript">javascript</MenuItem>
                       <MenuItem value="React">React</MenuItem>
                       <MenuItem value="wordpress">WordPress</MenuItem>
                       <MenuItem value="Python">Python</MenuItem>
@@ -232,7 +234,7 @@ const Testsetting = () => {
                         disabled={loading}
                         className="w-full text-white bg-gradient-to-br from-purple-500 to-pink-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-purple-200 font-medium rounded-lg text-sm px-5 py-2.5"
                       >
-                        {loading ? "Generating..." : "Generate Questions"}
+                        {loading ? "Please Wait..." : "Generate Questions"}
                       </button>
                     </>
                   )}

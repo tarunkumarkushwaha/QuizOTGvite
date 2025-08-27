@@ -24,7 +24,7 @@ import ErrorPage from "./components/ErrorPage";
 // import Usercontext from "./context/Usercontext";
 
 function App() {
-  const [testSub, settestSub] = useState("Javascript")
+  const [testSub, settestSub] = useState("javascript")
   const [min, setmin] = useState(10)
   const [TestQuestion, setTestQuestion] = useState()
   const [dark, setdark] = useState(false)
@@ -69,13 +69,13 @@ function App() {
     }
   }, []);
 
- useEffect(() => {
-    fetch(`https://quiztimequestionapi.onrender.com/questions/javascriptquestions`).then(
-      response => response.json()
-    ).then( data => {
-      console.log("waking up app",data)}
-    ).catch(error => console.log('Error fetching data:', error," waking up due to cold start please wait ....."));
-  }, [])
+//  useEffect(() => {
+//     fetch(`https://quiztimequestionapi.onrender.com/questions/javascriptquestions`).then(
+//       response => response.json()
+//     ).then( data => {
+//       console.log("waking up app",data)}
+//     ).catch(error => console.log('Error fetching data:', error," waking up due to cold start please wait ....."));
+//   }, [])
 
   return (
     <>
