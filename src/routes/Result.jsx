@@ -51,12 +51,13 @@ const Result = () => {
             >
               Restart
             </button>
-            <button
+            {/* under construction discussion forum  */}
+            {/* <button
               type="button"
               className="h-10 m-[5%] text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
             >
               <Link to={"/discussions"}>Discussions</Link>
-            </button>
+            </button> */}
           </div>
         </div>
       ) : (
