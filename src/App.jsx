@@ -1,7 +1,8 @@
 import {
   BrowserRouter,
   Route,
-  Routes
+  Routes,
+  Navigate
 } from "react-router-dom";
 import { Context } from "./MyContext";
 import { useEffect, useState } from "react";
@@ -21,21 +22,92 @@ import CustomTest from "./routes/CustomTest";
 import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
 import ErrorPage from "./components/ErrorPage";
-// import Usercontext from "./context/Usercontext";
 
 function App() {
+  const [accessToken, setAccessToken] = useState(null);
   const [testSub, settestSub] = useState("javascript")
   const [min, setmin] = useState(10)
   const [TestQuestion, setTestQuestion] = useState()
   const [dark, setdark] = useState(false)
-  const [signIn, setsignIn] = useState(false)
-  const [name, setName] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [userName, setuserName] = useState("")
   const [CustomQuestions, setCustomQuestions] = useState([]);
   const [correctresponse, setcorrectresponse] = useState(0)
   const [incorrectresponse, setincorrectresponse] = useState(0)
   const [pastpercentage, setpastpercentage] = useState(0)
   const [start, setstart] = useState(false)
+  const [loading, setLoading] = useState(true);
+
+  // const backendURL = "http://localhost:3000"
+  const backendURL = "https://quiztimequestionapi.onrender.com"
+
+  useEffect(() => {
+    const refresh = async () => {
+      try {
+        // setLoading(true)
+        const res = await fetch(`${backendURL}/refresh`, {
+          method: "POST",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          console.log("No valid refresh token (new user)");
+          return;
+        }
+
+        const data = await res.json();
+
+        if (data?.accessToken) {
+          setAccessToken(data.accessToken);
+        } else {
+          console.log("No refresh token, user not logged in");
+        }
+      } catch (err) {
+        console.log("Error refreshing token:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    refresh();
+  }, []);
+
+
+  // wrapper fetch that handles auto refresh
+  const authFetch = async (url, options = {}) => {
+    let res = await fetch(backendURL + url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      },
+      credentials: "include",
+    });
+
+    if (res.status === 401) {
+      // refresh token
+      const refreshRes = await fetch(`${backendURL}/refresh`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (refreshRes.ok) {
+        const { accessToken: newToken } = await refreshRes.json();
+        setAccessToken(newToken);
+
+        // retry request with new token
+        res = await fetch(backendURL + url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Bearer ${newToken}`,
+          },
+          credentials: "include",
+        });
+      }
+    }
+
+    return res;
+  };
 
   const themeChange = () => {
     dark ? localStorage.setItem('Theme', JSON.stringify(false)) : localStorage.setItem('Theme', JSON.stringify(true));
@@ -43,21 +115,9 @@ function App() {
   }
 
   useEffect(() => {
-    const item1 = localStorage.getItem('Name');
-    const item2 = localStorage.getItem('Password');
-    const item3 = localStorage.getItem('login');
     const QUESTION = localStorage.getItem('questions');
     const THEME = localStorage.getItem('Theme');
     const PERCENT = localStorage.getItem('result');
-    if (item1) {
-      setName(JSON.parse(item1));
-    }
-    if (item2) {
-      setPwd(JSON.parse(item2));
-    }
-    if (item3) {
-      setsignIn(JSON.parse(item3));
-    }
     if (THEME) {
       setdark(JSON.parse(THEME));
     }
@@ -69,22 +129,42 @@ function App() {
     }
   }, []);
 
-//  useEffect(() => {
-//     fetch(`https://quiztimequestionapi.onrender.com/questions/javascriptquestions`).then(
-//       response => response.json()
-//     ).then( data => {
-//       console.log("waking up app",data)}
-//     ).catch(error => console.log('Error fetching data:', error," waking up due to cold start please wait ....."));
-//   }, [])
+  useEffect(() => {
+    const savedToken = localStorage.getItem("accessToken");
+    if (savedToken) setAccessToken(savedToken);
+  }, []);
+
+  useEffect(() => {
+    if (accessToken) localStorage.setItem("accessToken", accessToken);
+  }, [accessToken]);
+
+
+  // Protected Route component
+  const ProtectedRoute = ({ children }) => {
+    if (loading) {
+      return (
+        <div style={{ textAlign: "center", marginTop: "20vh", color: "gray" }}>
+          Checking session...
+        </div>
+      );
+    }
+    if (!accessToken) {
+      return <Navigate to="/login" replace />;
+    }
+
+    return children;
+  };
+
+
 
   return (
     <>
-      {/* <Usercontext> */}
       <Context.Provider value={{
-        start, setstart,
+        accessToken, authFetch, setAccessToken,
+        start, setstart, userName, setuserName, backendURL,
         TestQuestion, setTestQuestion, min, setmin,
-        name, setName, pwd, pastpercentage,
-        setPwd, signIn, setsignIn, dark, themeChange,
+        pastpercentage,
+        dark, themeChange,
         correctresponse, setcorrectresponse, setincorrectresponse,
         incorrectresponse, CustomQuestions, setCustomQuestions,
         testSub, settestSub
@@ -97,12 +177,12 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/testsetting" element={<Testsetting />} />
             <Route path="/test" element={<Test />} />
-            <Route path="/customtest" element={<CustomTest />} />
-            <Route path="/result" element={<Result />} />
+            <Route path="/customtest" element={<ProtectedRoute><CustomTest /></ProtectedRoute>} />
+            <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/termsandconditions" element={<Termsandconditions />} />
-            <Route path="/discussions" element={<Discussions />} />
+            <Route path="/discussions" element={<ProtectedRoute><Discussions /></ProtectedRoute>} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
           <Foot />
@@ -118,7 +198,6 @@ function App() {
           draggable
           pauseOnHover={false}
         />
-        {/* </Usercontext> */}
       </Context.Provider>
     </>
   )

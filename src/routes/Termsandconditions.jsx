@@ -1,10 +1,7 @@
-// import Foot from "../components/Foot"
-// import Navbar from "../components/Navbar"
 
 const Termsandconditions = () => {
     return (
         <>
-            {/* <Navbar /> */}
             <div className="mainbg text-xl text-slate-900 bg-no-repeat bg-left h-screen flex justify-center items-center p-10 flex-col">
             <h1 className="text-2xl text-slate-800 p-10 smooth-entry">Terms and conditions</h1>
             <p>A <span title="I know spelling of messege is wrong, it is not grammer lecture">massege </span>
@@ -13,7 +10,6 @@ const Termsandconditions = () => {
             <p>if you really want to create something you can contact me</p>
             <p title="no payment for help smooth-entry">free of cost</p>
             </div>
-            {/* <Foot /> */}
         </>
     )
 }

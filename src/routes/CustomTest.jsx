@@ -96,7 +96,7 @@ const CustomTest = () => {
     <>
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
-      {signIn ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/>
+      { timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/>
       :
       <div className={`${style.ui} h-screen flex justify-center items-center p-10 flex-col`}>
         <Timer min={min} settimeover={settimeover} setmin={setmin} />
@@ -112,14 +112,7 @@ const CustomTest = () => {
             Final Submit
           </button>
         </div>
-      </div> 
-      : <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-        <h1 className="text-3xl text-lime-800 font-sans">Please log in to use app</h1>
-        <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-          <Link to={"/login"}>login</Link>
-        </button>
-      </div></>
-      }
+      </div> }
     </>
   )
 }

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [menu, setmenu] = useState(false)
-  const { dark, themeChange, signIn, setsignIn, name } = useContext(Context);
+  const { dark, themeChange, userName, backendURL, setAccessToken, setuserName, accessToken } = useContext(Context);
   let navigate = useNavigate()
   const location = useLocation()
 
@@ -17,11 +17,24 @@ const Navbar = () => {
 
   // console.log("rerendering")
 
-  const handleLogout = () => {
-    toast.success(`user ${name} has successfully signed out`)
+  const handleLogout = async () => {
+
+    try {
+      const res = await fetch(`${backendURL}/logout`, {
+        method: "POST",
+        credentials: "include"
+      });
+      if (!res.ok) return toast.error(await res.text());
+      toast.success(`user ${userName} has successfully signed out`)
+      setAccessToken(null);
+      setuserName("");
+      navigate("/login");
+    } catch {
+      toast.error("Server error");
+    }
     localStorage.setItem('login', JSON.stringify(false));
     navigate("/login")
-    setsignIn(false)
+    // setsignIn(false)
   }
 
   const loginClick = () => {
@@ -87,7 +100,7 @@ const Navbar = () => {
                 </ul>
               </div>
               <div className="my-5 mr-0 md:mr-10">
-                {signIn ?
+                {accessToken ?
                   <button type="button" onClick={handleLogout} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                     log out
                   </button>

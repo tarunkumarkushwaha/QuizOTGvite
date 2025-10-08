@@ -40,8 +40,7 @@ const Discussions = () => {
   return (
 
     <>
-      {/* <Navbar /> */}
-      {signIn ? <div className={`${style.ui} h-screen flex md:flex-row justify-center items-center p-10 flex-col`}>
+   <div className={`${style.ui} h-screen flex md:flex-row justify-center items-center p-10 flex-col`}>
         <div className='smooth-entry mx-2 flex sm:flex-row justify-center item-center gap-4 flex-col'>
           <div className='w-full max-w-xl xl:mx-0 mx-auto'>
             <div onClick={() => { setShowAddNewsModal(true) }} className='md:w-[30vw] w-[80vw] shadow mx-auto my-0 p-1.5 rounded-lg border bg-white border-[#D1D5DB] flex items-center flex-col no-scrollbar'>
@@ -89,16 +88,7 @@ const Discussions = () => {
             )}
           </div>
         </div>
-        {/* } */}
-      </div> : <><div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-        <h1 className="smooth-entry text-3xl text-lime-800 font-sans">Please log in to use app</h1>
-        <CircularProgress />
-        <button type="button" className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-          <Link to={"/login"}>login</Link>
-        </button>
-      </div></>
-      }
-      {/* <Foot /> */}
+      </div> 
     </>
   )
 }

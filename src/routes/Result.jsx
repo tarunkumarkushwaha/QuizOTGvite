@@ -4,7 +4,7 @@ import { Context } from '../MyContext';
 import { useRef } from "react";
 
 const Result = () => {
-  const { TestQuestion, correctresponse, incorrectresponse, dark, CustomQuestions, testSub, signIn } = useContext(Context);
+  const { TestQuestion, correctresponse, incorrectresponse, dark, CustomQuestions, testSub, accessToken } = useContext(Context);
   let navigate = useNavigate()
   const style = {
     ui: dark ?
@@ -22,7 +22,7 @@ const Result = () => {
   //  console.log(percentage)
   return (
     <>
-      {signIn ? (
+      {accessToken ? (
         <div className={`${style.ui} h-screen ${style.text} flex justify-center items-center text-start p-10 flex-col`}>
           <h1 className="smooth-entry text-3xl text-green-500 font-sans">Result</h1>
           <div className="smooth-entry flex">

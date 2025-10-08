@@ -9,7 +9,7 @@ const Signup = () => {
   const [password, setpassword] = useState("")
   const [showpass, setshowpass] = useState(false)
   const [checkpassword, setcheckpassword] = useState("")
-  const { setName, setPwd } = useContext(Context);
+  const { setuserName, backendURL } = useContext(Context);
 
   const passwordValidator = (pass) => {
     let passobject = { password: pass, error: false, errormessege: "" }
@@ -44,9 +44,21 @@ const Signup = () => {
     }
   }
 
-  const handle = () => {
-    setName(naam)
-    setPwd(password)
+  const handle = async () => {
+    // setName(naam)
+    // setPwd(password)
+    try {
+      const res = await fetch(`${backendURL}/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ naam, password })
+      });
+      if (!res.ok) return toast.error(await res.text());
+      toast.success("User created! You can now login.");
+      navigate("/login");
+    } catch {
+      toast.error("Server error");
+    }
   };
 
   let navigate = useNavigate()
@@ -57,11 +69,11 @@ const Signup = () => {
       return
     }
 
-    if (passwordValidator(password).error) {
-      let messege = passwordValidator(password).errormessege
-      toast.error(messege)
-      return
-    }
+    // if (passwordValidator(password).error) {
+    //   let messege = passwordValidator(password).errormessege
+    //   toast.error(messege)
+    //   return
+    // }
     if (checkpassword == password) {
       handle()
       navigate("/login")

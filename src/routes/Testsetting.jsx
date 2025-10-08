@@ -16,7 +16,9 @@ const Testsetting = () => {
     setmin,
     TestQuestion,
     setTestQuestion,
-    signIn
+    backendURL,
+    accessToken,
+    min
   } = useContext(Context);
 
   const [questionLength, setquestionLength] = useState(10);
@@ -31,7 +33,7 @@ const Testsetting = () => {
 
   const handleChange = (text) => {
     const numericTimeValue = text.replace(/[^0-9]/g, "");
-    setTimeValue(numericTimeValue);
+    setmin(numericTimeValue);
   };
 
   function randomShuffle(array) {
@@ -47,7 +49,7 @@ const Testsetting = () => {
   const GenerateQuestion = () => {
     setLoading(true);
     fetch(
-      `https://quiztimequestionapi.onrender.com/ask?prompt=${encodeURIComponent(
+      `${backendURL}/ask?prompt=${encodeURIComponent(
         questionGenerateInputText
       )}&count=${questionLength}`
     )
@@ -56,7 +58,7 @@ const Testsetting = () => {
         if (data?.question) {
           let shuffledQuestions = randomShuffle(data.question)
           setTestQuestion(shuffledQuestions);
-          setTimeValue(String(data.time || 10));
+          // setmin(String(data.time || 10));
           setmin(data.time || 10);
           toast.success("Questions generated successfully!");
         } else {
@@ -89,10 +91,13 @@ const Testsetting = () => {
   };
 
   useEffect(() => {
+    if (!testSub || !backendURL) {
+      return;
+    }
     if (testSub !== "generate question" && testSub !== "Your Questions") {
       setLoading(true)
       fetch(
-        `https://quiztimequestionapi.onrender.com/questions/${testSub.toLowerCase()}questions`
+        `${backendURL}/questions/${testSub.toLowerCase()}questions`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -105,59 +110,9 @@ const Testsetting = () => {
     } else { setquestionGenerateInput(true) }
   }, [testSub]);
 
-  // console.log(TestQuestion,"question",testSub)
-  // local question files 
-
-  //   const questionModules = {
-  //   javascript: () => import("../questions/javascriptquestions"),
-  //   react: () => import("../questions/reactquestions"),
-  //   html: () => import("../questions/htmlquestions"),
-  //   css: () => import("../questions/cssquestions"),
-  //   indianGK: () => import("../questions/indianGKquestions"),
-  //   wordpress: () => import("../questions/wordpressquestions"),
-  //   math: () => import("../questions/mathquestions"),
-  //   python: () => import("../questions/pythonquestions"),
-  //   science: () => import("../questions/sciencequestions"),
-  //   reasoning: () => import("../questions/reasoningquestions"),
-  //   funny: () => import("../questions/funnyquestions"),
-  // };
-
-  // useEffect(() => {
-  //   if (testSub !== "generate question") {
-  //     setquestionGenerateInput(false)
-  //     loadQuestions();
-  //   } else { setquestionGenerateInput(true) }
-  // }, [testSub, loadQuestions]);
-
-  //   const loadQuestions = useCallback(async () => {
-  //   if (testSub === "generate question") {
-  //     return
-  //   };
-
-  //   if (questionModules[testSub]) {
-  //     // setquestionGenerateInput(false)
-  //     try {
-  //       const module = await questionModules[testSub]();
-  //       const availableLength = module.default.questions.length;
-  //       setmaxquestionLength(availableLength);
-
-  //       const length = Math.min(questionLength, availableLength);
-  //       const shuffled = randomShuffle(module.default.questions).slice(
-  //         0,
-  //         length
-  //       );
-
-  //       setTestQuestion(shuffled);
-  //       setmin(parseInt(Timevalue, 10) || 10);
-  //     } catch (err) {
-  //       toast.error(`Unable to load questions for ${testSub}`);
-  //     }
-  //   }
-  // }, [testSub, questionLength, Timevalue]);
-
   return (
     <>
-      {signIn ? (
+      {accessToken ? (
         <div className="mainbg bg-no-repeat bg-left min-h-screen">
           <div className="bg-slate-950/60 min-h-screen flex flex-col items-center p-10">
             <h1 className="smooth-entry text-3xl m-1 p-5 mt-8 text-slate-100 text-center font-sans">
@@ -199,7 +154,7 @@ const Testsetting = () => {
                     className="bg-slate-300"
                     type="number"
                     label="Time (minutes)"
-                    value={Timevalue}
+                    value={min}
                     onChange={(e) => handleChange(e.target.value)}
                     inputProps={{ min: 1 }}
                     fullWidth
@@ -241,14 +196,14 @@ const Testsetting = () => {
 
                 </div>
                 {/* Start Test */}
-                  <button
-                    type="button"
-                    onClick={startTest}
-                    disabled={loading}
-                    className="text-white w-1/3 bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5"
-                  >
-                    Start Test
-                  </button>
+                <button
+                  type="button"
+                  onClick={startTest}
+                  disabled={loading}
+                  className="text-white w-1/3 bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5"
+                >
+                  Start Test
+                </button>
               </div>
 
               {/* Conditional Render for Rules or Adding Questions */}
