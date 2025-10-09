@@ -22,6 +22,7 @@ import CustomTest from "./routes/CustomTest";
 import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
 import ErrorPage from "./components/ErrorPage";
+import QuizManager from "./routes/ManageQuestions";
 
 function App() {
   const [accessToken, setAccessToken] = useState(null);
@@ -37,8 +38,8 @@ function App() {
   const [start, setstart] = useState(false)
   const [loading, setLoading] = useState(true);
 
-  // const backendURL = "http://localhost:3000"
-  const backendURL = "https://quiztimequestionapi.onrender.com"
+  const backendURL = "http://localhost:3000"
+  // const backendURL = "https://quiztimequestionapi.onrender.com"
 
   useEffect(() => {
     const refresh = async () => {
@@ -177,6 +178,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/testsetting" element={<Testsetting />} />
             <Route path="/test" element={<Test />} />
+            <Route path="/managequestions" element={<ProtectedRoute><QuizManager /></ProtectedRoute>} />
             <Route path="/customtest" element={<ProtectedRoute><CustomTest /></ProtectedRoute>} />
             <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />

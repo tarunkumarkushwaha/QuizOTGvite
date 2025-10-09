@@ -3,8 +3,10 @@ import Papa from "papaparse";
 import { Context } from '../MyContext';
 import { useContext } from 'react';
 import ShowQuestionFormat from "./ShowQuestionFormat";
+import { useNavigate } from "react-router-dom";
 
 export default function FileUploadComponent({ setmaxquestionLength, randomShuffle }) {
+    const [customsubject, setcustomsubject] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [validData, setValidData] = useState([]);
     const [invalidData, setInvalidData] = useState([]);
@@ -13,6 +15,8 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         CustomQuestions,
         setCustomQuestions,
         setTestQuestion,
+        backendURL,
+        accessToken
     } = useContext(Context);
 
     const schema = [
@@ -23,6 +27,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         "option4",
         "correctresponse",
         "time",
+        "subject"
     ];
 
     const handleUpload = (e) => {
@@ -103,7 +108,10 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                         error: `Row ${index + 1}: Missing or invalid options.`,
                     });
                 } else {
-                    valid.push(row);
+                    valid.push({
+                        ...row,
+                        subject: customsubject
+                    });
                 }
             } else {
                 invalid.push({
@@ -126,10 +134,52 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         }
     };
 
+    let navigate = useNavigate()
+
+    const submitMultipleQuestions = async (questionsArray) => {
+        if (!Array.isArray(questionsArray) || questionsArray.length === 0) {
+            alert("Please provide at least one question");
+            return;
+        }
+
+        const subject = questionsArray[0]?.subject?.trim() || selectedSubject;
+        if (!subject) return alert("Please enter or select a subject");
+
+        try {
+            const res = await fetch(`${backendURL}/quiz/bulk/${subject}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                credentials: "include",
+                body: JSON.stringify({ questions: questionsArray }),
+            });
+
+            if (res.ok) {
+                alert("All questions uploaded successfully!");
+                // await getAllSubjects();
+                // await loadQuestions();
+            } else {
+                const errMsg = await res.text();
+                console.error(errMsg);
+                alert("Error uploading questions");
+            }
+        } catch (err) {
+            console.error("Bulk upload failed", err);
+            alert("Bulk upload failed");
+        }
+    };
+
+    console.log(validData, "data")
+
     return (
         <div className="w-full bg-gray-100 rounded-lg p-6 mt-4">
             <h2 className="text-2xl font-bold mb-4">Upload Questions</h2>
-
+            <input
+                placeholder="enter subject name"
+                className="block w-full text-sm p-1 text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white mb-4"
+                type="text" value={customsubject} onChange={(e) => setcustomsubject(e.target.value)} />
             <input
                 type="file"
                 accept=".csv,.json"
@@ -160,11 +210,25 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                 </button>
             )}
 
+            <button
+                onClick={() => navigate("/managequestions")}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
+            >
+                Manage Questions
+            </button>
+
+            <button
+                onClick={() => submitMultipleQuestions(validData)}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
+            >
+                Save Questions
+            </button>
+
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg p-6 w-11/12 max-h-[80vh] overflow-y-auto">
                         <h3 className="text-lg font-semibold mb-4">Uploaded Questions</h3>
-
+                        <h2 className="text-sm font-semibold mb-4">subject - {validData[0]?.subject}</h2>
                         {validData.map((item, i) => (
                             <div
                                 key={i}

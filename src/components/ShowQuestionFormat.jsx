@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export default function ShowQuestionFormat({ showQuestionFormatModal, setShowQuestionFormatModal }) {
-  const textToCopy = `Step 1. Convert questions in csv in the following schema:
+  const textToCopy = ` Convert given questions in csv file in the following schema:
 - **question**: The question text.
 - **option1, option2, option3, option4**: Multiple-choice answers.
 - **correctresponse**: The correct answer text.
@@ -9,7 +9,7 @@ export default function ShowQuestionFormat({ showQuestionFormatModal, setShowQue
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(textToCopy);
-    alert("Text copied! Paste in any AI tool (ChatGPT is best) with your text questions and answers to convert them into CSV.");
+    alert("Text copied! Paste in any AI tool (ChatGPT is best) with your text questions and answers to convert them into CSV. u can also ask ai to create questions");
   };
 
   if (!showQuestionFormatModal) return null;

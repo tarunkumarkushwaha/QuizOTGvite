@@ -42,6 +42,7 @@ const ViewQuestion = ({ onCancelClick, questions, open }) => {
                             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
                             <div className="xl:mt-0 mt-32 relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle sm:max-w-[600px] w-full">
                                 <div className="sm:items-start flex h-[26rem] overflow-scroll bg-slate-100 flex-col justify-center p-4">
+                                    {/* <h1 className="text-2xl text-lime-900 font-semibold m-10">subject - {questions.question.subject}</h1> */}
                                     {questions.map((item, i) => (<div key={i} className="flex flex-col justify-center items-center smooth-entry">
                                         <h2 className="text-2xl text-lime-900 font-semibold m-10">Q{i+1} - {item.question}</h2>
                                         <ul className=" self-start text-lg font-extralight rounded-lg">
