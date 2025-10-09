@@ -38,8 +38,8 @@ function App() {
   const [start, setstart] = useState(false)
   const [loading, setLoading] = useState(true);
 
-  const backendURL = "http://localhost:3000"
-  // const backendURL = "https://quiztimequestionapi.onrender.com"
+  // const backendURL = "http://localhost:3000"
+  const backendURL = "https://quiztimequestionapi.onrender.com"
 
   useEffect(() => {
     const refresh = async () => {
