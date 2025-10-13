@@ -120,17 +120,21 @@ const QuizManager = () => {
     });
 
     if (res.ok) {
-      alert(editingId ? "Question updated!" : "Question added!");
+      toast.success(editingId ? "Question updated!" : "Question added!");
       setSelectedSubject(subject);
       await getAllSubjects();
       await loadQuestions();
       resetForm();
     } else {
-      alert("Error saving question");
+      toast.error("Error saving question");
     }
   };
 
   const editQuestion = (q) => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
     setEditingId(q._id);
     setFormData({
       question: q.question,
@@ -153,10 +157,10 @@ const QuizManager = () => {
     });
 
     if (res.ok) {
-      alert("Question deleted");
+      toast.success("Question deleted");
       loadQuestions();
     } else {
-      alert("Error deleting question");
+      toast.error("Error deleting question");
     }
   };
 
@@ -197,12 +201,12 @@ const QuizManager = () => {
             ))}
           </select>
 
-          <button
+          {/* <button
             onClick={() => alert("Implement delete subject API")}
             className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition"
           >
             X
-          </button>
+          </button> */}
         </div>
       </div>
 

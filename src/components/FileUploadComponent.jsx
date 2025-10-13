@@ -214,14 +214,14 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                 onClick={() => navigate("/managequestions")}
                 className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
             >
-                Manage Questions
+                Previous Questions
             </button>
 
             <button
                 onClick={() => submitMultipleQuestions(validData)}
                 className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
             >
-                Save Questions
+                Save uploaded Questions
             </button>
 
             {showModal && (

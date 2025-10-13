@@ -40,7 +40,7 @@ export default function ShowQuestionFormat({ showQuestionFormatModal, setShowQue
 
           <h2 className="text-lg font-bold">Method 2</h2>
           <p className="text-gray-700">Step 1. Create excel file with below format in image.</p>
-          <p className="text-gray-700">Step 2. Convert the file to `.csv` or `.json`.</p>
+          <p className="text-gray-700">Step 2. Convert or save the file as `.csv` or `.json`.</p>
           <p className="text-gray-700">Example of excel/csv is given below.</p>
 
           {/* Example CSV image */}

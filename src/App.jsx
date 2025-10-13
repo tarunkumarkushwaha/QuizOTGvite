@@ -23,6 +23,7 @@ import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
 import ErrorPage from "./components/ErrorPage";
 import QuizManager from "./routes/ManageQuestions";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const [accessToken, setAccessToken] = useState(null);
@@ -144,9 +145,7 @@ function App() {
   const ProtectedRoute = ({ children }) => {
     if (loading) {
       return (
-        <div style={{ textAlign: "center", marginTop: "20vh", color: "gray" }}>
-          Checking session...
-        </div>
+        <LoadingSpinner text="Loading..."/>
       );
     }
     if (!accessToken) {

@@ -1,15 +1,14 @@
-import { useNavigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
 import { Context } from '../MyContext';
 import { useContext, useEffect, useState, useCallback } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { toast } from "react-toastify";
-import PleaseLogin from "../components/PleaseLogin.jsx";
 import TestRules from "../components/TestRules.jsx";
 import FileUploadComponent from "../components/FileUploadComponent.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 
 const Testsetting = () => {
   const {
-    CustomQuestions,
     testSub,
     settestSub,
     setstart,
@@ -23,9 +22,7 @@ const Testsetting = () => {
 
   const [questionLength, setquestionLength] = useState(10);
   const [maxquestionLength, setmaxquestionLength] = useState(30);
-  const [Timevalue, setTimeValue] = useState("10");
   const [loading, setLoading] = useState(false);
-  const [error, seterror] = useState("");
   const [questionGenerateInput, setquestionGenerateInput] = useState(false);
   const [questionGenerateInputText, setquestionGenerateInputText] = useState("");
 
@@ -67,30 +64,32 @@ const Testsetting = () => {
         }
       })
       .catch((err) => {
-        seterror(err.message);
+        console.log(err.message);
         toast.warning("Please wait — AI is waking up");
       })
       .finally(() => setLoading(false));
   };
 
   const startTest = () => {
-    if (testSub === "custom" && CustomQuestions.length <= 0) {
-      toast.warning("No custom questions, switching to GK");
-      settestSub("indianGK");
+    if (testSub === "Your Questions" && !TestQuestion?.length) {
+      toast.warning("No custom questions found");
+      return
     }
     if (testSub === "generate question" && !TestQuestion?.length) {
       toast.error("Generate questions first");
       return;
     }
     setstart(true);
-    navigate(testSub === "custom" ? "/customtest" : "/test");
-    localStorage.setItem(
-      "questions",
-      JSON.stringify(testSub === "custom" ? CustomQuestions : TestQuestion)
-    );
+    navigate("/test");
   };
 
   useEffect(() => {
+    if (testSub === "Your Questions") {
+      setTestQuestion();
+    }
+    if (testSub === "generate question") {
+      setTestQuestion();
+    }
     if (!testSub || !backendURL) {
       return;
     }
@@ -109,6 +108,10 @@ const Testsetting = () => {
         .finally(() => setLoading(false));
     } else { setquestionGenerateInput(true) }
   }, [testSub]);
+
+   if (!accessToken) {
+        return <Navigate to="/login" replace />;
+      }
 
   return (
     <>
@@ -215,7 +218,7 @@ const Testsetting = () => {
           </div>
         </div>
       ) : (
-        <PleaseLogin />
+        <LoadingSpinner/>
       )}
 
     </>
