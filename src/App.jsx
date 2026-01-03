@@ -163,7 +163,7 @@ function App() {
         accessToken, authFetch, setAccessToken,
         start, setstart, userName, setuserName, backendURL,
         TestQuestion, setTestQuestion, min, setmin,
-        pastpercentage,
+        pastpercentage,loading, setLoading,
         dark, themeChange,
         correctresponse, setcorrectresponse, setincorrectresponse,
         incorrectresponse, CustomQuestions, setCustomQuestions,

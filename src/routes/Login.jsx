@@ -8,60 +8,48 @@ import { toast } from "react-toastify"
 
 const Login = () => {
   const [password, setpassword] = useState("")
-  const { userName, setuserName, backendURL, setAccessToken } = useContext(Context);
+  const { userName, setuserName, backendURL, setAccessToken,loading, setLoading } = useContext(Context);
 
   let navigate = useNavigate()
 
-  // const handleSignin = () => {
-  //   if (userName == name && password == pwd) {
-  //     setsignIn(true)
-  //     localStorage.setItem('login', JSON.stringify(true));
-  //     toast.success(`User - ${userName} successfully login`)
-  //     navigate("/testsetting")
-  //   }
-  //   else{toast.error(`User - ${userName} not found`)}
-  // }
+const handleSignin = async () => {
+  if (!userName || !password) {
+    toast.error("Please enter username and password");
+    return;
+  }
 
-  const handleSignin = async () => {
-    if (!userName || !password) {
-      toast.error("Please enter username and password");
+  setLoading(true); 
+
+  try {
+    const res = await fetch(`${backendURL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: userName,
+        password: password.trim()
+      }),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const msg = await res.text();
+      toast.error(msg || "Login failed");
       return;
     }
 
-    try {
-      const res = await fetch(`${backendURL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: userName, password }),
-        credentials: "include",
-      });
+    const data = await res.json();
+    setAccessToken(data.accessToken);
 
-      if (!res.ok) {
-        const msg = await response.text();
-        toast.error(msg);
-        return;
-      }
+    toast.success(`User ${userName} signed in successfully`);
+    navigate("/testsetting");
 
-      const data = await res.json();
-      setAccessToken(data.accessToken);
-      toast.success(`user ${userName} has successfully signed in`)
-      navigate("/testsetting");
-      // return data;
-    } catch (err) {
-      toast.error("Server error");
-    }
-  };
+  } catch (err) {
+    toast.error("Server error");
+  } finally {
+    setLoading(false); 
+  }
+};
 
-  // useEffect(() => {
-  //   const NAME = JSON.parse(localStorage.getItem('Name'));
-  //   const PASSWORD = JSON.parse(localStorage.getItem('Password'));
-  //   if (NAME) {
-  //     setuserName(NAME);
-  //   }
-  //   if (PASSWORD) {
-  //     setpassword(PASSWORD);
-  //   }
-  // }, []);
 
   return (
     <>
@@ -86,11 +74,11 @@ const Login = () => {
                     <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                     <input
                       value={password}
-                      onChange={(e) => setpassword(e.target.value)}
+                      onChange={(e) => setpassword(e.target.value.trim())}
                       type="password" name="password" id="password" placeholder="••••••••" className="bg-green-100 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
                   </div>
-                  <button onClick={handleSignin} className="w-full text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Sign in
+                  <button onClick={handleSignin} disabled={loading} className={`${loading ? "opacity-50 cursor-not-allowed" : ""} w-full text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center `}>
+                    {loading ? "Signing in..." : "Sign In"}
                   </button>
                   <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                     Don’t have an account yet? <Link to="/signup" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
@@ -99,13 +87,8 @@ const Login = () => {
               </div>
             </div>
           </section>
-          {/* <button type="button"
-          className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-          <Link to={"/testsetting"}>test setting</Link>
-        </button> */}
         </div>
       </div>
-      {/* <Foot /> */}
     </>
   )
 }
