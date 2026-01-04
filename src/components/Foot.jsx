@@ -14,7 +14,7 @@ const Foot = () => {
   return (
     <>
        <footer className="">
-       <span className={`block md:text-sm text-xs ${style.uiMode} text-center`}>© 2023 quiz OTG™<Link to="/termsandconditions" className="hover:underline">. All Rights Reserved.</Link></span>
+       <span className={`block md:text-sm text-xs ${style.uiMode} text-center`}>© 2026 quiz OTG™<Link to="/termsandconditions" className="hover:underline">. All Rights Reserved.</Link></span>
        </footer>
     </>
   )

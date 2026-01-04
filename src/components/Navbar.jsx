@@ -96,13 +96,13 @@ const Navbar = () => {
                 <ul className="flex font-semibold md:justify-between justify-center items-center md:flex-row flex-col gap-5">
                   <li className={`${location.pathname == "/" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/" >Home</NavLink></li>
                   {!accessToken && <><li className={`${location.pathname == "/about" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/about">About</NavLink></li>
-                  <li className={`${location.pathname == "/contact" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/contact">Contact</NavLink></li></>}
-                {accessToken && <>
-                <li className={`${location.pathname == "/managequestions" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/managequestions">Questions</NavLink></li>
-                <li className={`${location.pathname == "/testsetting" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/testsetting">Test</NavLink></li>
-                <li className={`${location.pathname == "/result" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/result">Results</NavLink></li>
-                <li className={`${location.pathname == "/discussions" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/discussions">Discussions</NavLink></li>
-                </>}
+                    <li className={`${location.pathname == "/contact" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/contact">Contact</NavLink></li></>}
+                  {accessToken && <>
+                    <li className={`${location.pathname == "/testsetting" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/testsetting">Test</NavLink></li>
+                    <li className={`${location.pathname == "/result" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/result">Results</NavLink></li>
+                    {/* <li className={`${location.pathname == "/managequestions" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/managequestions">Your Questions</NavLink></li> */}
+                    {/* <li className={`${location.pathname == "/discussions" ? "text-indigo-800" : `${style.text}`} hover:text-indigo-400`}><NavLink to="/discussions">Discussions</NavLink></li> */}
+                  </>}
                 </ul>
               </div>
               <div className="my-5 mr-0 md:mr-10">

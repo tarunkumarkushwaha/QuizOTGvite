@@ -4,6 +4,7 @@ import { Context } from '../MyContext';
 import { useContext } from 'react';
 import ShowQuestionFormat from "./ShowQuestionFormat";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function FileUploadComponent({ setmaxquestionLength, randomShuffle }) {
     const [customsubject, setcustomsubject] = useState("");
@@ -41,7 +42,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                 : null;
 
         if (!fileType) {
-            alert("Please upload a CSV or JSON file.");
+            toast.warn("Please upload a CSV or JSON file.");
             return;
         }
 
@@ -64,7 +65,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
             skipEmptyLines: true,
             complete: (results) => validateData(results.data),
             error: (error) => {
-                alert("Parsing Error: " + error.message);
+                toast.error("Parsing Error: " + error.message);
             },
         });
     };
@@ -74,7 +75,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
             const jsonData = JSON.parse(data);
             validateData(jsonData);
         } catch (error) {
-            alert("Parsing Error: Invalid JSON format.");
+            toast.error("Parsing Error: Invalid JSON format.");
         }
     };
 
@@ -125,7 +126,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         setInvalidData(invalid);
 
         if (invalid.length > 0) {
-            alert(`${invalid.length} invalid rows found.`);
+            toast.error(`${invalid.length} invalid rows found.`);
         } else {
             setmaxquestionLength(valid.length);
             let shuffled = randomShuffle(valid).slice(0, valid.length);
@@ -138,12 +139,14 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
 
     const submitMultipleQuestions = async (questionsArray) => {
         if (!Array.isArray(questionsArray) || questionsArray.length === 0) {
-            alert("Please provide at least one question");
+            toast.warn("Please provide at least one question");
             return;
         }
 
+        let selectedSubject = customsubject
+
         const subject = questionsArray[0]?.subject?.trim() || selectedSubject;
-        if (!subject) return alert("Please enter or select a subject");
+        if (!subject) return toast.warn("Please enter or select a subject");
 
         try {
             const res = await fetch(`${backendURL}/quiz/bulk/${subject}`, {
@@ -157,17 +160,17 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
             });
 
             if (res.ok) {
-                alert("All questions uploaded successfully!");
+                toast.success("All questions uploaded successfully!");
                 // await getAllSubjects();
                 // await loadQuestions();
             } else {
                 const errMsg = await res.text();
                 console.error(errMsg);
-                alert("Error uploading questions");
+                toast.error("Error uploading questions");
             }
         } catch (err) {
             console.error("Bulk upload failed", err);
-            alert("Bulk upload failed");
+            toast.error("Bulk upload failed");
         }
     };
 
@@ -187,7 +190,24 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                 className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-white mb-4"
             />
 
-            {validData.length === 0 && (
+            <ShowQuestionFormat
+                showQuestionFormatModal={showQuestionFormatModal}
+                setShowQuestionFormatModal={setShowQuestionFormatModal}
+            />
+
+            <div className="flex justify-center my-4 items-center flex-wrap gap-4">
+
+             <button
+                onClick={() => submitMultipleQuestions(validData)}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
+            >
+                Save uploaded Questions
+            </button>
+
+            </div>
+
+            <div className="flex justify-center items-center flex-wrap gap-4">
+                {validData.length === 0 && (
                 <button
                     onClick={() => setShowQuestionFormatModal(true)}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
@@ -195,11 +215,6 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                     How to Generate CSV?
                 </button>
             )}
-
-            <ShowQuestionFormat
-                showQuestionFormatModal={showQuestionFormatModal}
-                setShowQuestionFormatModal={setShowQuestionFormatModal}
-            />
 
             {validData.length > 0 && (
                 <button
@@ -216,13 +231,14 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
             >
                 Previous Questions
             </button>
-
             <button
-                onClick={() => submitMultipleQuestions(validData)}
+                onClick={() => navigate("/managequestions")}
                 className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
             >
-                Save uploaded Questions
+                Manually Enter Questions
             </button>
+
+            </div>
 
             {showModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

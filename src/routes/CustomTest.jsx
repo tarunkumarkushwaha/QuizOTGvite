@@ -1,7 +1,7 @@
 import SingleQuestion from "../components/SingleQuestion.jsx"
 import Timer from "../components/Timer.jsx"
 import { toast } from "react-toastify"
-import { useRef, useState , useEffect} from "react"
+import { useRef, useState, useEffect } from "react"
 import { useContext } from 'react';
 import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
@@ -17,7 +17,7 @@ const CustomTest = () => {
 
   let navigate = useNavigate()
 
-  const { dark, signIn,setmin, min, } = useContext(Context);
+  const { dark, signIn, setmin, min, } = useContext(Context);
   const currentsong = useRef()
   const currentsong2 = useRef()
 
@@ -68,51 +68,52 @@ const CustomTest = () => {
 
   console.log(CustomQuestions[questionNo])
 
-    // anti cheat 
+  // anti cheat 
 
-    const handleKeyPress = (event) => {
-      // console.log('Key pressed:', event.key);
+  const handleKeyPress = (event) => {
+    // console.log('Key pressed:', event.key);
+    navigate('/result')
+    toast.error("early submission, you tried to cheat")
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    }
+  }, []);
+
+  const focus = useWindowFocusDetector()
+
+  useEffect(() => {
+    if (!focus) {
       navigate('/result')
       toast.error("early submission, you tried to cheat")
-    };
-  
-    useEffect(() => {
-      window.addEventListener('keydown', handleKeyPress);
-      return () => {
-        window.removeEventListener('keydown', handleKeyPress);
-      }
-    }, []);
-  
-    const focus = useWindowFocusDetector()
-  
-    useEffect(() => {
-     if(!focus) { navigate('/result')
-     toast.error("early submission, you tried to cheat")
-     }
-  
-    }, [focus])
+    }
+
+  }, [focus])
 
   return (
     <>
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
-      { timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit}/>
-      :
-      <div className={`${style.ui} h-screen flex justify-center items-center p-10 flex-col`}>
-        <Timer min={min} settimeover={settimeover} setmin={setmin} />
-        <SingleQuestion question={CustomQuestions[questionNo]} disabled={disabled} response={response} setresponse={setresponse} />
-        <div className="flex">
-          <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-            Next
-          </button>
-          <button type="button" disabled={disabled} onClick={checkAns} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-            check
-          </button>
-          <button type="button" onClick={finalSubmit} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-            Final Submit
-          </button>
-        </div>
-      </div> }
+      {timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} />
+        :
+        <div className={`${style.ui} h-screen flex justify-center items-center p-10 flex-col`}>
+          <Timer min={min} settimeover={settimeover} setmin={setmin} />
+          <SingleQuestion question={CustomQuestions[questionNo]} disabled={disabled} response={response} setresponse={setresponse} />
+          <div className="flex">
+            <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
+              Next
+            </button>
+            <button type="button" disabled={disabled} onClick={checkAns} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
+              check
+            </button>
+            <button type="button" onClick={finalSubmit} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
+              Final Submit
+            </button>
+          </div>
+        </div>}
     </>
   )
 }

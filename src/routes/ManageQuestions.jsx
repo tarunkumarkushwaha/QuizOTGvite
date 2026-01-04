@@ -174,26 +174,29 @@ const QuizManager = () => {
   };
 
   return (
-    <div className="font-sans bg-gray-100 min-h-screen py-10 px-4">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+    <div className="font-sans min-h-screen mt-10 bg-gradient-to-br from-slate-100 to-slate-200 py-12 px-4">
+
+      <h1 className="text-4xl font-bold text-center text-slate-800 mb-10">
         Quiz Manager
       </h1>
 
-      <div className="max-w-3xl mx-auto mb-8">
+      <div className="max-w-3xl mx-auto mb-10">
         <label
           htmlFor="collection-select"
-          className="block text-sm font-medium text-gray-700 mb-2"
+          className="block text-sm font-semibold text-slate-700 mb-2"
         >
-          Available Subjects:
+          Select Subject
         </label>
-        <div className="flex items-center gap-3">
+
+        <div className="flex gap-3">
           <select
             id="collection-select"
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
-            className="flex-1 p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3
+        focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           >
-            <option value="">Select subject</option>
+            <option value="">Choose a subject</option>
             {subjects.map((s) => (
               <option key={s} value={s}>
                 {s}
@@ -202,61 +205,76 @@ const QuizManager = () => {
           </select>
 
           {/* <button
-            onClick={() => alert("Implement delete subject API")}
-            className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg transition"
-          >
-            X
-          </button> */}
+        onClick={() => alert("Implement delete subject API")}
+        className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
+      >
+        Delete
+      </button> */}
         </div>
       </div>
 
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center mb-12">
         <button
           onClick={startTest}
-          className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
+          className="px-8 py-3 rounded-xl font-semibold text-white
+      bg-gradient-to-br from-green-500 to-emerald-600
+      hover:from-green-400 hover:to-emerald-500
+      shadow-lg transition active:scale-95"
         >
           Start Test
         </button>
       </div>
 
-      <div className="bg-white p-6 mt-6 rounded-2xl shadow-md max-w-3xl mx-auto">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Questions</h2>
+      <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6 mb-10">
+        <h2 className="text-xl font-semibold text-slate-700 mb-6">
+          Questions
+        </h2>
 
         {loading ? (
-          <p className="text-gray-600">Loading questions...</p>
+          <p className="text-slate-500">Loading questions...</p>
         ) : questions.length === 0 ? (
-          <p className="text-gray-600">No questions found.</p>
+          <p className="text-slate-500">No questions found.</p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-5">
             {questions.map((q) => (
               <div
                 key={q._id}
-                className="p-4 border border-gray-200 rounded-xl bg-gray-50 hover:bg-gray-100 transition"
+                className="p-5 rounded-2xl border border-slate-200
+            bg-slate-50 hover:bg-slate-100 transition"
               >
-                <b className="text-gray-800">{q.question}</b>
-                <div className="text-sm text-gray-700 mt-2 space-y-1">
-                  <p>1. {q.option1}</p>
-                  <p>2. {q.option2}</p>
-                  <p>3. {q.option3}</p>
-                  <p>4. {q.option4}</p>
-                  <p className="mt-1">
-                    <span className="font-medium">Correct:</span> {q.correctresponse}
+                <p className="font-semibold text-slate-800 mb-3">
+                  {q.question}
+                </p>
+
+                <div className="text-sm text-slate-700 space-y-1">
+                  <p>A. {q.option1}</p>
+                  <p>B. {q.option2}</p>
+                  <p>C. {q.option3}</p>
+                  <p>D. {q.option4}</p>
+
+                  <p className="mt-2">
+                    <span className="font-medium">Correct:</span>{" "}
+                    <span className="text-green-600">{q.correctresponse}</span>
                   </p>
+
                   <p>
                     <span className="font-medium">Time:</span> {q.time}s
                   </p>
                 </div>
 
-                <div className="mt-3 flex gap-2">
+                <div className="mt-4 flex gap-3">
                   <button
                     onClick={() => editQuestion(q)}
-                    className="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded-lg text-sm transition"
+                    className="px-4 py-2 rounded-lg text-sm font-medium text-white
+                bg-amber-500 hover:bg-amber-600 transition"
                   >
                     Edit
                   </button>
+
                   <button
                     onClick={() => deleteQuestion(q._id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm transition"
+                    className="px-4 py-2 rounded-lg text-sm font-medium text-white
+                bg-red-500 hover:bg-red-600 transition"
                   >
                     Delete
                   </button>
@@ -267,12 +285,12 @@ const QuizManager = () => {
         )}
       </div>
 
-      <div className="bg-white p-6 rounded-2xl shadow-md max-w-3xl mx-auto my-8">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
-          {editingId ? " Edit Question" : "+ Add Question"}
+      <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6">
+        <h2 className="text-xl font-semibold text-slate-700 mb-6">
+          {editingId ? "Edit Question" : "Add New Question"}
         </h2>
 
-        <form onSubmit={submitQuestion} className="space-y-4">
+        <form onSubmit={submitQuestion} className="grid gap-4">
           {[
             "question",
             "option1",
@@ -295,14 +313,16 @@ const QuizManager = () => {
               value={formData[field]}
               onChange={handleChange}
               required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="w-full rounded-xl border border-slate-300 px-4 py-3
+          focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
           ))}
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-4">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg transition"
+              className="px-6 py-3 rounded-xl font-semibold text-white
+          bg-blue-600 hover:bg-blue-700 transition"
             >
               {editingId ? "Update Question" : "Add Question"}
             </button>
@@ -311,7 +331,8 @@ const QuizManager = () => {
               <button
                 type="button"
                 onClick={resetForm}
-                className="bg-gray-500 hover:bg-gray-600 text-white font-medium px-5 py-2.5 rounded-lg transition"
+                className="px-6 py-3 rounded-xl font-semibold text-white
+            bg-slate-500 hover:bg-slate-600 transition"
               >
                 Cancel
               </button>
@@ -320,6 +341,7 @@ const QuizManager = () => {
         </form>
       </div>
     </div>
+
 
   );
 };

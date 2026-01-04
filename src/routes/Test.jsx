@@ -15,10 +15,10 @@ const Test = () => {
   const [disabled, setdisabled] = useState(false)
   const [timeover, settimeover] = useState(false)
 
-  const { setincorrectresponse, setmin, min, setcorrectresponse,correctresponse,accessToken,
+  const { setincorrectresponse, setmin, min, setcorrectresponse, correctresponse, accessToken,
     testSub, dark, TestQuestion, setTestQuestion } = useContext(Context);
 
-    // console.log(correctresponse)
+  // console.log(correctresponse)
 
   let navigate = useNavigate()
   const currentsong = useRef()
@@ -114,20 +114,87 @@ const Test = () => {
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {accessToken ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} />
         :
-        TestQuestion && <div className={`${style.ui} min-h-screen smooth-entry flex justify-center items-center p-10 mt-14 gap-5 flex-col`}>
-          <SingleQuestion question={TestQuestion[questionNO]} disabled={disabled} response={response} setresponse={setresponse} />
-          <div className="flex md:flex-row flex-col gap-2">
-            <button type="button" onClick={yourNext} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-              Next
-            </button>
-            <button type="button" disabled={disabled} onClick={checkAns} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-              check
-            </button>
-            <button type="button" onClick={finalSubmit} className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2">
-              Final Submit
-            </button>
+        TestQuestion && (
+          <div
+            className={`${style.ui} min-h-screen smooth-entry 
+    flex flex-col items-center justify-center 
+    px-4 py-10 mt-14 gap-8`}
+          >
+
+            <div className="w-full max-w-3xl">
+              <div className="flex justify-between items-center mb-2 text-sm text-slate-300">
+                <span>
+                  Question <span className="text-lime-400 font-semibold">
+                    {questionNO + 1}
+                  </span>{" "}
+                  of {TestQuestion.length}
+                </span>
+
+                <span className="text-slate-400">
+                  {Math.round(((questionNO + 1) / TestQuestion.length) * 100)}%
+                </span>
+              </div>
+
+              <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-lime-400 to-green-500
+          transition-all duration-500 ease-out"
+                  style={{
+                    width: `${((questionNO + 1) / TestQuestion.length) * 100}%`,
+                  }}
+                />
+              </div>
+            </div>
+
+            <SingleQuestion
+              question={TestQuestion[questionNO]}
+              disabled={disabled}
+              response={response}
+              setresponse={setresponse}
+            />
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
+
+              <button
+                type="button"
+                onClick={yourNext}
+                className="px-6 py-2.5 rounded-xl font-semibold text-white
+        bg-gradient-to-br from-sky-400 to-blue-600
+        hover:from-sky-300 hover:to-blue-500
+        transition-all duration-300 active:scale-95"
+              >
+                Next
+              </button>
+
+              <button
+                type="button"
+                disabled={disabled}
+                onClick={checkAns}
+                className={`px-6 py-2.5 rounded-xl font-semibold text-white
+        transition-all duration-300 active:scale-95
+        ${disabled
+                    ? "bg-white/20 cursor-not-allowed"
+                    : "bg-gradient-to-br from-emerald-400 to-green-600 hover:from-emerald-300 hover:to-green-500"
+                  }`}
+              >
+                Check Answer
+              </button>
+
+              <button
+                type="button"
+                onClick={finalSubmit}
+                className="px-6 py-2.5 rounded-xl font-semibold text-white
+        bg-gradient-to-br from-purple-500 to-pink-600
+        hover:from-purple-400 hover:to-pink-500
+        transition-all duration-300 active:scale-95"
+              >
+                Final Submit
+              </button>
+
+            </div>
           </div>
-        </div>
+        )
+
 
         :
 

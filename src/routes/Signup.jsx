@@ -85,53 +85,137 @@ const Signup = () => {
 
   return (
     <>
-      <section className="mainbg bg-no-repeat bg-left">
-        <div className="bg-slate-950/60">
-          <div className="smooth-entry flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-              <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <div className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Create and account
+      <section className="mainbg mt-10 bg-no-repeat bg-left min-h-screen">
+        <div className="min-h-screen bg-gradient-to-br from-slate-950/80 via-slate-900/70 to-slate-950/80 flex items-center justify-center px-4">
+
+          <div className="smooth-entry w-full max-w-md">
+
+            <div className="rounded-2xl bg-white/10 backdrop-blur-xl 
+          border border-white/10 shadow-2xl shadow-black/40">
+
+              <div className="p-8 space-y-6">
+
+                <div className="text-center">
+                  <h1 className="text-2xl md:text-3xl font-extrabold text-white">
+                    Create your account
+                  </h1>
+                  <p className="mt-2 text-sm text-slate-300">
+                    Join QuizOTG and start practicing smarter
+                  </p>
                 </div>
-                <div className="space-y-4 md:space-y-6">
+
+
+                <div className="space-y-5">
+
                   <div>
-                    <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                    <label
+                      htmlFor="email"
+                      className="block mb-1 text-sm font-medium text-slate-200"
+                    >
+                      Email
+                    </label>
                     <input
                       value={naam}
                       onChange={(e) => setnaam(e.target.value)}
-                      type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@company.com" required="" />
+                      type="email"
+                      name="email"
+                      id="email"
+                      placeholder="name@anymail.com"
+                      required
+                      className="w-full rounded-lg px-4 py-2.5 text-sm
+                    bg-white/10 text-white placeholder-slate-400
+                    border border-white/10
+                    focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    />
                   </div>
+
                   <div>
-                    <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                    <label
+                      htmlFor="password"
+                      className="block mb-1 text-sm font-medium text-slate-200"
+                    >
+                      Password
+                    </label>
                     <input
                       value={password}
                       onChange={(e) => setpassword(e.target.value.trim())}
-                      type={showpass ? "text" : "password"} name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                      type={showpass ? "text" : "password"}
+                      name="password"
+                      id="password"
+                      placeholder="••••••••"
+                      required
+                      className="w-full rounded-lg px-4 py-2.5 text-sm
+                    bg-white/10 text-white placeholder-slate-400
+                    border border-white/10
+                    focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    />
                   </div>
+
                   <div>
-                    <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
+                    <label
+                      htmlFor="confirm-password"
+                      className="block mb-1 text-sm font-medium text-slate-200"
+                    >
+                      Confirm Password
+                    </label>
                     <input
                       value={checkpassword}
                       onChange={(e) => setcheckpassword(e.target.value)}
-                      type="confirm-password" name="confirm-password" id="confirm-password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="" />
+                      type={showpass ? "text" : "password"}
+                      name="confirm-password"
+                      id="confirm-password"
+                      placeholder="••••••••"
+                      required
+                      className="w-full rounded-lg px-4 py-2.5 text-sm
+                    bg-white/10 text-white placeholder-slate-400
+                    border border-white/10
+                    focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    />
                   </div>
-                  <div className="flex text-white gap-2 text-sm">
-                    <input type="checkbox" name="check" id="check" value={showpass} onChange={(e) => setshowpass(e.target.checked)} />
-                    <p>view password</p>
+
+                  <div className="flex items-center gap-2 text-sm text-slate-300">
+                    <input
+                      type="checkbox"
+                      id="check"
+                      name="check"
+                      checked={showpass}
+                      onChange={(e) => setshowpass(e.target.checked)}
+                      className="accent-sky-500"
+                    />
+                    <label htmlFor="check">Show passwords</label>
                   </div>
-                  <button onClick={handleSignup} className="w-full text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Create an account
+
+                  <button
+                    onClick={handleSignup}
+                    className="w-full rounded-xl py-3 text-sm font-semibold text-white
+                  bg-gradient-to-r from-green-400 to-blue-600
+                  shadow-lg shadow-blue-500/30
+                  transition-all duration-300
+                  hover:shadow-blue-500/50 hover:-translate-y-0.5
+                  active:scale-95"
+                  >
+                    Create Account
                   </button>
-                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                    Already have an account? <Link to={"/login"} className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</Link>
+
+                  <p className="text-center text-sm text-slate-400">
+                    Already have an account?{" "}
+                    <Link
+                      to="/login"
+                      className="font-medium text-sky-400 hover:underline"
+                    >
+                      Login here
+                    </Link>
                   </p>
+
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
     </>
+
   )
 }
 

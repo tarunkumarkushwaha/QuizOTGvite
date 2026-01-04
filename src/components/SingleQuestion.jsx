@@ -5,58 +5,90 @@ const { PropTypes } = pkg;
 
 const SingleQuestion = ({ question, response, setresponse, disabled }) => {
     // const [checked, setchecked] = useState(false)
-    const responseHandler = (e) => {setresponse(e.target.value)}
+    const responseHandler = (e) => { setresponse(e.target.value) }
     // console.log(response)
 
     return (
         <>
-            <div className="flex flex-col justify-center items-center smooth-entry">
-                <h2 className="md:text-2xl text-xl text-lime-300 font-semibold m-10">{question.question}</h2>
+            <div className="smooth-entry w-full max-w-3xl mx-auto px-4">
 
-                <ul className=" self-start md:text-lg text-sm font-extralight rounded-lg p-3">
-                    <li className="w-full rounded-t-lg">
-                        <div className="flex items-center ps-3">
-                            <input onChange={responseHandler} disabled={disabled} checked={(response == question.option1)}
-                                id="list-radio-a" type="radio" value={question.option1} name="list-radio" className="w-10 h-4 " />
-                            <label htmlFor="list-radio-a" className="w-full py-3 ms-2  font-extralight text-gray-900 dark:text-gray-300">
-                                <p className={`text-l ${!disabled ? "text-lime-300" : question.correctresponse == question.option1 ? "text-green-600" : "text-red-600"} font-bold`}>
-                                    <span className="text-green-400 mr-1">a. </span>{question.option1}</p>
-                            </label>
-                        </div>
-                    </li>
-                    <li className="w-full rounded-t-lg">
-                        <div className="flex items-center ps-3">
-                            <input onChange={responseHandler} disabled={disabled} checked={(response == question.option2)}
-                                id="list-radio-b" type="radio" value={question.option2} name="list-radio" className="w-10 h-4 " />
-                            <label htmlFor="list-radio-b" className="w-full py-3 ms-2  font-extralight">
-                                <p className={`text-l ${!disabled ? "text-lime-300" : question.correctresponse == question.option2 ? "text-green-600" : "text-red-600"} font-bold`}>
-                                    <span className="text-green-400 mr-1">b. </span>{question.option2}</p>
-                            </label>
-                        </div>
-                    </li>
-                    <li className="w-full rounded-t-lg">
-                        <div className="flex items-center ps-3">
-                            <input onChange={responseHandler} disabled={disabled} checked={(response == question.option3)}
-                                id="list-radio-c" type="radio" value={question.option3} name="list-radio" className="w-10 h-4" />
-                            <label htmlFor="list-radio-c" className="w-full py-3 ms-2  font-extralight">
-                                <p className={`text-l ${!disabled ? "text-lime-300" : question.correctresponse == question.option3 ? "text-green-600" : "text-red-600"} font-bold`}>
-                                    <span className="text-green-400 mr-1">c. </span>{question.option3}</p>
-                            </label>
-                        </div>
-                    </li>
-                    <li className="w-full rounded-t-lg">
-                        <div className="flex items-center ps-3">
-                            <input onChange={responseHandler} disabled={disabled} checked={(response == question.option4)}
-                                id="list-radio-d" type="radio" value={question.option4} name="list-radio" className="w-10 h-4" />
-                            <label htmlFor="list-radio-d" className="w-full py-3 ms-2  font-extralight">
-                                <p className={`text-l ${!disabled ? "text-lime-300" : question.correctresponse == question.option4 ? "text-green-600" : "text-red-600"} font-bold`}>
-                                    <span className="text-green-400 mr-1">d. </span>{question.option4}</p>
-                            </label>
-                        </div>
-                    </li>
+
+                <div className="mb-8 p-6 rounded-2xl 
+      bg-white/10 backdrop-blur-md 
+      border border-white/10 shadow-xl">
+
+                    <h2 className="md:text-2xl text-lg font-semibold text-lime-300 leading-relaxed">
+                        {question.question}
+                    </h2>
+                </div>
+
+                <ul className="space-y-4">
+                    {[
+                        { key: "a", value: question.option1 },
+                        { key: "b", value: question.option2 },
+                        { key: "c", value: question.option3 },
+                        { key: "d", value: question.option4 },
+                    ].map((opt, idx) => {
+                        const isSelected = response === opt.value;
+                        const isCorrect = question.correctresponse === opt.value;
+
+                        const baseColor = !disabled
+                            ? isSelected
+                                ? "border-lime-400 bg-lime-400/10"
+                                : "border-white/10 bg-white/5 hover:bg-white/10"
+                            : isCorrect
+                                ? "border-green-500 bg-green-500/10"
+                                : isSelected
+                                    ? "border-red-500 bg-red-500/10"
+                                    : "border-white/10 bg-white/5";
+
+                        return (
+                            <li key={idx}>
+                                <label
+                                    htmlFor={`option-${opt.key}`}
+                                    className={`flex items-center gap-4 p-4 rounded-md 
+                border transition-all duration-300 cursor-pointer
+                ${baseColor}`}
+                                >
+
+                                    <input
+                                        id={`option-${opt.key}`}
+                                        type="radio"
+                                        name="list-radio"
+                                        value={opt.value}
+                                        onChange={responseHandler}
+                                        disabled={disabled}
+                                        checked={isSelected}
+                                        className="hidden"
+                                    />
+
+                                    <div className="w-8 h-8 flex items-center justify-center 
+                rounded-full font-bold text-sm
+                bg-lime-400/20 text-lime-300">
+                                        {opt.key}
+                                    </div>
+
+                                    <p
+                                        className={`text-sm md:text-base font-medium
+                  ${!disabled
+                                                ? "text-slate-100"
+                                                : isCorrect
+                                                    ? "text-green-400"
+                                                    : isSelected
+                                                        ? "text-red-400"
+                                                        : "text-slate-300"
+                                            }`}
+                                    >
+                                        {opt.value}
+                                    </p>
+                                </label>
+                            </li>
+                        );
+                    })}
                 </ul>
             </div>
         </>
+
     )
 }
 

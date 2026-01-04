@@ -14,28 +14,67 @@ const Home = () => {
   }
   return (
     <>
-      <div className="mainbg bg-no-repeat bg-left h-screen">
-        <div className="bg-slate-950/60 h-screen flex justify-center m-0 item-center flex-col">
-          <div className="flex flex-col smooth-entry justify-center item-center">
-            <h1 className="md:text-5xl text-3xl text-white font-bold text-center font-sans p-5 w-full">
-              Welcome to QuizOTG!
+      <div className="mainbg bg-no-repeat bg-left min-h-screen">
+
+        <div className="min-h-screen bg-gradient-to-br from-slate-950/80 via-slate-900/70 to-slate-950/80 flex flex-col justify-center relative">
+
+
+          <div className="smooth-entry flex flex-col items-center text-center px-6">
+
+            <span className="mb-4 inline-block rounded-full bg-white/10 px-4 py-1 text-xs tracking-wide text-sky-300 backdrop-blur-md">
+              Learn - Practice - Win
+            </span>
+
+
+            <h1 className="font-sans font-extrabold text-white 
+        text-3xl sm:text-4xl md:text-6xl 
+        leading-tight max-w-3xl">
+              Welcome to <span className="bg-gradient-to-r from-sky-400 to-emerald-400 bg-clip-text text-transparent">
+                QuizOTG
+              </span>
             </h1>
-            <h1 className="sm:text-xl text-base text-white self-center text-center font-sans p-5 sm:w-1/2 w-full sm:min-w-1/2 min-w-9/12">
-              Master your knowledge with our diverse range of quizzes and challenges.
-              Choose your subject, and dive into a world of coding quizzes designed to challenge.
-              Start exploring now and unlock your potential!
-            </h1>
+
+            <p className="mt-6 max-w-2xl text-sm sm:text-base md:text-lg text-slate-200 leading-relaxed">
+              Master your knowledge with interactive quizzes and challenges.
+              Pick a subject, test your skills, and grow smarter with every attempt.
+            </p>
+
+
+            <div className="mt-10">
+              {accessToken ? (
+                <button
+                  onClick={TestSetting}
+                  className="group relative inline-flex items-center justify-center
+              px-8 py-3 rounded-xl font-semibold text-white
+              bg-gradient-to-r from-green-400 to-blue-600
+              shadow-lg shadow-blue-500/30
+              transition-all duration-300
+              hover:shadow-blue-500/50 hover:-translate-y-1 active:scale-95">
+
+                  <span className="relative z-10">Start Test</span>
+
+
+                  <span className="absolute inset-0 rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition" />
+                </button>
+              ) : (
+                <button
+                  onClick={login}
+                  className="group relative inline-flex items-center justify-center
+              px-8 py-3 rounded-xl font-semibold text-white
+              bg-gradient-to-r from-green-400 to-blue-600
+              shadow-lg shadow-green-500/30
+              transition-all duration-300
+              hover:shadow-green-500/50 hover:-translate-y-1 active:scale-95">
+
+                  <span className="relative z-10">Login to Start</span>
+                </button>
+              )}
+            </div>
           </div>
 
-          <div className="absolute bottom-10 sm:right-5 right-1/2 sm:translate-x-0 translate-x-1/2 smooth-entry">
-            {accessToken ? <button type="button" onClick={TestSetting} className="h-10 sm:w-48 w-44 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg sm:text-sm text-xs px-5 py-2.5 text-center">
-              Start Test
-            </button> : <button onClick={login} type="button" className="h-10 sm:w-48 w-44 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg sm:text-sm text-xs px-5 py-2.5 text-center">
-             login
-            </button>}
-          </div>
         </div>
       </div>
+
     </>
   )
 }

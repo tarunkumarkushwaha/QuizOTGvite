@@ -17,7 +17,9 @@ const Testsetting = () => {
     setTestQuestion,
     backendURL,
     accessToken,
-    min
+    min,
+    setcorrectresponse,
+    setincorrectresponse
   } = useContext(Context);
 
   const [questionLength, setquestionLength] = useState(10);
@@ -71,157 +73,201 @@ const Testsetting = () => {
   };
 
   const startTest = () => {
-    if (testSub === "Your Questions" && !TestQuestion?.length) {
+    if (testSub === "Your Questions" && (!Array.isArray(TestQuestion) || TestQuestion.length === 0)) {
       toast.warning("No custom questions found");
-      return
+      return;
     }
-    if (testSub === "generate question" && !TestQuestion?.length) {
+
+    if (testSub === "generate question" && (!Array.isArray(TestQuestion) || TestQuestion.length === 0)) {
       toast.error("Generate questions first");
       return;
     }
+
+    setcorrectresponse(0);
+    setincorrectresponse(0);
+
     setstart(true);
     navigate("/test");
   };
 
+
   useEffect(() => {
-    if (testSub === "Your Questions") {
-      setTestQuestion();
-    }
+    if (!testSub || !backendURL) return;
+
     if (testSub === "generate question") {
-      setTestQuestion();
-    }
-    if (!testSub || !backendURL) {
+      setquestionGenerateInput(true);
+      setTestQuestion([]);
       return;
     }
-    if (testSub !== "generate question" && testSub !== "Your Questions") {
-      setLoading(true)
-      fetch(
-        `${backendURL}/questions/${testSub.toLowerCase()}questions`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          let shuffledQuestions = randomShuffle(data.questions)
-          setTestQuestion(shuffledQuestions);
-          setmin(data.time);
-        })
-        .catch((err) => console.error("Error fetching data:", err))
-        .finally(() => setLoading(false));
-    } else { setquestionGenerateInput(true) }
+
+    if (testSub === "Your Questions") {
+      setquestionGenerateInput(false);
+      return;
+    }
+
+    setquestionGenerateInput(false);
+    setLoading(true);
+
+    fetch(`${backendURL}/questions/${testSub.toLowerCase()}questions`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.questions?.length) {
+          setTestQuestion(randomShuffle(data.questions));
+          setmin(data.time || 10);
+        } else {
+          setTestQuestion([]);
+        }
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, [testSub]);
 
-   if (!accessToken) {
-        return <Navigate to="/login" replace />;
-      }
+
 
   return (
     <>
-      {accessToken ? (
-        <div className="mainbg bg-no-repeat bg-left min-h-screen">
-          <div className="bg-slate-950/60 min-h-screen flex flex-col items-center p-10">
-            <h1 className="smooth-entry text-3xl m-1 p-5 mt-8 text-slate-100 text-center font-sans">
+      <div className="mainbg mt-10 bg-no-repeat bg-left min-h-screen">
+        {accessToken ? <div className="bg-slate-950/70 min-h-screen flex justify-center items-start px-4 py-10">
+
+
+          <div className="smooth-entry w-full max-w-4xl 
+        bg-white/10 backdrop-blur-xl border border-white/10 
+        rounded-2xl shadow-2xl shadow-black/40 p-8">
+
+
+            <h1 className="text-center text-3xl font-extrabold text-slate-100 mb-2">
               Test Settings
             </h1>
-
-            <div className="flex flex-col justify-center items-center smooth-entry">
-              <div className="flex flex-col md:flex-row flex-wrap justify-center items-center gap-4 p-4">
-
-                {/* Subject Selector */}
-                <div className="w-full sm:w-64 md:w-80">
-                  <FormControl className="bg-slate-300 rounded-md w-full" fullWidth>
-                    <InputLabel id="subject-select-label">Subject</InputLabel>
-                    <Select
-                      labelId="subject-select-label"
-                      id="subject-select"
-                      value={testSub}
-                      label="Subject"
-                      onChange={(e) => settestSub(e.target.value)}
-                    >
-                      <MenuItem value="generate question">Generate Question (AI)</MenuItem>
-                      <MenuItem value="Your Questions">Your Custom Questions</MenuItem>
-                      <MenuItem value="html">HTML</MenuItem>
-                      <MenuItem value="css">CSS</MenuItem>
-                      <MenuItem value="javascript">javascript</MenuItem>
-                      <MenuItem value="React">React</MenuItem>
-                      <MenuItem value="wordpress">WordPress</MenuItem>
-                      <MenuItem value="Python">Python</MenuItem>
-                      <MenuItem value="Science">Science</MenuItem>
-                      <MenuItem value="Funny">Funny</MenuItem>
-                      <MenuItem value="Reasoning">Reasoning</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-
-                {/* Time & Question Inputs */}
-                <div className="flex flex-col gap-3 w-full sm:w-64 md:w-80">
-                  <TextField
-                    className="bg-slate-300"
-                    type="number"
-                    label="Time (minutes)"
-                    value={min}
-                    onChange={(e) => handleChange(e.target.value)}
-                    inputProps={{ min: 1 }}
-                    fullWidth
-                  />
-                  <TextField
-                    className="bg-slate-300"
-                    type="number"
-                    label="Number of Questions"
-                    value={questionLength}
-                    onChange={(e) => setquestionLength(Number(e.target.value))}
-                    inputProps={{ min: 1, max: maxquestionLength }}
-                    fullWidth
-                  />
-
-                  {/* Generate AI Questions */}
-                  {testSub === "generate question" && (
-                    <>
-                      {questionGenerateInput && (
-                        <TextField
-                          className="bg-slate-300"
-                          type="text"
-                          label="Generate questions via AI"
-                          value={questionGenerateInputText}
-                          onChange={(e) => setquestionGenerateInputText(e.target.value)}
-                          fullWidth
-                        />
-                      )}
-                      <button
-                        type="button"
-                        onClick={GenerateQuestion}
-                        disabled={loading}
-                        className="w-full text-white bg-gradient-to-br from-purple-500 to-pink-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-purple-200 font-medium rounded-lg text-sm px-5 py-2.5"
-                      >
-                        {loading ? "Please Wait..." : "Generate Questions"}
-                      </button>
-                    </>
-                  )}
+            <p className="text-center text-slate-300 text-sm mb-8">
+              Configure your test before starting
+            </p>
 
 
-                </div>
-                {/* Start Test */}
-                <button
-                  type="button"
-                  onClick={startTest}
-                  disabled={loading}
-                  className="text-white w-1/3 bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5"
-                >
-                  Start Test
-                </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div>
+                <FormControl className="bg-slate-300 rounded-md w-full" fullWidth>
+                  <InputLabel id="subject-select-label">Subject</InputLabel>
+                  <Select
+                    labelId="subject-select-label"
+                    name="subject"
+                    id="subject-select"
+                    value={testSub}
+                    label="Subject"
+                    onChange={(e) => settestSub(e.target.value)}
+                  >
+                    <MenuItem value="generate question">Generate Question (AI)</MenuItem>
+                    <MenuItem value="Your Questions">Your Custom Questions</MenuItem>
+                    <MenuItem value="html">HTML</MenuItem>
+                    <MenuItem value="css">CSS</MenuItem>
+                    <MenuItem value="javascript">JavaScript</MenuItem>
+                    <MenuItem value="React">React</MenuItem>
+                    <MenuItem value="wordpress">WordPress</MenuItem>
+                    <MenuItem value="Python">Python</MenuItem>
+                    <MenuItem value="Science">Science</MenuItem>
+                    <MenuItem value="Funny">Funny</MenuItem>
+                    <MenuItem value="Reasoning">Reasoning</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
-              {/* Conditional Render for Rules or Adding Questions */}
-              {testSub === "Your Questions" ? <FileUploadComponent
-                randomShuffle={randomShuffle}
-                setmaxquestionLength={setmaxquestionLength} />
-                : <TestRules />}
-            </div>
-          </div>
-        </div>
-      ) : (
-        <LoadingSpinner/>
-      )}
+              <div className="flex flex-col gap-4">
+                <TextField
+                  id="time-input"
+                  name="time"
+                  className="bg-slate-300"
+                  type="number"
+                  label="Time (minutes)"
+                  value={min}
+                  onChange={(e) => handleChange(e.target.value)}
+                  inputProps={{ min: 1 }}
+                  fullWidth
+                />
 
+                <TextField
+                  className="bg-slate-300"
+                  type="number"
+                  name="number"
+                  id="question-count"
+                  label="Number of Questions"
+                  value={questionLength}
+                  onChange={(e) => setquestionLength(Number(e.target.value))}
+                  inputProps={{ min: 1, max: maxquestionLength }}
+                  fullWidth
+                />
+              </div>
+            </div>
+
+
+            {testSub === "generate question" && (
+              <div className="mt-8 p-6 rounded-xl bg-white/5 border border-white/10">
+                <h3 className="text-slate-100 font-semibold mb-4">
+                  AI Question Generator
+                </h3>
+
+                {questionGenerateInput && (
+                  <TextField
+                    className="bg-slate-300 mb-4 rounded-md"
+                    type="text"
+                    id="ai-prompt"
+                    name="aiPrompt"
+                    label="Describe what questions you want"
+                    value={questionGenerateInputText}
+                    onChange={(e) => setquestionGenerateInputText(e.target.value)}
+                    fullWidth
+                  />
+                )}
+
+                <button
+                  type="button"
+                  onClick={GenerateQuestion}
+                  disabled={loading}
+                  className={`w-full text-white my-4 font-semibold rounded-xl px-6 py-3
+                bg-gradient-to-r from-purple-500 to-pink-500
+                shadow-lg shadow-pink-500/30
+                transition-all duration-300
+                hover:shadow-pink-500/50 hover:-translate-y-0.5
+                active:scale-95
+                ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
+                >
+                  {loading ? "Generating..." : "Generate Questions"}
+                </button>
+              </div>
+            )}
+
+            <div className="mt-10 flex justify-center">
+              <button
+                type="button"
+                onClick={startTest}
+                disabled={loading}
+                className={`px-10 py-3 text-sm font-bold text-white rounded-xl
+              bg-gradient-to-r from-green-400 to-blue-600
+              shadow-lg shadow-blue-500/30
+              transition-all duration-300
+              hover:shadow-blue-500/50 hover:-translate-y-0.5
+              active:scale-95
+              ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
+              >
+                Start Test
+              </button>
+            </div>
+
+            <div className="mt-10">
+              {testSub === "Your Questions" ? (
+                <FileUploadComponent
+                  randomShuffle={randomShuffle}
+                  setmaxquestionLength={setmaxquestionLength}
+                />
+              ) : (
+                <TestRules />
+              )}
+            </div>
+
+          </div>
+        </div> : <LoadingSpinner />}
+      </div>
     </>
+
   )
 }
 

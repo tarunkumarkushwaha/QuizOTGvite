@@ -23,54 +23,107 @@ const Result = () => {
   return (
     <>
       {accessToken ? (
-        <div className={`${style.ui} h-screen ${style.text} flex justify-center items-center text-start p-10 flex-col`}>
-          <h1 className="smooth-entry text-3xl text-green-500 font-sans">Result</h1>
-          <div className="smooth-entry flex">
-            Your Result
-          </div>
-          <div className="smooth-entry flex">
-            Correct Responses - {correctresponse}
-          </div>
-          <div className="smooth-entry flex">
-            Incorrect Responses - {incorrectresponse}
-          </div>
-          <div className="smooth-entry flex">
-            Unattempted Questions - {questionlength.current - (incorrectresponse + correctresponse)}
-          </div>
-          <div className="smooth-entry flex">
-            Total Questions - {questionlength.current}
-          </div>
-          <div className="smooth-entry flex">
-            Percentage - {Number(Math.round(percentage.current + 'e2') + 'e-2')} %
-          </div>
-          <div className="smooth-entry flex justify-between">
-            <button
-              type="button"
-              onClick={() => navigate("/testsetting")}
-              className="h-10 m-[5%] text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
-            >
-              Restart
-            </button>
-            {/* under construction discussion forum  */}
-            {/* <button
-              type="button"
-              className="h-10 m-[5%] text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2"
-            >
-              <Link to={"/discussions"}>Discussions</Link>
-            </button> */}
+        <div className={`${style.ui} ${style.text} min-h-screen flex items-center justify-center px-4`}>
+
+          <div className="smooth-entry w-full max-w-xl rounded-2xl 
+      bg-white/10 backdrop-blur-xl border border-white/10 
+      shadow-2xl shadow-black/40 p-8">
+
+
+            <h1 className="text-center text-3xl font-extrabold text-emerald-400 mb-2">
+              Test Result
+            </h1>
+            <p className="text-center text-slate-300 text-sm mb-8">
+              Here’s a summary of your performance
+            </p>
+
+            {/* Stats */}
+            <div className="space-y-4 text-sm sm:text-base">
+              <div className="flex justify-between text-slate-200">
+                <span>Total Questions</span>
+                <span className="font-semibold">{questionlength.current}</span>
+              </div>
+
+              <div className="flex justify-between text-emerald-400">
+                <span>Correct Responses</span>
+                <span className="font-semibold">{correctresponse}</span>
+              </div>
+
+              <div className="flex justify-between text-red-400">
+                <span>Incorrect Responses</span>
+                <span className="font-semibold">{incorrectresponse}</span>
+              </div>
+
+              <div className="flex justify-between text-yellow-400">
+                <span>Unattempted Questions</span>
+                <span className="font-semibold">
+                  {questionlength.current - (incorrectresponse + correctresponse)}
+                </span>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sky-400 text-lg">
+                <span>Percentage</span>
+                <span className="font-bold">
+                  {Number(Math.round(percentage.current + "e2") + "e-2")}%
+                </span>
+              </div>
+            </div>
+
+
+            <div className="mt-10 flex justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => navigate("/testsetting")}
+                className="px-8 py-3 rounded-xl text-sm font-semibold text-white
+            bg-gradient-to-r from-green-400 to-blue-600
+            shadow-lg shadow-blue-500/30
+            transition-all duration-300
+            hover:shadow-blue-500/50 hover:-translate-y-0.5
+            active:scale-95"
+              >
+                Restart Test
+              </button>
+
+              {/* under construction discussion forum  */}
+              {/* <button
+          type="button"
+          className="px-8 py-3 rounded-xl text-sm font-semibold text-white
+            bg-gradient-to-r from-green-400 to-blue-600
+            shadow-lg shadow-blue-500/30
+            transition-all duration-300
+            hover:shadow-blue-500/50 hover:-translate-y-0.5
+            active:scale-95"
+        >
+          <Link to={"/discussions"}>Discussions</Link>
+        </button> */}
+            </div>
           </div>
         </div>
       ) : (
-        <div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex justify-between items-center p-10 flex-col">
-          <h1 className="text-3xl smooth-entry text-lime-800 font-sans">Please Log In to Use the App</h1>
-          <button
-            type="button"
-            className="smooth-entry h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-          >
-            <Link to={"/login"}>Login</Link>
-          </button>
+        <div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex items-center justify-center px-4">
+          <div className="smooth-entry text-center rounded-2xl 
+      bg-white/10 backdrop-blur-xl border border-white/10 
+      shadow-2xl shadow-black/40 p-8 max-w-md">
+
+            <h1 className="text-2xl font-bold text-slate-200 mb-6">
+              Please log in to view results
+            </h1>
+
+            <Link
+              to="/login"
+              className="inline-block px-8 py-3 rounded-xl text-sm font-semibold text-white
+          bg-gradient-to-r from-green-400 to-blue-600
+          shadow-lg shadow-blue-500/30
+          transition-all duration-300
+          hover:shadow-blue-500/50 hover:-translate-y-0.5
+          active:scale-95"
+            >
+              Login
+            </Link>
+          </div>
         </div>
       )}
+
 
     </>
   )
