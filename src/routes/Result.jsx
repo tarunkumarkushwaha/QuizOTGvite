@@ -33,13 +33,13 @@ const Result = () => {
             <h1 className="text-center text-3xl font-extrabold text-emerald-400 mb-2">
               Test Result
             </h1>
-            <p className="text-center text-slate-300 text-sm mb-8">
+            <p className="text-center text-sm mb-8">
               Here’s a summary of your performance
             </p>
 
             {/* Stats */}
             <div className="space-y-4 text-sm sm:text-base">
-              <div className="flex justify-between text-slate-200">
+              <div className="flex justify-between ">
                 <span>Total Questions</span>
                 <span className="font-semibold">{questionlength.current}</span>
               </div>

@@ -174,7 +174,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         }
     };
 
-    console.log(validData, "data")
+    // console.log(validData, "data")
 
     return (
         <div className="w-full bg-gray-100 rounded-lg p-6 mt-4">

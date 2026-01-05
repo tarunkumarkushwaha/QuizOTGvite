@@ -26,6 +26,7 @@ import QuizManager from "./routes/ManageQuestions";
 import LoadingSpinner from "./components/LoadingSpinner";
 import PublicRoute from "./components/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const [accessToken, setAccessToken] = useState(null);
@@ -155,6 +156,7 @@ function App() {
         testSub, settestSub
       }}>
         <BrowserRouter>
+          <ScrollToTop />
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -174,7 +176,7 @@ function App() {
               <PublicRoute>
                 <Signup />
               </PublicRoute>
-            }/>
+            } />
             <Route path="/termsandconditions" element={<Termsandconditions />} />
             <Route path="/discussions" element={<ProtectedRoute><Discussions /></ProtectedRoute>} />
             <Route path="*" element={<ErrorPage />} />

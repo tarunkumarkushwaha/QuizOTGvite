@@ -83,6 +83,10 @@ const Testsetting = () => {
       return;
     }
 
+    let shortenedQuestions = TestQuestion.slice(0, questionLength)
+
+    setTestQuestion(shortenedQuestions)
+
     setcorrectresponse(0);
     setincorrectresponse(0);
 
@@ -97,11 +101,13 @@ const Testsetting = () => {
     if (testSub === "generate question") {
       setquestionGenerateInput(true);
       setTestQuestion([]);
+      setmaxquestionLength(20)
       return;
     }
 
     if (testSub === "Your Questions") {
       setquestionGenerateInput(false);
+      setmaxquestionLength(30)
       return;
     }
 
@@ -114,6 +120,7 @@ const Testsetting = () => {
         if (data?.questions?.length) {
           setTestQuestion(randomShuffle(data.questions));
           setmin(data.time || 10);
+          setmaxquestionLength(data.questions.length)
         } else {
           setTestQuestion([]);
         }
@@ -184,17 +191,26 @@ const Testsetting = () => {
                   fullWidth
                 />
 
-                <TextField
-                  className="bg-slate-300"
-                  type="number"
-                  name="number"
-                  id="question-count"
-                  label="Number of Questions"
-                  value={questionLength}
-                  onChange={(e) => setquestionLength(Number(e.target.value))}
-                  inputProps={{ min: 1, max: maxquestionLength }}
-                  fullWidth
-                />
+                <FormControl className="bg-slate-300 rounded-md" fullWidth>
+                  <InputLabel id="question-count-label">
+                    Number of Questions
+                  </InputLabel>
+
+                  <Select
+                    labelId="question-count-label"
+                    id="question-count"
+                    value={questionLength}
+                    label="Number of Questions"
+                    onChange={(e) => setquestionLength(Number(e.target.value))}
+                  >
+                    {Array.from({ length: maxquestionLength }, (_, i) => i + 1).map((num) => (
+                      <MenuItem key={num} value={num}>
+                        {num} Questions
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
               </div>
             </div>
 

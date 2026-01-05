@@ -3,10 +3,21 @@ import pkg from 'prop-types';
 
 const { PropTypes } = pkg;
 
-const SingleQuestion = ({ question, response, setresponse, disabled }) => {
+const SingleQuestion = ({ question, response, setresponse, disabled, dark }) => {
     // const [checked, setchecked] = useState(false)
     const responseHandler = (e) => { setresponse(e.target.value) }
     // console.log(response)
+
+    const style = {
+        ui: dark ?
+            "border-white/10 bg-white/5 hover:bg-white/10"
+            :
+            "border-white/10 bg-slate-100 hover:bg-slate/10",
+        text: dark ?
+            "text-white"
+            :
+            "text-slate-900"
+    }
 
     return (
         <>
@@ -35,7 +46,7 @@ const SingleQuestion = ({ question, response, setresponse, disabled }) => {
                         const baseColor = !disabled
                             ? isSelected
                                 ? "border-lime-400 bg-lime-400/10"
-                                : "border-white/10 bg-white/5 hover:bg-white/10"
+                                : style.ui
                             : isCorrect
                                 ? "border-green-500 bg-green-500/10"
                                 : isSelected
@@ -71,12 +82,12 @@ const SingleQuestion = ({ question, response, setresponse, disabled }) => {
                                     <p
                                         className={`text-sm md:text-base font-medium
                   ${!disabled
-                                                ? "text-slate-100"
+                                                ? style.text
                                                 : isCorrect
                                                     ? "text-green-400"
                                                     : isSelected
                                                         ? "text-red-400"
-                                                        : "text-slate-300"
+                                                        : style.text
                                             }`}
                                     >
                                         {opt.value}

@@ -173,6 +173,45 @@ const QuizManager = () => {
     else { toast.error("no question found please select question") }
   };
 
+  const handleDeleteSubject = async () => {
+    if (!selectedSubject) return;
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete ALL questions for "${selectedSubject}"?\nThis action cannot be undone.`
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(
+        `${backendURL}/quiz/${selectedSubject}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || "Failed to delete questions");
+        return;
+      }
+
+      toast.success(data.message);
+      getAllSubjects();
+      setQuestions([]);
+      setSelectedSubject("");
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error while deleting subject");
+    }
+  };
+
+
   return (
     <div className="font-sans min-h-screen mt-10 bg-gradient-to-br from-slate-100 to-slate-200 py-12 px-4">
 
@@ -204,12 +243,12 @@ const QuizManager = () => {
             ))}
           </select>
 
-          {/* <button
-        onClick={() => alert("Implement delete subject API")}
-        className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
-      >
-        Delete
-      </button> */}
+          {selectedSubject && <button
+            onClick={handleDeleteSubject}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
+          >
+            Delete
+          </button>}
         </div>
       </div>
 

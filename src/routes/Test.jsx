@@ -87,7 +87,7 @@ const Test = () => {
   const handleKeyPress = (event) => {
     // console.log('Key pressed:', event.key);
     navigate('/result')
-    toast.error("early submission, you tried to cheat")
+    toast.error("early submission, BECAUSE, BOOOO... You tried to cheat")
   };
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const Test = () => {
   useEffect(() => {
     if (!focus) {
       navigate('/result')
-      toast.error("Cheating detected. Consequences imminent.")
+      toast.error("Booo.... you are a cheater")
     }
 
   }, [focus])
@@ -151,6 +151,7 @@ const Test = () => {
               disabled={disabled}
               response={response}
               setresponse={setresponse}
+              dark={dark}
             />
 
             <div className="flex flex-col sm:flex-row gap-4 mt-6">
