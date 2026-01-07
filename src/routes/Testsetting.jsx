@@ -18,8 +18,7 @@ const Testsetting = () => {
     backendURL,
     accessToken,
     min,
-    setcorrectresponse,
-    setincorrectresponse
+    setresponses
   } = useContext(Context);
 
   const [questionLength, setquestionLength] = useState(10);
@@ -87,9 +86,9 @@ const Testsetting = () => {
 
     setTestQuestion(shortenedQuestions)
 
-    setcorrectresponse(0);
-    setincorrectresponse(0);
-
+    // setcorrectresponse(0);
+    // setincorrectresponse(0);
+    setresponses([])
     setstart(true);
     navigate("/test");
   };

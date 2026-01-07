@@ -18,12 +18,10 @@ import Result from './routes/Result';
 import Termsandconditions from "./routes/Termsandconditions";
 import Discussions from './routes/Discussions';
 import Test from "./routes/Test";
-import CustomTest from "./routes/CustomTest";
 import Navbar from "./components/Navbar";
 import Foot from "./components/Foot";
 import ErrorPage from "./components/ErrorPage";
 import QuizManager from "./routes/ManageQuestions";
-import LoadingSpinner from "./components/LoadingSpinner";
 import PublicRoute from "./components/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
@@ -36,9 +34,8 @@ function App() {
   const [dark, setdark] = useState(false)
   const [userName, setuserName] = useState("")
   const [CustomQuestions, setCustomQuestions] = useState([]);
-  const [correctresponse, setcorrectresponse] = useState(0)
-  const [incorrectresponse, setincorrectresponse] = useState(0)
-  const [pastpercentage, setpastpercentage] = useState(0)
+  const [responses, setresponses] = useState([])
+  const [pastresult, setpastresult] = useState({})
   const [start, setstart] = useState(false)
   const [loading, setLoading] = useState(true);
 
@@ -120,28 +117,15 @@ function App() {
   }
 
   useEffect(() => {
-    const QUESTION = localStorage.getItem('questions');
     const THEME = localStorage.getItem('Theme');
     const PERCENT = localStorage.getItem('result');
     if (THEME) {
       setdark(JSON.parse(THEME));
     }
-    if (QUESTION) {
-      setTestQuestion(JSON.parse(QUESTION));
-    }
     if (PERCENT) {
-      setpastpercentage(JSON.parse(PERCENT));
+      setpastresult(JSON.parse(PERCENT));
     }
   }, []);
-
-  // useEffect(() => {
-  //   const savedToken = localStorage.getItem("accessToken");
-  //   if (savedToken) setAccessToken(savedToken);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (accessToken) localStorage.setItem("accessToken", accessToken);
-  // }, [accessToken]);
 
   return (
     <>
@@ -149,10 +133,9 @@ function App() {
         accessToken, authFetch, setAccessToken,
         start, setstart, userName, setuserName, backendURL,
         TestQuestion, setTestQuestion, min, setmin,
-        pastpercentage, loading, setLoading,
-        dark, themeChange,
-        correctresponse, setcorrectresponse, setincorrectresponse,
-        incorrectresponse, CustomQuestions, setCustomQuestions,
+        pastresult, loading, setLoading, setpastresult,
+        dark, themeChange, responses, setresponses,
+        CustomQuestions, setCustomQuestions,
         testSub, settestSub
       }}>
         <BrowserRouter>
@@ -165,7 +148,6 @@ function App() {
             <Route path="/testsetting" element={<ProtectedRoute><Testsetting /></ProtectedRoute>} />
             <Route path="/test" element={<ProtectedRoute><Test /></ProtectedRoute>} />
             <Route path="/managequestions" element={<ProtectedRoute><QuizManager /></ProtectedRoute>} />
-            <Route path="/customtest" element={<ProtectedRoute><CustomTest /></ProtectedRoute>} />
             <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
             <Route path="/login" element={
               <PublicRoute>
