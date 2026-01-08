@@ -29,7 +29,8 @@ import ScrollToTop from "./components/ScrollToTop";
 function App() {
   const [accessToken, setAccessToken] = useState(null);
   const [testSub, settestSub] = useState("javascript")
-  const [min, setmin] = useState(10)
+  const [min, setmin] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(10);
   const [TestQuestion, setTestQuestion] = useState()
   const [dark, setdark] = useState(false)
   const [userName, setuserName] = useState("")
@@ -136,7 +137,7 @@ function App() {
         pastresult, loading, setLoading, setpastresult,
         dark, themeChange, responses, setresponses,
         CustomQuestions, setCustomQuestions,
-        testSub, settestSub
+        testSub, settestSub, timeLeft, setTimeLeft
       }}>
         <BrowserRouter>
           <ScrollToTop />

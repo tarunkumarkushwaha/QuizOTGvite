@@ -15,7 +15,7 @@ const Test = () => {
   const [disabled, setdisabled] = useState(false)
   const [timeover, settimeover] = useState(false)
 
-  const { setmin, min, accessToken,
+  const { timeLeft, accessToken,
     dark, TestQuestion, setresponses } = useContext(Context);
 
   let navigate = useNavigate()
@@ -37,12 +37,12 @@ const Test = () => {
 
   const checkAns = () => {
     if (TestQuestion[questionNO].correctresponse == response) {
-      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response }])
+      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp :timeLeft }])
       currentsong.current.play()
       toast.success("correct")
     }
     else {
-      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response }])
+      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp :timeLeft }])
       currentsong2.current.play()
       toast.error("oops, Your answer is INCORRECT")
     }
@@ -53,10 +53,10 @@ const Test = () => {
     if (disabled == false) {
       if (response != TestQuestion[questionNO].correctresponse) {
         response == "" ? toast.warn("no response submitted") :
-          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response }]);
+          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp :timeLeft }]);
       }
       else if (TestQuestion[questionNO].correctresponse == response) {
-        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response }]);
+        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp :timeLeft }]);
       }
       else { toast.error("some error occured") }
     }
@@ -72,10 +72,10 @@ const Test = () => {
     if (disabled == false) {
       if (response != TestQuestion[questionNO].correctresponse) {
         response == "" ? toast.warn("no response submitted in previous question") :
-          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response }])
+          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp :timeLeft }])
       }
       else if (TestQuestion[questionNO].correctresponse == response) {
-        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response }])
+        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp :timeLeft }])
       }
     }
     toast.success("test submitted successfully")
@@ -109,7 +109,7 @@ const Test = () => {
 
   return (
     <>
-      <Timer min={min} settimeover={settimeover} setmin={setmin} />
+      <Timer settimeover={settimeover}/>
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {accessToken ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} />

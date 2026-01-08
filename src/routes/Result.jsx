@@ -1,9 +1,50 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useContext, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { Context } from '../MyContext';
 
 const Result = () => {
-  const { TestQuestion, responses, dark, accessToken, pastresult, setpastresult, testSub } = useContext(Context);
+  const { TestQuestion, responses, dark, accessToken, pastresult, setpastresult, testSub, min, timeLeft, backendURL } = useContext(Context);
+  const [explanations, setExplanations] = useState({});
+  const [loadingExplain, setLoadingExplain] = useState(null);
+
+  const explainQuestion = async (item, index) => {
+    if (explanations[index]) return;
+
+    try {
+      setLoadingExplain(index);
+
+      const url = `${backendURL}/ask/explain?question=${encodeURIComponent(
+        item.question.question
+      )}&correct=${encodeURIComponent(
+        item.question.correctresponse
+      )}&yourAnswer=${encodeURIComponent(
+        item.yourAnswer || "Not Attempted"
+      )}`;
+
+      const res = await fetch(url);
+
+      if (!res.ok) {
+        throw new Error("Explain API failed");
+      }
+
+      const data = await res.json();
+
+      setExplanations(prev => ({
+        ...prev,
+        [index]: data.explanation
+      }));
+    } catch (err) {
+      console.error(err);
+      setExplanations(prev => ({
+        ...prev,
+        [index]: "Failed to load explanation."
+      }));
+    } finally {
+      setLoadingExplain(null);
+    }
+  };
+
+
   let navigate = useNavigate()
   const style = {
     ui: dark ?
@@ -18,9 +59,16 @@ const Result = () => {
 
   const correctresponse = responses?.filter(item => item.marks == true).length
   const incorrectresponse = responses?.filter(item => item.marks == false).length
-  const questionlength = TestQuestion ? TestQuestion?.length : 10
-  const percentage = correctresponse / questionlength * 100
+  const questionlength = TestQuestion?.length || 0;
+  const percentage = questionlength
+    ? (correctresponse / questionlength) * 100
+    : 0;
   const pastpercentage = (pastresult?.correctresponse / pastresult?.questionlength) * 100
+  const timeTaken = Math.max(0, (min * 60) - timeLeft);
+  const minute = Math.floor(timeTaken / 60);
+  const sec = timeTaken % 60;
+
+  // console.log(responses, "rexsult")
 
   return (
     <>
@@ -62,6 +110,13 @@ const Result = () => {
                   {questionlength - (incorrectresponse + correctresponse)}
                 </span>
               </div>
+              <div className="flex justify-between text-yellow-400">
+                <span>Time taken</span>
+                <span className="font-semibold">
+                  {String(minute).padStart(2, "0")}:
+                  {String(sec).padStart(2, "0")}
+                </span>
+              </div>
 
               <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sky-400 text-lg">
                 <span>Percentage</span>
@@ -70,7 +125,8 @@ const Result = () => {
                 </span>
               </div>
 
-              {Object.keys(pastresult).length !== 0 && <>
+              {/* {pastresult && Object.keys(pastresult).length !== 0 && <> */}
+              {!!pastresult?.questionlength && <>
                 <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sky-400 text-lg">
                   <span>Past Percentage</span>
                   <span className="font-semibold">
@@ -113,9 +169,13 @@ const Result = () => {
               </h2>
 
               <div className="space-y-5 max-h-[400px] overflow-y-auto pr-2">
-                {responses.map((item, index) => {
-                  const { question, marks, yourAnswer } = item;
-
+                {responses?.map((item, index) => {
+                  const { question, marks, yourAnswer, timestamp } = item;
+                  let time = (index !== 0 ? responses[index - 1]?.timestamp : min * 60) - timestamp
+                  let questionTimeTaken = {
+                    minute: Math.floor(time / 60),
+                    second: (time % 60)
+                  }
                   return (
                     <div
                       key={index}
@@ -128,7 +188,7 @@ const Result = () => {
                       {/* Header */}
                       <div className="flex justify-between items-start mb-3">
                         <h3 className="font-semibold text-slate-100 text-sm md:text-base">
-                          Q{index + 1}. {question.question}
+                          Q{index + 1}. {question?.question}
                         </h3>
 
                         <span
@@ -152,12 +212,49 @@ const Result = () => {
                         </p>
 
                         {!marks && (
+                          <>
+
+                            <button
+                              onClick={() => explainQuestion(item, index)}
+                              disabled={loadingExplain === index}
+                              className="text-xs px-4 py-2 rounded-lg font-semibold
+      bg-gradient-to-r from-purple-500 to-indigo-600
+      text-white shadow-md shadow-indigo-500/30
+      hover:shadow-indigo-500/50 transition
+      disabled:opacity-50"
+                            >
+                              {loadingExplain === index ? "Loading..." : "Explain with gemini AI"}
+                            </button>
+
+                            {explanations[index] && (
+                              <div className="mt-3 p-4 rounded-xl bg-slate-900/60 border border-white/10 text-sm text-slate-200 leading-relaxed">
+                                <span className="font-semibold text-indigo-400">AI Explanation:</span>
+                                <p className="mt-2 whitespace-pre-line">
+                                  {explanations[index]}
+                                </p>
+                              </div>
+                            )}
+                          </>
+
+                        )}
+                        {!marks && (
                           <p className="text-slate-300">
                             <span className="font-medium text-slate-400">
                               Correct Answer:
                             </span>{" "}
                             <span className="text-green-400">
-                              {question.correctresponse}
+                              {question?.correctresponse}
+                            </span>
+                          </p>
+                        )}
+                        {(
+                          <p className="text-slate-300">
+                            <span className="font-medium text-slate-400">
+                              Time taken:
+                            </span>{" "}
+                            <span className="text-green-400">
+                              {String(questionTimeTaken?.minute).padStart(2, "0")}:
+                              {String(questionTimeTaken?.second).padStart(2, "0")}
                             </span>
                           </p>
                         )}
@@ -183,7 +280,7 @@ const Result = () => {
         </button> */}
             </div>
           </div>
-        </div>
+        </div >
       ) : (
         <div className="mainbg bg-no-repeat bg-left min-h-[87vh] flex items-center justify-center px-4">
           <div className="smooth-entry text-center rounded-2xl 

@@ -11,6 +11,7 @@ const Testsetting = () => {
   const {
     testSub,
     settestSub,
+    setTimeLeft,
     setstart,
     setmin,
     TestQuestion,
@@ -58,6 +59,7 @@ const Testsetting = () => {
           setTestQuestion(shuffledQuestions);
           // setmin(String(data.time || 10));
           setmin(data.time || 10);
+          setTimeLeft(data.time * 60 || 10 * 60);
           toast.success("Questions generated successfully!");
         } else {
           console.log(data)
@@ -85,9 +87,6 @@ const Testsetting = () => {
     let shortenedQuestions = TestQuestion.slice(0, questionLength)
 
     setTestQuestion(shortenedQuestions)
-
-    // setcorrectresponse(0);
-    // setincorrectresponse(0);
     setresponses([])
     setstart(true);
     navigate("/test");
@@ -119,6 +118,7 @@ const Testsetting = () => {
         if (data?.questions?.length) {
           setTestQuestion(randomShuffle(data.questions));
           setmin(data.time || 10);
+          setTimeLeft(data.time * 60 || 10 * 60);
           setmaxquestionLength(data.questions.length)
         } else {
           setTestQuestion([]);

@@ -1,39 +1,38 @@
-import { useContext, useEffect, useState } from "react";
-import { Context } from '../MyContext';
+import { useState, useEffect, useContext } from "react";
+import { Context } from "../MyContext";
 
-const Timer = ({ settimeover, min, setmin }) => {
-  const [sec, setsec] = useState(0)
-  const { start, setstart } = useContext(Context);
+const Timer = ({ settimeover}) => {
+  const { start, timeLeft, setTimeLeft } = useContext(Context);
 
-  const timer = () => {
-    if (start) {
-      if (sec > 0) {
-        setsec(sec - 1);
-      }
-      if (sec === 0) {
-        setmin(min - 1);
-        setsec(59);
-      }
-    }
-  }
   useEffect(() => {
-    const interval = setInterval(() => timer(), 1000);
-    if (min === 0 && sec === 0) {
-      settimeover(true)
-      clearInterval(interval)
-    }
+    if (!start) return;
+
+    const interval = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          settimeover(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     return () => clearInterval(interval);
-  }, [sec, min, start]);
+  }, [start, settimeover]);
+
+  const minute = Math.floor(timeLeft / 60);
+  const sec = timeLeft % 60;
 
   return (
-    <>
-      <div className="w-36 justify-center flex flex-row absolute top-20 font-extrabold text-2xl italic right-10 bg-green-200 shadow-xl rounded-xl items-center">
-        <p className="p-2 ">{min}</p>
-        <p className="p-2 ">:</p>
-        <p className="p-2 ">{sec > 0 ? sec : "0" + sec}</p>
-      </div>
-    </>
-  )
-}
+    <div
+      className={`absolute top-20 right-10 px-5 py-3 rounded-xl font-bold
+        ${timeLeft <= 10 ? "bg-red-400 animate-pulse" : "bg-green-300"}`}
+    >
+      {String(minute).padStart(2, "0")}:
+      {String(sec).padStart(2, "0")}
+    </div>
+  );
+};
 
-export default Timer
+export default Timer;
