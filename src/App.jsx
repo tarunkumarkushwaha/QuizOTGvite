@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { Context } from "./MyContext";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import Home from './routes/Home';
 import About from './routes/About';
@@ -53,7 +53,10 @@ function App() {
         });
 
         if (!res.ok) {
-          console.log("No valid refresh token (new user)");
+          setLoading(false);
+          if (accessToken) {
+            toast.warn("Session expired. Please login again.");
+          }
           return;
         }
 

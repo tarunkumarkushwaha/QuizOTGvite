@@ -3,7 +3,7 @@ import { Context } from '../MyContext';
 import { useContext } from 'react';
 
 const Home = () => {
-  const { accessToken } = useContext(Context);
+  const { accessToken, loading } = useContext(Context);
   let navigate = useNavigate()
 
   const TestSetting = () => {
@@ -39,8 +39,19 @@ const Home = () => {
               Pick a subject, test your skills, and grow smarter with every attempt.
             </p>
 
+            {loading && <div className="flex smooth-entry items-center my-4 justify-center text-white">
+              <div className="text-center">
+                <div className="text-xl font-semibold mb-3">
+                  Starting server…
+                </div>
+                <p className="text-sm text-slate-400">
+                  Free-tier backend may take up to 30 seconds
+                </p>
+              </div>
+            </div>}
 
-            <div className="mt-10">
+
+            <div className="mt-10 smooth-entry">
               {accessToken ? (
                 <button
                   onClick={TestSetting}
@@ -66,7 +77,7 @@ const Home = () => {
               transition-all duration-300
               hover:shadow-green-500/50 hover:-translate-y-1 active:scale-95">
 
-                  <span className="relative z-10">Login to Start</span>
+                  <span className="relative z-10">{loading ? "Starting server…" : "Sign In"}</span>
                 </button>
               )}
             </div>

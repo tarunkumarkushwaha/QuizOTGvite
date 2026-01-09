@@ -7,6 +7,7 @@ import { Context } from '../MyContext.js';
 import { useNavigate, Link } from "react-router-dom"
 import Timeover from "../components/Timeover.jsx"
 import useWindowFocusDetector from "../customhooks/WindowFocusDetector.js";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 
 
 const Test = () => {
@@ -37,45 +38,73 @@ const Test = () => {
 
   const checkAns = () => {
     if (TestQuestion[questionNO].correctresponse == response) {
-      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp :timeLeft }])
-      currentsong.current.play()
+      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp: timeLeft }])
+      currentsong.current?.play().catch(() => { });
       toast.success("correct")
     }
     else {
-      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp :timeLeft }])
-      currentsong2.current.play()
+      setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp: timeLeft }])
+      currentsong2.current?.play().catch(() => { });
       toast.error("oops, Your answer is INCORRECT")
     }
     setdisabled(true)
   }
 
   const yourNext = () => {
-    if (disabled == false) {
-      if (response != TestQuestion[questionNO].correctresponse) {
-        response == "" ? toast.warn("no response submitted") :
-          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp :timeLeft }]);
+    if (!disabled) {
+      if (response === "") {
+        setresponses(prev => [
+          ...prev,
+          {
+            question: TestQuestion[questionNO],
+            marks: null,
+            yourAnswer: "",
+            timestamp: timeLeft
+          }
+        ]);
+      } else if (response === TestQuestion[questionNO].correctresponse) {
+        setresponses(prev => [
+          ...prev,
+          {
+            question: TestQuestion[questionNO],
+            marks: true,
+            yourAnswer: response,
+            timestamp: timeLeft
+          }
+        ]);
+      } else {
+        setresponses(prev => [
+          ...prev,
+          {
+            question: TestQuestion[questionNO],
+            marks: false,
+            yourAnswer: response,
+            timestamp: timeLeft
+          }
+        ]);
       }
-      else if (TestQuestion[questionNO].correctresponse == response) {
-        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp :timeLeft }]);
-      }
-      else { toast.error("some error occured") }
     }
-    setdisabled(false)
-    setresponse("")
-    questionNO < TestQuestion.length - 1 ?
-      setquestionNO((prevQues) => prevQues + 1)
-      :
-      toast.warn("it is last question")
-  }
+
+    setdisabled(false);
+    setresponse("");
+
+    if (questionNO >= TestQuestion.length - 1) {
+      toast.success("Test completed");
+      navigate("/result");
+      return;
+    }
+
+    setquestionNO(prev => prev + 1);
+  };
 
   const finalSubmit = () => {
-    if (disabled == false) {
+    if (!disabled && response !== "") {
       if (response != TestQuestion[questionNO].correctresponse) {
         response == "" ? toast.warn("no response submitted in previous question") :
-          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp :timeLeft }])
+          setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: false, yourAnswer: response, timestamp: timeLeft }])
       }
       else if (TestQuestion[questionNO].correctresponse == response) {
-        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp :timeLeft }])
+        setresponses(prev => [...prev, { question: TestQuestion[questionNO], marks: true, yourAnswer: response, timestamp: timeLeft }])
       }
     }
     toast.success("test submitted successfully")
@@ -107,9 +136,16 @@ const Test = () => {
 
   }, [focus])
 
+  if (!TestQuestion?.length) {
+    return (
+      <LoadingSpinner />
+    );
+  }
+
+
   return (
     <>
-      <Timer settimeover={settimeover}/>
+      <Timer settimeover={settimeover} />
       <audio src={trueSound} loop={false} ref={currentsong} crossOrigin={'anonymous'}></audio>
       <audio src={falseSound} loop={false} ref={currentsong2} crossOrigin={'anonymous'}></audio>
       {accessToken ? timeover ? <Timeover style={style.ui} finalSubmit={finalSubmit} />
@@ -159,12 +195,13 @@ const Test = () => {
               <button
                 type="button"
                 onClick={yourNext}
+                disabled={questionNO === TestQuestion.length - 1}
                 className="px-6 py-2.5 rounded-xl font-semibold text-white
         bg-gradient-to-br from-sky-400 to-blue-600
         hover:from-sky-300 hover:to-blue-500
         transition-all duration-300 active:scale-95"
               >
-                Next
+                {questionNO === TestQuestion.length - 1 ? "Finish" : "Next"}
               </button>
 
               <button

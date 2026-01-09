@@ -5,7 +5,7 @@ import { Context } from "../MyContext";
 const ProtectedRoute = ({ children }) => {
   const { accessToken, loading } = useContext(Context);
 
-  if (loading) return null; // NO spinner, NO remount
+  if (loading) return null; 
 
   if (!accessToken) {
     return <Navigate to="/login" replace />;

@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import { Context } from "../MyContext";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from '@mui/material';
 
 const QuizManager = () => {
   const [formData, setFormData] = useState({
@@ -21,14 +22,6 @@ const QuizManager = () => {
   const [loading, setLoading] = useState(false);
   let navigate = useNavigate();
   const { backendURL, accessToken, setTestQuestion, setstart } = useContext(Context);
-
-  useEffect(() => {
-    getAllSubjects();
-  }, []);
-
-  useEffect(() => {
-    if (selectedSubject) loadQuestions();
-  }, [selectedSubject]);
 
   const getAllSubjects = async () => {
     try {
@@ -58,7 +51,11 @@ const QuizManager = () => {
         },
       });
       const result = await res.json();
-      const data = Array.isArray(result) ? result : result.data || [];
+      const data =
+        Array.isArray(result)
+          ? result
+          : result.questions || result.data || [];
+
       setQuestions(data);
       setLoading(false);
     } catch (err) {
@@ -82,14 +79,28 @@ const QuizManager = () => {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+
   };
 
   const submitQuestion = async (e) => {
     e.preventDefault();
 
-    const subject = formData.subject.trim() || selectedSubject;
-    if (!subject) return alert("Please enter or select a subject");
+    const subject = selectedSubject.trim();
+    if (!subject) {
+      toast.error("Please select a subject");
+      return;
+    }
+
+    const time = Number(formData.time);
+    if (!time || time <= 0) {
+      toast.error("Time must be a positive number");
+      return;
+    }
+
 
     const data = {
       question: formData.question,
@@ -98,7 +109,7 @@ const QuizManager = () => {
       option3: formData.option3,
       option4: formData.option4,
       correctresponse: formData.correctresponse,
-      time: parseInt(formData.time),
+      time: time,
       subject,
     };
 
@@ -166,7 +177,7 @@ const QuizManager = () => {
 
   const startTest = () => {
     if (questions.length > 0) {
-      setTestQuestion(questions)
+      setTestQuestion([...questions]);
       setstart(true);
       navigate("/test");
     }
@@ -202,14 +213,28 @@ const QuizManager = () => {
       }
 
       toast.success(data.message);
-      getAllSubjects();
-      setQuestions([]);
       setSelectedSubject("");
+      setQuestions([]);
+      await getAllSubjects();
     } catch (err) {
       console.error(err);
       toast.error("Server error while deleting subject");
     }
   };
+
+  useEffect(() => {
+    getAllSubjects();
+  }, []);
+
+  useEffect(() => {
+    if (selectedSubject) loadQuestions();
+  }, [selectedSubject]);
+
+  if (!accessToken) {
+    toast.error("Session expired. Please login again.");
+    navigate("/login");
+    return;
+  }
 
 
   return (
@@ -270,7 +295,7 @@ const QuizManager = () => {
         </h2>
 
         {loading ? (
-          <p className="text-slate-500">Loading questions...</p>
+          <div className="flex justify-center items-center"><CircularProgress size={60} thickness={4} color="primary" /></div>
         ) : questions.length === 0 ? (
           <p className="text-slate-500">No questions found.</p>
         ) : (

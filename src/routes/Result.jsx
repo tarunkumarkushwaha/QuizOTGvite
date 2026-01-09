@@ -58,6 +58,7 @@ const Result = () => {
   }
 
   const correctresponse = responses?.filter(item => item.marks == true).length
+  const unattempted = responses.filter(r => r.marks === null).length;
   const incorrectresponse = responses?.filter(item => item.marks == false).length
   const questionlength = TestQuestion?.length || 0;
   const percentage = questionlength
@@ -107,7 +108,7 @@ const Result = () => {
               <div className="flex justify-between text-yellow-400">
                 <span>Unattempted Questions</span>
                 <span className="font-semibold">
-                  {questionlength - (incorrectresponse + correctresponse)}
+                  {unattempted}
                 </span>
               </div>
               <div className="flex justify-between text-yellow-400">
