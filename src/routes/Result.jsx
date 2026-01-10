@@ -94,6 +94,10 @@ const Result = () => {
                 <span>Total Questions</span>
                 <span className="font-semibold">{questionlength}</span>
               </div>
+              <div className="flex justify-between ">
+                <span>Total Time</span>
+                <span className="font-semibold">{min} min</span>
+              </div>
 
               <div className="flex justify-between text-emerald-400">
                 <span>Correct Responses</span>

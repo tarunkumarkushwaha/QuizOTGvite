@@ -32,7 +32,7 @@ function App() {
   const [min, setmin] = useState(10);
   const [timeLeft, setTimeLeft] = useState(10);
   const [TestQuestion, setTestQuestion] = useState()
-  const [dark, setdark] = useState(false)
+  const [dark, setdark] = useState(true)
   const [userName, setuserName] = useState("")
   const [CustomQuestions, setCustomQuestions] = useState([]);
   const [responses, setresponses] = useState([])

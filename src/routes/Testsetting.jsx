@@ -152,63 +152,76 @@ const Testsetting = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               <div>
-                <FormControl className="bg-slate-300 rounded-md w-full" fullWidth>
-                  <InputLabel id="subject-select-label">Subject</InputLabel>
-                  <Select
-                    labelId="subject-select-label"
-                    name="subject"
-                    id="subject-select"
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-slate-200">
+                    Subject
+                  </label>
+
+                  <select
                     value={testSub}
-                    label="Subject"
                     onChange={(e) => settestSub(e.target.value)}
+                    className="w-full rounded-xl px-4 py-3
+      bg-slate-200 text-slate-900
+      border border-slate-300
+      focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    <MenuItem value="generate question">Generate Question (AI)</MenuItem>
-                    <MenuItem value="Your Questions">Your Custom Questions</MenuItem>
-                    <MenuItem value="html">HTML</MenuItem>
-                    <MenuItem value="css">CSS</MenuItem>
-                    <MenuItem value="javascript">JavaScript</MenuItem>
-                    <MenuItem value="React">React</MenuItem>
-                    <MenuItem value="wordpress">WordPress</MenuItem>
-                    <MenuItem value="Python">Python</MenuItem>
-                    <MenuItem value="Science">Science</MenuItem>
-                    <MenuItem value="Funny">Funny</MenuItem>
-                    <MenuItem value="Reasoning">Reasoning</MenuItem>
-                  </Select>
-                </FormControl>
+                    <option disabled value="">Select subject</option>
+                    <option value="generate question">Generate Question (AI)</option>
+                    <option value="Your Questions">Your Custom Questions</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="React">React</option>
+                    <option value="wordpress">WordPress</option>
+                    <option value="Python">Python</option>
+                    <option value="Science">Science</option>
+                    <option value="Funny">Funny</option>
+                    <option value="Reasoning">Reasoning</option>
+                  </select>
+                </div>
+
               </div>
 
               <div className="flex flex-col gap-4">
-                <TextField
-                  id="time-input"
-                  name="time"
-                  className="bg-slate-300"
-                  type="number"
-                  label="Time (minutes)"
-                  value={min}
-                  onChange={(e) => handleChange(e.target.value)}
-                  inputProps={{ min: 1 }}
-                  fullWidth
-                />
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-slate-200">
+                    Time (minutes)
+                  </label>
 
-                <FormControl className="bg-slate-300 rounded-md" fullWidth>
-                  <InputLabel id="question-count-label">
+                  <input
+                    type="number"
+                    min={1}
+                    value={min}
+                    onChange={(e) => handleChange(e.target.value)}
+                    className="w-full rounded-xl px-4 py-3
+      bg-slate-200 text-slate-900
+      border border-slate-300
+      focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-slate-200">
                     Number of Questions
-                  </InputLabel>
+                  </label>
 
-                  <Select
-                    labelId="question-count-label"
-                    id="question-count"
+                  <select
                     value={questionLength}
-                    label="Number of Questions"
                     onChange={(e) => setquestionLength(Number(e.target.value))}
+                    className="w-full rounded-xl px-4 py-3
+      bg-slate-200 text-slate-900
+      border border-slate-300
+      focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
-                    {Array.from({ length: maxquestionLength }, (_, i) => i + 1).map((num) => (
-                      <MenuItem key={num} value={num}>
+                    {Array.from({ length: maxquestionLength }, (_, i) => i + 1).map(num => (
+                      <option key={num} value={num}>
                         {num} Questions
-                      </MenuItem>
+                      </option>
                     ))}
-                  </Select>
-                </FormControl>
+                  </select>
+                </div>
+
 
               </div>
             </div>

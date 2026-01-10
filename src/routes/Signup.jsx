@@ -12,37 +12,32 @@ const Signup = () => {
   const { setuserName, backendURL } = useContext(Context);
 
   const passwordValidator = (pass) => {
-    let passobject = { password: pass, error: false, errormessege: "" }
-    if (pass.length > 8) {
-      let capital = []
-      let small = []
-      let specialordigit = []
-      pass.split('').map((char) => {
-        if (char.charCodeAt() >= 65 && char.charCodeAt() <= 90) {
-          capital.push(char)
-        }
-        else if (char.charCodeAt() >= 97 && char.charCodeAt() <= 122) {
-          small.push(char)
-        } else { specialordigit.push(char) }
-      })
-      if (capital.length < 1) {
-        passobject.error = true
-        passobject.errormessege = "password must contain a capital letter"
-        return passobject
-      }
-      if (specialordigit.length < 1) {
-        passobject.error = true
-        passobject.errormessege = "password must contain a special letter"
-        return passobject
-      }
-      else { return passobject }
+    let result = { error: false, errormessege: "" };
+
+    if (pass.length < 8) {
+      return { error: true, errormessege: "Password must be at least 8 characters" };
     }
-    else if (pass.length < 8 || pass.length == 0) {
-      passobject.error = true
-      passobject.errormessege = "password must be of 8 characters"
-      return passobject
+
+    let hasUpper = false;
+    let hasLower = false;
+    let hasDigit = false;
+    let hasSpecial = false;
+
+    for (let char of pass) {
+      if (char >= "A" && char <= "Z") hasUpper = true;
+      else if (char >= "a" && char <= "z") hasLower = true;
+      else if (char >= "0" && char <= "9") hasDigit = true;
+      else hasSpecial = true;
     }
-  }
+
+    if (!hasUpper) return { error: true, errormessege: "Must contain an uppercase letter" };
+    if (!hasLower) return { error: true, errormessege: "Must contain a lowercase letter" };
+    if (!hasDigit) return { error: true, errormessege: "Must contain a number" };
+    if (!hasSpecial) return { error: true, errormessege: "Must contain a special character" };
+
+    return result;
+  };
+
 
   const handle = async () => {
     setuserName(naam)
@@ -64,24 +59,26 @@ const Signup = () => {
   let navigate = useNavigate()
 
   const handleSignup = () => {
-    if (naam.length <= 3) {
-      toast.error("name must be of 3 characters")
-      return
+    if (!/\S+@\S+\.\S+/.test(naam)) {
+      toast.error("Enter a valid email");
+      return;
     }
 
-    // if (passwordValidator(password).error) {
-    //   let messege = passwordValidator(password).errormessege
-    //   toast.error(messege)
-    //   return
-    // }
-    if (checkpassword == password) {
-      handle()
-      navigate("/login")
-      toast.success("account created")
-      localStorage.setItem('Name', JSON.stringify(naam));
+    const validation = passwordValidator(password);
+    if (validation.error) {
+      toast.error(validation.errormessege);
+      return;
     }
-    else { toast.error("confirm password do not match") }
-  }
+
+    if (password !== checkpassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    handle();
+    localStorage.setItem("Name", JSON.stringify(naam));
+  };
+
 
   return (
     <>
@@ -103,7 +100,6 @@ const Signup = () => {
                     Join QuizOTG and start practicing smarter
                   </p>
                 </div>
-
 
                 <div className="space-y-5">
 
@@ -138,7 +134,7 @@ const Signup = () => {
                     </label>
                     <input
                       value={password}
-                      onChange={(e) => setpassword(e.target.value.trim())}
+                      onChange={(e) => setpassword(e.target.value)}
                       type={showpass ? "text" : "password"}
                       name="password"
                       id="password"

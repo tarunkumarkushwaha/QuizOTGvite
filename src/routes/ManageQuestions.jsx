@@ -79,21 +79,24 @@ const QuizManager = () => {
   };
 
   const handleChange = (e) => {
+    const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [id]: value,
     }));
-
   };
 
   const submitQuestion = async (e) => {
     e.preventDefault();
 
-    const subject = selectedSubject.trim();
+    const subject =
+      formData.subject.trim() || selectedSubject.trim();
+
     if (!subject) {
-      toast.error("Please select a subject");
+      toast.error("Please select or enter a subject");
       return;
     }
+
 
     const time = Number(formData.time);
     if (!time || time <= 0) {
