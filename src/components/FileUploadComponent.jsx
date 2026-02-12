@@ -221,7 +221,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                     onClick={() => setShowModal(true)}
                     className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
                 >
-                    Show Questions
+                    Show uploaded Questions
                 </button>
             )}
 
@@ -229,7 +229,7 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
                 onClick={() => navigate("/managequestions")}
                 className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 ml-2"
             >
-                Previous Questions
+                Your Questions
             </button>
             <button
                 onClick={() => navigate("/managequestions")}

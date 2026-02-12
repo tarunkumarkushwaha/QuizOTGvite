@@ -50,7 +50,13 @@ const Testsetting = () => {
     fetch(
       `${backendURL}/ask?prompt=${encodeURIComponent(
         questionGenerateInputText
-      )}&count=${questionLength}`
+      )}&count=${questionLength}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
     )
       .then((response) => response.json())
       .then((data) => {

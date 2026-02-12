@@ -10,7 +10,7 @@ const ShowNewsEditModal = (props) => {
     onCancelClick,
     item,
     open,
-    refreshPosts, // ✅ from parent to re-fetch posts
+    refreshPosts, 
     ...rest
   } = props;
 

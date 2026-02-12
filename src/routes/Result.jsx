@@ -1,11 +1,86 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { Context } from '../MyContext';
+import { toast } from "react-toastify"
+import PerformanceHistory from "../components/PerformanceHistory";
+
 
 const Result = () => {
-  const { TestQuestion, responses, dark, accessToken, pastresult, setpastresult, testSub, min, timeLeft, backendURL } = useContext(Context);
+  const { TestQuestion, responses, dark, accessToken, pastresult, setpastresult, testSub, min, timeLeft, backendURL, userName } = useContext(Context);
   const [explanations, setExplanations] = useState({});
+  const [allresults, setallresults] = useState([])
   const [loadingExplain, setLoadingExplain] = useState(null);
+  const [showtestHistory, setshowtestHistory] = useState(false);
+  const hasPosted = useRef(false);
+
+  useEffect(() => {
+    const loadResults = async () => {
+      if (!accessToken) return;
+      try {
+        // setLoading(true);
+        // console.log("im o")
+        const res = await fetch(`${backendURL}/results/result`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = await res.json();
+        setallresults(data || [])
+        // console.log(data);
+        // return data
+      } catch (err) {
+        console.error("Error loading questions", err);
+        // setLoading(false);
+      }
+    };
+    loadResults()
+  }, []);
+
+
+  useEffect(() => {
+    if (hasPosted.current) return;
+    hasPosted.current = true;
+
+    const postresult = async () => {
+      if (!accessToken) return;
+
+      const subject = testSub;
+      const time = Math.max(0, min * 60 - timeLeft);
+
+      const totalQuestions = TestQuestion?.length || 1;
+      const correctAnswers = responses?.filter(i => i.marks).length;
+      const accuracy = (correctAnswers / totalQuestions) * 100;
+      const score = correctAnswers * accuracy;
+
+      const data = {
+        subject,
+        score,
+        timeTaken: time,
+        totalQuestions,
+        correctAnswers,
+      };
+
+      const res = await fetch(`${backendURL}/results`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        toast.success(result.message || "Result saved");
+      } else {
+        toast.error(result.message || "Error saving result");
+      }
+    };
+
+    postresult();
+  }, []);
+
 
   const explainQuestion = async (item, index) => {
     if (explanations[index]) return;
@@ -21,7 +96,11 @@ const Result = () => {
         item.yourAnswer || "Not Attempted"
       )}`;
 
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
       if (!res.ok) {
         throw new Error("Explain API failed");
@@ -130,7 +209,6 @@ const Result = () => {
                 </span>
               </div>
 
-              {/* {pastresult && Object.keys(pastresult).length !== 0 && <> */}
               {!!pastresult?.questionlength && <>
                 <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sky-400 text-lg">
                   <span>Past Percentage</span>
@@ -138,17 +216,24 @@ const Result = () => {
                     {Number(Math.round(pastpercentage + "e2") + "e-2")}% on {pastresult.subject}
                   </span>
                 </div>
-                {/* <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sky-400 text-lg">
-                  <span>Past Subject</span>
-                  <span className="font-bold">
-                    {pastresult.subject}
-                  </span>
-                </div> */}
               </>}
             </div>
 
-
             <div className="mt-10 flex justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setshowtestHistory(!showtestHistory)
+                }}
+                className="px-8 py-3 rounded-xl text-sm font-semibold text-white
+            bg-gradient-to-r from-green-400 to-blue-600
+            shadow-lg shadow-blue-500/30
+            transition-all duration-300
+            hover:shadow-blue-500/50 hover:-translate-y-0.5
+            active:scale-95"
+              >
+                Past performances
+              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -166,6 +251,10 @@ const Result = () => {
               </button>
 
             </div>
+
+            {showtestHistory && <div>
+              <PerformanceHistory allresults={allresults} />
+            </div>}
 
             {/* Question Review */}
             <div className="mt-10 border-t border-white/10 pt-8">
