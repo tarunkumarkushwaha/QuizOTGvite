@@ -3,6 +3,7 @@ import { Context } from "../MyContext";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CircularProgress } from '@mui/material';
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const QuizManager = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,7 @@ const QuizManager = () => {
   const [questions, setQuestions] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
   let navigate = useNavigate();
   const { backendURL, accessToken, setTestQuestion, setstart } = useContext(Context);
 
@@ -247,39 +249,41 @@ const QuizManager = () => {
         Quiz Manager
       </h1>
 
-      <div className="max-w-3xl mx-auto mb-10">
-        <label
-          htmlFor="collection-select"
-          className="block text-sm font-semibold text-slate-700 mb-2"
-        >
-          Select Subject
-        </label>
+      <>
+        <div className="max-w-3xl mx-auto mb-10">
+          <label
+            htmlFor="collection-select"
+            className="block text-sm font-semibold text-slate-700 mb-2"
+          >
+            Select Subject
+          </label>
 
-        <div className="flex gap-3">
-          <select
-            id="collection-select"
-            value={selectedSubject}
-            onChange={(e) => setSelectedSubject(e.target.value)}
-            className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3
+          <div className="flex gap-3">
+            <select
+              id="collection-select"
+              value={selectedSubject}
+              onChange={(e) => setSelectedSubject(e.target.value)}
+              className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-3
         focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          >
-            <option value="">Choose a subject</option>
-            {subjects.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
+            >
+              <option value="">Choose a subject</option>
+              {loading ? <p>please wait ...</p> : subjects.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
 
-          {selectedSubject && <button
-            onClick={handleDeleteSubject}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
-          >
-            Delete
-          </button>}
+            {selectedSubject && <button
+              onClick={handleDeleteSubject}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
+            >
+              Delete
+            </button>}
+
+          </div>
         </div>
-      </div>
-
+      </>
       <div className="flex justify-center mb-12">
         <button
           onClick={startTest}
@@ -293,9 +297,9 @@ const QuizManager = () => {
       </div>
 
       <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6 mb-10">
-        <h2 className="text-xl font-semibold text-slate-700 mb-6">
+        {!loading && <h2 className="text-xl font-semibold text-slate-700 mb-6">
           Questions
-        </h2>
+        </h2>}
 
         {loading ? (
           <div className="flex justify-center items-center"><CircularProgress size={60} thickness={4} color="primary" /></div>
@@ -352,7 +356,7 @@ const QuizManager = () => {
         )}
       </div>
 
-      <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6">
+      {!loading && <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6">
         <h2 className="text-xl font-semibold text-slate-700 mb-6">
           {editingId ? "Edit Question" : "Add New Question"}
         </h2>
@@ -406,7 +410,7 @@ const QuizManager = () => {
             )}
           </div>
         </form>
-      </div>
+      </div>}
     </div>
 
 

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { Context } from '../MyContext';
 import { useContext } from 'react';
+import PleaseLogin from "../components/PleaseLogin";
 
 const Home = () => {
   const { accessToken, loading } = useContext(Context);

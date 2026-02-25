@@ -134,6 +134,44 @@ const Testsetting = () => {
       .finally(() => setLoading(false));
   }, [testSub]);
 
+  const submitMultipleQuestions = async () => {
+    if (!Array.isArray(TestQuestion) || TestQuestion.length === 0) {
+      toast.warn("Please generate question");
+      return;
+    }
+
+    const subject = questionGenerateInputText.slice(0, 20) || "AI generated questions";
+    if (!subject) return toast.warn("Please generate question");
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${backendURL}/quiz/bulk/${subject}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ questions: TestQuestion }),
+      });
+
+      if (res.ok) {
+        toast.success("All questions uploaded successfully!");
+        // await getAllSubjects();
+        // await loadQuestions();
+      } else {
+        const errMsg = await res.text();
+        console.error(errMsg);
+        toast.error("Error uploading questions");
+      }
+    } catch (err) {
+      console.error("Bulk upload failed", err);
+      toast.error("Bulk upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
 
   return (
@@ -157,7 +195,7 @@ const Testsetting = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-              <div>
+              <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-medium text-slate-200">
                     Subject
@@ -184,6 +222,18 @@ const Testsetting = () => {
                     <option value="Funny">Funny</option>
                     <option value="Reasoning">Reasoning</option>
                   </select>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-medium text-slate-200">
+                    Manage Your Questions
+                  </label>
+                  <button
+                    onClick={() => navigate("/managequestions")}
+                    className="bg-green-500 text-white px-4 py-3 rounded-xl shadow border border-slate-300
+      focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-green-600"
+                  >
+                    Manage Your Questions
+                  </button>
                 </div>
 
               </div>
@@ -251,7 +301,6 @@ const Testsetting = () => {
                     fullWidth
                   />
                 )}
-
                 <button
                   type="button"
                   onClick={GenerateQuestion}
@@ -265,6 +314,20 @@ const Testsetting = () => {
                 ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
                 >
                   {loading ? "Generating..." : "Generate Questions"}
+                </button>
+                <button
+                  type="button"
+                  onClick={submitMultipleQuestions}
+                  disabled={loading}
+                  className={`w-full text-white my-4 font-semibold rounded-xl px-6 py-3
+                bg-gradient-to-r from-purple-500 to-pink-500
+                shadow-lg shadow-pink-500/30
+                transition-all duration-300
+                hover:shadow-pink-500/50 hover:-translate-y-0.5
+                active:scale-95
+                ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
+                >
+                  {loading ? "Wait..." : "Save Genererated Questions"}
                 </button>
               </div>
             )}
