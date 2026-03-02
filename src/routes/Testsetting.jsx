@@ -46,7 +46,10 @@ const Testsetting = () => {
   }
 
   const generateQuestionsViaPdf = async () => {
-    if (!file) return alert("Please upload a PDF first");
+    if (!file) {
+      toast.error("Please upload a PDF first")
+      return
+    };
 
     setLoading(true);
     const formData = new FormData();
@@ -82,11 +85,11 @@ const Testsetting = () => {
   };
 
   const GenerateQuestion = () => {
-    if ((questionGenerateInputText.length < 1) || file ? false : true) {
-      console.log(questionGenerateInputText.length < 1 || file)
-      toast.error("please enter prompt")
-      return
-    }
+    // if ((questionGenerateInputText.length < 1) || file ? false : true) {
+    //   console.log(questionGenerateInputText.length < 1 || file)
+    //   toast.error("please enter prompt")
+    //   return
+    // }
     if (file) {
       generateQuestionsViaPdf()
       return
@@ -351,8 +354,8 @@ const Testsetting = () => {
 
                   <div
                     className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 transition-all ${file
-                        ? "border-green-400 bg-green-50"
-                        : "border-gray-300 bg-gray-50 group-hover:border-indigo-400 group-hover:bg-indigo-50"
+                      ? "border-green-400 bg-green-50"
+                      : "border-gray-300 bg-gray-50 group-hover:border-indigo-400 group-hover:bg-indigo-50"
                       }`}
                   >
                     {file ? (
