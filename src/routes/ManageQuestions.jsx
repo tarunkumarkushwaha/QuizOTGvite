@@ -21,7 +21,7 @@ const QuizManager = () => {
   const [questions, setQuestions] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [loading1, setLoading1] = useState(false);
+  // const [file, setFile] = useState(null);
   let navigate = useNavigate();
   const { backendURL, accessToken, setTestQuestion, setstart } = useContext(Context);
 
@@ -241,6 +241,38 @@ const QuizManager = () => {
     return;
   }
 
+  // const generateQuestionsViaPdf = async () => {
+  //   if (!file) return alert("Please upload a PDF first");
+
+  //   setLoading(true);
+  //   const formData = new FormData();
+  //   formData.append('pdf', file);
+  //   formData.append('count', 5);
+
+  //   try {
+  //     const response = await fetch(`${backendURL}/ask/generate-from-pdf`, {
+  //       method: 'POST',
+  //       body: formData,
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     });
+
+
+  //     const data = await response.json();
+  //     setQuestions(data.questions || []);
+  //   } catch (error) {
+  //     console.error("Upload failed", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleFileChange = (e) => {
+  //   if (e.target.files[0]) {
+  //     setFile(e.target.files[0]);
+  //   }
+  // };
 
   return (
     <div className="font-sans min-h-screen mt-10 bg-gradient-to-br from-slate-100 to-slate-200 py-12 px-4">
@@ -296,6 +328,50 @@ const QuizManager = () => {
         </button>
       </div>
 
+      {/* Upload Box */}
+      {/* <div className="relative group">
+        <input
+          type="file"
+          accept=".pdf"
+          onChange={handleFileChange}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        />
+        <div className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 transition-all ${file ? 'border-green-400 bg-green-50' : 'border-gray-300 bg-gray-50 group-hover:border-indigo-400 group-hover:bg-indigo-50'
+          }`}>
+          {file ? (
+            <div className="text-center text-green-700">
+              <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="font-semibold underline truncate max-w-[200px]">{file.name}</p>
+            </div>
+          ) : (
+            <div className="text-center text-gray-400">
+              <svg className="w-12 h-12 mx-auto mb-2 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+              <p className="text-sm font-medium">Click to upload or drag and drop</p>
+              <p className="text-xs mt-1">PDF files only</p>
+            </div>
+          )}
+        </div>
+      </div> */}
+
+      {/* Action Button */}
+      {/* <button
+        onClick={generateQuestionsViaPdf}
+        disabled={!file || loading}
+        className="w-full mt-6 bg-indigo-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100 transition-all shadow-lg shadow-indigo-200"
+      >
+        {loading ? (
+          <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+        ) : null}
+        {loading ? "Analyzing Document..." : "Build My Interview"}
+      </button> */}
+
       <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6 mb-10">
         {!loading && <h2 className="text-xl font-semibold text-slate-700 mb-6">
           Questions
@@ -307,14 +383,14 @@ const QuizManager = () => {
           <p className="text-slate-500">No questions found.</p>
         ) : (
           <div className="space-y-5">
-            {questions.map((q) => (
+            {questions.map((q, i) => (
               <div
                 key={q._id}
                 className="p-5 rounded-2xl border border-slate-200
             bg-slate-50 hover:bg-slate-100 transition"
               >
                 <p className="font-semibold text-slate-800 mb-3">
-                  {q.question}
+                  {i + 1 + ". "} {q.question}
                 </p>
 
                 <div className="text-sm text-slate-700 space-y-1">

@@ -21,7 +21,7 @@ const Testsetting = () => {
     min,
     setresponses
   } = useContext(Context);
-
+  const [file, setFile] = useState(null);
   const [questionLength, setquestionLength] = useState(10);
   const [maxquestionLength, setmaxquestionLength] = useState(30);
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,52 @@ const Testsetting = () => {
     return newArray;
   }
 
+  const generateQuestionsViaPdf = async () => {
+    if (!file) return alert("Please upload a PDF first");
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('pdf', file);
+    formData.append('count', 5);
+
+    try {
+      const response = await fetch(`${backendURL}/ask/generate-from-pdf`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+
+      const data = await response.json();
+      // console.log(data,"data")
+      if (data?.question) {
+        let shuffledQuestions = randomShuffle(data.question)
+        setTestQuestion(shuffledQuestions);
+        // setmin(String(data.time || 10));
+        setmin(data.time || 10);
+        setTimeLeft(data.time * 60 || 10 * 60);
+        toast.success("Questions generated successfully!");
+      }
+    } catch (error) {
+      console.error("Upload failed", error);
+    } finally {
+      setLoading(false);
+      return
+    }
+  };
+
   const GenerateQuestion = () => {
+    if ((questionGenerateInputText.length < 1) || file ? false : true) {
+      console.log(questionGenerateInputText.length < 1 || file)
+      toast.error("please enter prompt")
+      return
+    }
+    if (file) {
+      generateQuestionsViaPdf()
+      return
+    }
     setLoading(true);
     fetch(
       `${backendURL}/ask?prompt=${encodeURIComponent(
@@ -140,8 +185,8 @@ const Testsetting = () => {
       return;
     }
 
-    const subject = questionGenerateInputText.slice(0, 20) || "AI generated questions";
-    if (!subject) return toast.warn("Please generate question");
+    const subject = questionGenerateInputText.slice(0, 20) || file?.name?.split(".")[0];
+    if (!subject || !file) return toast.warn("Please generate question");
     setLoading(true);
 
     try {
@@ -172,7 +217,13 @@ const Testsetting = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      setFile(e.target.files[0]);
+    }
+  };
 
+  // console.log(file?.name?.split(".")[0])
 
   return (
     <>
@@ -289,6 +340,75 @@ const Testsetting = () => {
                   AI Question Generator
                 </h3>
 
+                {/* Upload Box */}
+                <div className="relative group my-4">
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    onChange={handleFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+
+                  <div
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-10 transition-all ${file
+                        ? "border-green-400 bg-green-50"
+                        : "border-gray-300 bg-gray-50 group-hover:border-indigo-400 group-hover:bg-indigo-50"
+                      }`}
+                  >
+                    {file ? (
+                      <div className="text-center text-green-700 relative">
+                        {/* Delete button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFile(null);
+                          }}
+                          className="absolute -top-20 -right-60 bg-red-500 text-white rounded-md w-24 h-8 flex items-center justify-center hover:bg-red-600"
+                        >
+                          delete file
+                        </button>
+
+                        <svg
+                          className="w-12 h-12 mx-auto mb-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+
+                        <p className="font-semibold underline truncate max-w-[200px]">
+                          {file.name}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="text-center text-gray-400">
+                        <svg
+                          className="w-12 h-12 mx-auto mb-2 opacity-60"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+                        <p className="text-sm font-medium">Click to upload or drag and drop</p>
+                        <p className="text-xs mt-1">PDF files only</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {questionGenerateInput && (
                   <TextField
                     className="bg-slate-300 mb-4 rounded-md"
@@ -299,6 +419,7 @@ const Testsetting = () => {
                     value={questionGenerateInputText}
                     onChange={(e) => setquestionGenerateInputText(e.target.value)}
                     fullWidth
+                    disabled={file ? true : false}
                   />
                 )}
                 <button
