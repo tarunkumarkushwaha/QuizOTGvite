@@ -437,6 +437,10 @@ const Testsetting = () => {
                   </div>
                 </div>
 
+                <h3 className="text-slate-100 text-center font-semibold mb-4">
+                  OR
+                </h3>
+
                 {questionGenerateInput && (
                   <TextField
                     className="bg-slate-300 mb-4 rounded-md"
