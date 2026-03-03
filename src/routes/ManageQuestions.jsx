@@ -164,20 +164,54 @@ const QuizManager = () => {
     });
   };
 
+  const confirmDelete = (messege = "selection", onConfirm) => {
+    toast(
+      ({ closeToast }) => (
+        <div className="flex flex-col gap-3">
+          <p className="font-medium">{`Delete ${messege}?`}</p>
+
+          <div className="flex gap-2 justify-end">
+            <button
+              className="px-3 py-1 bg-gray-200 rounded"
+              onClick={closeToast}
+            >
+              Cancel
+            </button>
+
+            <button
+              className="px-3 py-1 bg-red-500 text-white rounded"
+              onClick={() => {
+                onConfirm();
+                closeToast();
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        autoClose: false,
+        closeOnClick: false,
+      }
+    );
+  };
+
   const deleteQuestion = async (id) => {
-    if (!window.confirm("Delete this question?")) return;
+    confirmDelete("question", async () => {
+      const res = await fetch(`${backendURL}/quiz/${selectedSubject}/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
 
-    const res = await fetch(`${backendURL}/quiz/${selectedSubject}/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+      if (res.ok) {
+        toast.success("Question deleted");
+        loadQuestions();
+      } else {
+        toast.error("Error deleting question");
+      }
+    })
 
-    if (res.ok) {
-      toast.success("Question deleted");
-      loadQuestions();
-    } else {
-      toast.error("Error deleting question");
-    }
   };
 
   const startTest = () => {
@@ -192,39 +226,40 @@ const QuizManager = () => {
   const handleDeleteSubject = async () => {
     if (!selectedSubject) return;
 
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete ALL questions for "${selectedSubject}"?\nThis action cannot be undone.`
-    );
+    // const confirmDelete = window.confirm(
+    //   `Are you sure you want to delete ALL questions for "${selectedSubject}"?\nThis action cannot be undone.`
+    // );
 
-    if (!confirmDelete) return;
+    // if (!confirmDelete) return;
+    confirmDelete(selectedSubject, async () => {
+      try {
+        const res = await fetch(
+          `${backendURL}/quiz/${selectedSubject}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
 
-    try {
-      const res = await fetch(
-        `${backendURL}/quiz/${selectedSubject}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.error || "Failed to delete questions");
+          return;
         }
-      );
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error || "Failed to delete questions");
-        return;
+        toast.success(data.message);
+        setSelectedSubject("");
+        setQuestions([]);
+        await getAllSubjects();
+      } catch (err) {
+        console.error(err);
+        toast.error("Server error while deleting subject");
       }
-
-      toast.success(data.message);
-      setSelectedSubject("");
-      setQuestions([]);
-      await getAllSubjects();
-    } catch (err) {
-      console.error(err);
-      toast.error("Server error while deleting subject");
-    }
+    })
   };
 
   useEffect(() => {

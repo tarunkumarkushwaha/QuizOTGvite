@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from "react-router-dom"
 import { Context } from '../MyContext';
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { toast } from "react-toastify";
 import TestRules from "../components/TestRules.jsx";
@@ -29,6 +29,7 @@ const Testsetting = () => {
   const [questionGenerateInputText, setquestionGenerateInputText] = useState("");
 
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
 
   const handleChange = (text) => {
     const numericTimeValue = text.replace(/[^0-9]/g, "");
@@ -45,6 +46,14 @@ const Testsetting = () => {
     return newArray;
   }
 
+  const removeFile = () => {
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+
   const generateQuestionsViaPdf = async () => {
     if (!file) {
       toast.error("Please upload a PDF first")
@@ -52,9 +61,10 @@ const Testsetting = () => {
     };
 
     setLoading(true);
+    setTestQuestion([]);
     const formData = new FormData();
     formData.append('pdf', file);
-    formData.append('count', 5);
+    formData.append("count", questionLength);
 
     try {
       const response = await fetch(`${backendURL}/ask/generate-from-pdf`, {
@@ -65,15 +75,20 @@ const Testsetting = () => {
         },
       });
 
+      if (!response.ok) {
+        throw new Error("Failed to generate questions");
+      }
+
 
       const data = await response.json();
       // console.log(data,"data")
-      if (data?.question) {
-        let shuffledQuestions = randomShuffle(data.question)
+      if (data?.questions) {
+        let shuffledQuestions = randomShuffle(data.questions)
         setTestQuestion(shuffledQuestions);
         // setmin(String(data.time || 10));
         setmin(data.time || 10);
         setTimeLeft(data.time * 60 || 10 * 60);
+        // removeFile();
         toast.success("Questions generated successfully!");
       }
     } catch (error) {
@@ -171,8 +186,8 @@ const Testsetting = () => {
       .then((data) => {
         if (data?.questions?.length) {
           setTestQuestion(randomShuffle(data.questions));
-          setmin(data.time || 10);
-          setTimeLeft(data.time * 60 || 10 * 60);
+          setmin(data?.time || 10);
+          setTimeLeft(data?.time * 60 || 10 * 60);
           setmaxquestionLength(data.questions.length)
         } else {
           setTestQuestion([]);
@@ -188,8 +203,11 @@ const Testsetting = () => {
       return;
     }
 
-    const subject = questionGenerateInputText.slice(0, 20) || file?.name?.split(".")[0];
-    if (!subject || !file) return toast.warn("Please generate question");
+    const subject = questionGenerateInputText ? questionGenerateInputText.slice(0, 20) : file?.name?.split(".")[0];
+    // if (!subject) {
+    //   toast.warn("Please generate question1");
+    //   return;
+    // }
     setLoading(true);
 
     try {
@@ -221,12 +239,18 @@ const Testsetting = () => {
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files[0]) {
-      setFile(e.target.files[0]);
-    }
-  };
+    const selectedFile = e.target.files[0];
 
-  // console.log(file?.name?.split(".")[0])
+    if (!selectedFile) return;
+
+    if (selectedFile.type !== "application/pdf") {
+      toast.error("Only PDF files are allowed");
+      return;
+    }
+
+    setFile(selectedFile);
+  };
+  // console.log(questionGenerateInputText ? questionGenerateInputText.slice(0, 20) : file?.name?.split(".")[0],TestQuestion)
 
   return (
     <>
@@ -349,6 +373,7 @@ const Testsetting = () => {
                     type="file"
                     accept=".pdf"
                     onChange={handleFileChange}
+                    ref={fileInputRef}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
 
@@ -365,7 +390,7 @@ const Testsetting = () => {
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            setFile(null);
+                            removeFile()
                           }}
                           className="absolute -top-20 -right-60 bg-red-500 text-white rounded-md w-24 h-8 flex items-center justify-center hover:bg-red-600"
                         >
