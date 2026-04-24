@@ -3,6 +3,7 @@ import { useContext, useEffect, useState, useRef } from 'react';
 import { Context } from '../MyContext';
 import { toast } from "react-toastify"
 import PerformanceHistory from "../components/PerformanceHistory";
+import { Score } from "@mui/icons-material";
 
 
 const Result = () => {
@@ -12,6 +13,7 @@ const Result = () => {
   const [loadingExplain, setLoadingExplain] = useState(null);
   const [showtestHistory, setshowtestHistory] = useState(false);
   const hasPosted = useRef(false);
+  let Score = useRef(0);
 
   useEffect(() => {
     const loadResults = async () => {
@@ -49,9 +51,37 @@ const Result = () => {
 
       const totalQuestions = TestQuestion?.length || 1;
       const correctAnswers = responses?.filter(i => i.marks).length;
-      const accuracy = (correctAnswers / totalQuestions) * 100;
-      const score = correctAnswers * accuracy;
 
+      /**
+       * Calculates a weighted score out of 100
+       * @param {number} correct - Total correct answers
+       * @param {number} total - Total number of questions
+       * @param {number} timeLeft - Remaining time in seconds
+       * @param {number} totalTime - Initial total time in seconds
+       * @returns {number} - Rounded score from 0-100
+       */
+      const calculateWeightedScore = (correct, total, timeLeft, totalTime) => {
+        // 1. Prevent Division by Zero
+        if (total === 0) return 0;
+
+        // 2. Accuracy Component (80% of total score)
+        const accuracyRatio = correct / total;
+        const accuracyScore = accuracyRatio * 80;
+
+        // 3. Time Component (20% of total score)
+        // Ensure we don't get negative time or divide by zero
+        const timeRatio = totalTime > 0 ? Math.max(0, timeLeft) / totalTime : 0;
+        const timeScore = timeRatio * 20;
+
+        // 4. Final Result (Rounded to nearest whole number)
+        return Math.round(accuracyScore + timeScore);
+      };
+
+      // const accuracy = (correctAnswers / totalQuestions) * 100;
+      // const score = correctAnswers * accuracy;
+      const score = calculateWeightedScore(correctAnswers, totalQuestions, timeLeft, min * 60)
+      Score.current = score
+      // console.log(score)
       const data = {
         subject,
         score,
@@ -155,7 +185,7 @@ const Result = () => {
       {accessToken ? (
         <div className={`${style.ui} ${style.text} min-h-screen mt-16 flex items-center justify-center px-4`}>
 
-          <div className="smooth-entry w-full max-w-xl rounded-2xl 
+          <div className="smooth-entry w-full max-w-2xl rounded-2xl 
       bg-white/10 backdrop-blur-xl border border-white/10 
       shadow-2xl shadow-black/40 p-8">
 
@@ -208,6 +238,12 @@ const Result = () => {
                   {Number(Math.round(percentage + "e2") + "e-2")}%
                 </span>
               </div>
+              <div className="  border-white/10 flex justify-between text-sky-400 text-lg">
+                <span>Score</span>
+                <span className="font-bold">
+                  {Score.current}
+                </span>
+              </div>
 
               {!!pastresult?.questionlength && <>
                 <div className="mt-4 pt-4 border-t border-white/10 flex justify-between text-sky-400 text-lg">
@@ -219,7 +255,21 @@ const Result = () => {
               </>}
             </div>
 
-            <div className="mt-10 flex justify-center gap-4">
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  navigate("/leaderboard")
+                }}
+                className="px-8 py-3 rounded-xl text-sm font-semibold text-white
+            bg-gradient-to-r from-green-400 to-blue-600
+            shadow-lg shadow-blue-500/30
+            transition-all duration-300
+            hover:shadow-blue-500/50 hover:-translate-y-0.5
+            active:scale-95"
+              >
+                LeaderBoard
+              </button>
               <button
                 type="button"
                 onClick={() => {

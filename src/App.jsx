@@ -25,6 +25,7 @@ import QuizManager from "./routes/ManageQuestions";
 import PublicRoute from "./components/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import Leaderboard from "./routes/LeaderBoard";
 
 function App() {
   const [accessToken, setAccessToken] = useState(null);
@@ -40,8 +41,8 @@ function App() {
   const [start, setstart] = useState(false)
   const [loading, setLoading] = useState(true);
 
-  // const backendURL = "http://localhost:3000"
-  const backendURL = "https://quiztimequestionapi.onrender.com"
+  const backendURL = "http://localhost:3000"
+  // const backendURL = "https://quiztimequestionapi.onrender.com"
 
 
   useEffect(() => {
@@ -154,6 +155,7 @@ function App() {
             <Route path="/test" element={<ProtectedRoute><Test /></ProtectedRoute>} />
             <Route path="/managequestions" element={<ProtectedRoute><QuizManager /></ProtectedRoute>} />
             <Route path="/result" element={<ProtectedRoute><Result /></ProtectedRoute>} />
+            <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
             <Route path="/login" element={
               <PublicRoute>
                 <Login />
