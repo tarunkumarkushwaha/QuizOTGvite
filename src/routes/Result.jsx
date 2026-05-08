@@ -288,6 +288,21 @@ const Result = () => {
                 type="button"
                 onClick={() => {
                   setpastresult({ questionlength: TestQuestion?.length, correctresponse, subject: testSub })
+                  navigate("/discussions")
+                }}
+                className="px-8 py-3 rounded-xl text-sm font-semibold text-white
+            bg-gradient-to-r from-green-400 to-blue-600
+            shadow-lg shadow-blue-500/30
+            transition-all duration-300
+            hover:shadow-blue-500/50 hover:-translate-y-0.5
+            active:scale-95"
+              >
+                Discussion Forum
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setpastresult({ questionlength: TestQuestion?.length, correctresponse, subject: testSub })
                   navigate("/testsetting")
                 }}
                 className="px-8 py-3 rounded-xl text-sm font-semibold text-white

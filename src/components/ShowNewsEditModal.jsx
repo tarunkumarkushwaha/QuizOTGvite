@@ -1,6 +1,6 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import EmojiModal from "./EmojiModal";
+import EmojiModal from "./discussion/EmojiModal";
 import { toast } from "react-toastify";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";

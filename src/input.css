@@ -51,3 +51,24 @@
     opacity: 1;
   }
 }
+
+.side-entry {
+  animation: scaleentry 0.3s ease-out;
+}
+
+@keyframes scaleentry {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.02) translateY(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
