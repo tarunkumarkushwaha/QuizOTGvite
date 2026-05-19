@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { Context } from "../MyContext";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress } from '@mui/material';
+import { CircularProgress } from "@mui/material";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const QuizManager = () => {
@@ -23,15 +23,12 @@ const QuizManager = () => {
   const [loading, setLoading] = useState(false);
   // const [file, setFile] = useState(null);
   let navigate = useNavigate();
-  const { backendURL, accessToken, setTestQuestion, setstart } = useContext(Context);
+  const { backendURL, accessToken, setTestQuestion, setstart, authFetch } =
+    useContext(Context);
 
   const getAllSubjects = async () => {
     try {
-      const res = await fetch(`${backendURL}/quiz/allsubjects`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await authFetch(`/quiz/allsubjects`);
       if (res.ok) {
         const result = await res.json();
         setSubjects(result.subjects || []);
@@ -47,16 +44,11 @@ const QuizManager = () => {
     if (!selectedSubject) return;
     try {
       setLoading(true);
-      const res = await fetch(`${backendURL}/quiz/${selectedSubject}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await authFetch(`/quiz/${selectedSubject}`, {});
       const result = await res.json();
-      const data =
-        Array.isArray(result)
-          ? result
-          : result.questions || result.data || [];
+      const data = Array.isArray(result)
+        ? result
+        : result.questions || result.data || [];
 
       setQuestions(data);
       setLoading(false);
@@ -82,7 +74,7 @@ const QuizManager = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [id]: value,
     }));
@@ -91,21 +83,18 @@ const QuizManager = () => {
   const submitQuestion = async (e) => {
     e.preventDefault();
 
-    const subject =
-      formData.subject.trim() || selectedSubject.trim();
+    const subject = formData.subject.trim() || selectedSubject.trim();
 
     if (!subject) {
       toast.error("Please select or enter a subject");
       return;
     }
 
-
     const time = Number(formData.time);
     if (!time || time <= 0) {
       toast.error("Time must be a positive number");
       return;
     }
-
 
     const data = {
       question: formData.question,
@@ -118,18 +107,17 @@ const QuizManager = () => {
       subject,
     };
 
-    let url = `${backendURL}/quiz/${subject}`;
+    let url = `/quiz/${subject}`;
     let method = "POST";
     if (editingId) {
-      url = `${backendURL}/quiz/${subject}/${editingId}`;
+      url = `/quiz/${subject}/${editingId}`;
       method = "PUT";
     }
 
-    const res = await fetch(url, {
+    const res = await authFetch(url, {
       method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
       },
       credentials: "include",
       body: JSON.stringify(data),
@@ -193,15 +181,14 @@ const QuizManager = () => {
       {
         autoClose: false,
         closeOnClick: false,
-      }
+      },
     );
   };
 
   const deleteQuestion = async (id) => {
     confirmDelete("question", async () => {
-      const res = await fetch(`${backendURL}/quiz/${selectedSubject}/${id}`, {
+      const res = await authFetch(`/quiz/${selectedSubject}/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${accessToken}` },
       });
 
       if (res.ok) {
@@ -210,8 +197,7 @@ const QuizManager = () => {
       } else {
         toast.error("Error deleting question");
       }
-    })
-
+    });
   };
 
   const startTest = () => {
@@ -219,8 +205,9 @@ const QuizManager = () => {
       setTestQuestion([...questions]);
       setstart(true);
       navigate("/test");
+    } else {
+      toast.error("no question found please select question");
     }
-    else { toast.error("no question found please select question") }
   };
 
   const handleDeleteSubject = async () => {
@@ -233,16 +220,12 @@ const QuizManager = () => {
     // if (!confirmDelete) return;
     confirmDelete(selectedSubject, async () => {
       try {
-        const res = await fetch(
-          `${backendURL}/quiz/${selectedSubject}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
+        const res = await authFetch(`/quiz/${selectedSubject}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         const data = await res.json();
 
@@ -259,7 +242,7 @@ const QuizManager = () => {
         console.error(err);
         toast.error("Server error while deleting subject");
       }
-    })
+    });
   };
 
   useEffect(() => {
@@ -285,14 +268,13 @@ const QuizManager = () => {
   //   formData.append('count', 5);
 
   //   try {
-  //     const response = await fetch(`${backendURL}/ask/generate-from-pdf`, {
+  //     const response = await fetch(`/ask/generate-from-pdf`, {
   //       method: 'POST',
   //       body: formData,
   //       headers: {
   //         Authorization: `Bearer ${accessToken}`,
   //       },
   //     });
-
 
   //     const data = await response.json();
   //     setQuestions(data.questions || []);
@@ -311,7 +293,6 @@ const QuizManager = () => {
 
   return (
     <div className="font-sans min-h-screen mt-10 bg-gradient-to-br from-slate-100 to-slate-200 py-12 px-4">
-
       <h1 className="text-4xl font-bold text-center text-slate-800 mb-10">
         Quiz Manager
       </h1>
@@ -334,20 +315,25 @@ const QuizManager = () => {
         focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             >
               <option value="">Choose a subject</option>
-              {loading ? <p>please wait ...</p> : subjects.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
+              {loading ? (
+                <p>please wait ...</p>
+              ) : (
+                subjects.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))
+              )}
             </select>
 
-            {selectedSubject && <button
-              onClick={handleDeleteSubject}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
-            >
-              Delete
-            </button>}
-
+            {selectedSubject && (
+              <button
+                onClick={handleDeleteSubject}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 rounded-xl transition"
+              >
+                Delete
+              </button>
+            )}
           </div>
         </div>
       </>
@@ -408,12 +394,16 @@ const QuizManager = () => {
       </button> */}
 
       <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6 mb-10">
-        {!loading && <h2 className="text-xl font-semibold text-slate-700 mb-6">
-          Questions
-        </h2>}
+        {!loading && (
+          <h2 className="text-xl font-semibold text-slate-700 mb-6">
+            Questions
+          </h2>
+        )}
 
         {loading ? (
-          <div className="flex justify-center items-center"><CircularProgress size={60} thickness={4} color="primary" /></div>
+          <div className="flex justify-center items-center">
+            <CircularProgress size={60} thickness={4} color="primary" />
+          </div>
         ) : questions.length === 0 ? (
           <p className="text-slate-500">No questions found.</p>
         ) : (
@@ -467,64 +457,64 @@ const QuizManager = () => {
         )}
       </div>
 
-      {!loading && <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6">
-        <h2 className="text-xl font-semibold text-slate-700 mb-6">
-          {editingId ? "Edit Question" : "Add New Question"}
-        </h2>
+      {!loading && (
+        <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-lg p-6">
+          <h2 className="text-xl font-semibold text-slate-700 mb-6">
+            {editingId ? "Edit Question" : "Add New Question"}
+          </h2>
 
-        <form onSubmit={submitQuestion} className="grid gap-4">
-          {[
-            "question",
-            "option1",
-            "option2",
-            "option3",
-            "option4",
-            "correctresponse",
-            "time",
-            "subject",
-          ].map((field) => (
-            <input
-              key={field}
-              id={field}
-              type={field === "time" ? "number" : "text"}
-              placeholder={
-                field === "time"
-                  ? "Time (seconds)"
-                  : field.charAt(0).toUpperCase() + field.slice(1)
-              }
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              className="w-full rounded-xl border border-slate-300 px-4 py-3
+          <form onSubmit={submitQuestion} className="grid gap-4">
+            {[
+              "question",
+              "option1",
+              "option2",
+              "option3",
+              "option4",
+              "correctresponse",
+              "time",
+              "subject",
+            ].map((field) => (
+              <input
+                key={field}
+                id={field}
+                type={field === "time" ? "number" : "text"}
+                placeholder={
+                  field === "time"
+                    ? "Time (seconds)"
+                    : field.charAt(0).toUpperCase() + field.slice(1)
+                }
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                className="w-full rounded-xl border border-slate-300 px-4 py-3
           focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
-          ))}
+              />
+            ))}
 
-          <div className="flex gap-3 mt-4">
-            <button
-              type="submit"
-              className="px-6 py-3 rounded-xl font-semibold text-white
-          bg-blue-600 hover:bg-blue-700 transition"
-            >
-              {editingId ? "Update Question" : "Add Question"}
-            </button>
-
-            {editingId && (
+            <div className="flex gap-3 mt-4">
               <button
-                type="button"
-                onClick={resetForm}
+                type="submit"
                 className="px-6 py-3 rounded-xl font-semibold text-white
-            bg-slate-500 hover:bg-slate-600 transition"
+          bg-blue-600 hover:bg-blue-700 transition"
               >
-                Cancel
+                {editingId ? "Update Question" : "Add Question"}
               </button>
-            )}
-          </div>
-        </form>
-      </div>}
+
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="px-6 py-3 rounded-xl font-semibold text-white
+            bg-slate-500 hover:bg-slate-600 transition"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
+      )}
     </div>
-
-
   );
 };
 

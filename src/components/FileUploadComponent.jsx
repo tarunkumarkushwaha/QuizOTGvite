@@ -17,7 +17,8 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         setCustomQuestions,
         setTestQuestion,
         backendURL,
-        accessToken
+        accessToken,
+        authFetch
     } = useContext(Context);
 
     const schema = [
@@ -149,11 +150,10 @@ export default function FileUploadComponent({ setmaxquestionLength, randomShuffl
         if (!subject) return toast.warn("Please enter or select a subject");
 
         try {
-            const res = await fetch(`${backendURL}/quiz/bulk/${subject}`, {
+            const res = await authFetch(`/quiz/bulk/${subject}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
                 },
                 credentials: "include",
                 body: JSON.stringify({ questions: questionsArray }),

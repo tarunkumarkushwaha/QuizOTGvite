@@ -3,8 +3,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import EmojiModal from "./discussion/EmojiModal";
 import { toast } from "react-toastify";
 
-const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
-
 const ShowNewsEditModal = (props) => {
   const {
     onCancelClick,
@@ -19,9 +17,19 @@ const ShowNewsEditModal = (props) => {
   const [inputNews, setinputNews] = useState(item.content || item.post || "");
   const [file, setFile] = useState(item.image ? [item.image] : []);
 
-  const token = localStorage.getItem("accessToken");
+    const {
+      dark,
+      themeChange,
+      userName,
+      backendURL,
+      setAccessToken,
+      setuserName,
+      accessToken,
+      authFetch
+    } = useContext(Context);
 
-  // ✅ Handle image upload preview
+  const token = accessToken
+
   function handleChange(e) {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
@@ -29,7 +37,6 @@ const ShowNewsEditModal = (props) => {
     setFile([fileURL]);
   }
 
-  // ✅ Update Post using backend
   const EditPost = async () => {
     if (!inputNews.trim()) return toast.warning("Post content cannot be empty");
 
@@ -44,7 +51,7 @@ const ShowNewsEditModal = (props) => {
         formData.append("image", blob, "upload.jpg");
       }
 
-      const res = await fetch(`${backendURL}/discussions/${item._id}`, {
+      const res = await authFetch(`/discussions/${item._id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -12,6 +12,7 @@ const PostPage = () => {
   const { darkmode, backendURL, accessToken, testSub, settestSub } =
     useContext(Context);
   const [localFilter, setLocalFilter] = useState(testSub || "all");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const fetchPosts = useCallback(async () => {
     if (!accessToken) return;
@@ -36,6 +37,13 @@ const PostPage = () => {
     fetchPosts();
   }, [fetchPosts]);
 
+  const handleManualRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchPosts();
+    setIsRefreshing(false);
+    toast.info("Feed updated");
+  };
+
   const filteredPosts = postitems.filter((item) =>
     localFilter === "all" ? true : item.subjectName === localFilter,
   );
@@ -51,10 +59,36 @@ const PostPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          padding: "40px 10px",
           transition: "background 0.3s ease",
         }}
       >
+        <button
+          onClick={handleManualRefresh}
+          disabled={loading || isRefreshing}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all
+      ${
+        darkmode
+          ? "bg-slate-800 text-slate-300 hover:bg-slate-700"
+          : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+      }
+      ${loading || isRefreshing ? "opacity-50 cursor-not-allowed" : ""}
+    `}
+        >
+          <svg
+            className={`w-4 h-4 ${loading || isRefreshing ? "animate-spin" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
+          </svg>
+          {isRefreshing ? "Checking..." : "Refresh"}
+        </button>
         <div
           style={{
             width: "100%",

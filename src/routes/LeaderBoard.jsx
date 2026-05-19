@@ -13,21 +13,17 @@ const Leaderboard = () => {
     const [subject, setSubject] = useState('');
     const [subjects, setSubjects] = useState(["javascript"]);
     const [loading, setLoading] = useState(true);
-    const { backendURL, accessToken } = useContext(Context);
+    const { backendURL, accessToken, authFetch } = useContext(Context);
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
             setLoading(true);
             try {
                 const endpoint = subject
-                    ? `${backendURL}/leaderboard/subject/${subject}`
-                    : `${backendURL}/leaderboard/${filter}`;
+                    ? `/leaderboard/subject/${subject}`
+                    : `/leaderboard/${filter}`;
 
-                const response = await fetch(endpoint, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                });
+                const response = await authFetch(endpoint);
                 const result = await response.json();
                 setData(result || []);
                 let filteredSubjects = result.map((item, i) => item.subject)

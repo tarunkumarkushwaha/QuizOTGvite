@@ -4,11 +4,11 @@ import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 
 const EditPostModal = ({ open, onClose, postData, setPosts }) => {
-  const { darkmode, backendURL, accessToken } = useContext(Context);
+  const { darkmode, backendURL, accessToken,authFetch } = useContext(Context);
 
   let dark = darkmode;
   const [inputPost, setInputPost] = useState(postData.content);
-  const API_URL = `${backendURL}/discussions`;
+  const API_URL = `/discussions`;
 
   const updatePost = async () => {
     if (inputPost.trim() === "") {
@@ -19,11 +19,10 @@ const EditPostModal = ({ open, onClose, postData, setPosts }) => {
     const token = accessToken;
 
     try {
-      const response = await fetch(`${API_URL}/${postData._id}`, {
+      const response = await authFetch(`${API_URL}/${postData._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify({ content: inputPost }),
       });

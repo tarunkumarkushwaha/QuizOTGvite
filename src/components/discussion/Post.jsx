@@ -37,9 +37,9 @@ const Post = ({ item, setPosts }) => {
   const [commentBox, setCommentBox] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [animateBtn, setAnimateBtn] = useState(null);
-  const { darkmode, backendURL, accessToken } = useContext(Context);
+  const { darkmode, backendURL, accessToken, authFetch } = useContext(Context);
 
-//   console.log(item, "here");
+  //   console.log(item, "here");
   const liked = item.userLiked;
   const disliked = item.userDisliked;
 
@@ -50,19 +50,18 @@ const Post = ({ item, setPosts }) => {
       method,
       headers: {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
       },
     };
     if (body) options.body = JSON.stringify(body);
     return options;
   };
 
-  const API_URL = `${backendURL}/discussions`;
+  const API_URL = `/discussions`;
 
   const toggleLike = async () => {
     setAnimateBtn("like");
     try {
-      const response = await fetch(
+      const response = await authFetch(
         `${API_URL}/${item._id}/like`,
         getOptions("POST", {}),
       );
@@ -90,7 +89,7 @@ const Post = ({ item, setPosts }) => {
   const toggleDislike = async () => {
     setAnimateBtn("dislike");
     try {
-      const response = await fetch(
+      const response = await authFetch(
         `${API_URL}/${item._id}/dislike`,
         getOptions("POST", {}),
       );
@@ -119,7 +118,7 @@ const Post = ({ item, setPosts }) => {
     if (!comment.trim()) return;
 
     try {
-      const response = await fetch(
+      const response = await authFetch(
         `${API_URL}/${item._id}/comment`,
         getOptions("POST", { text: comment }),
       );
@@ -141,13 +140,13 @@ const Post = ({ item, setPosts }) => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const response = await fetch(
+        const response = await authFetch(
           `${API_URL}/${item._id}`,
           getOptions("DELETE"),
         );
         if (response.ok) {
           setPosts((prev) => prev.filter((p) => p._id !== item._id));
-          toast.success("Post deleted successfully"); 
+          toast.success("Post deleted successfully");
         } else {
           const data = await response.json();
           alert("Failed: " + data.message);

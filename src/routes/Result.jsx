@@ -7,7 +7,7 @@ import { Score } from "@mui/icons-material";
 
 
 const Result = () => {
-  const { TestQuestion, responses, dark, accessToken, pastresult, setpastresult, testSub, min, timeLeft, backendURL, userName } = useContext(Context);
+  const { TestQuestion, responses, dark, accessToken, pastresult, setpastresult, testSub, min, timeLeft, backendURL, userName ,authFetch} = useContext(Context);
   const [explanations, setExplanations] = useState({});
   const [allresults, setallresults] = useState([])
   const [loadingExplain, setLoadingExplain] = useState(null);
@@ -21,11 +21,7 @@ const Result = () => {
       try {
         // setLoading(true);
         // console.log("im o")
-        const res = await fetch(`${backendURL}/results/result`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const res = await authFetch(`${backendURL}/results/result`);
         const data = await res.json();
         setallresults(data || [])
         // console.log(data);
@@ -40,6 +36,7 @@ const Result = () => {
 
 
   useEffect(() => {
+    console.log(hasPosted,"result")
     if (hasPosted.current) return;
     hasPosted.current = true;
 
@@ -90,11 +87,10 @@ const Result = () => {
         correctAnswers,
       };
 
-      const res = await fetch(`${backendURL}/results`, {
+      const res = await authFetch(`/results`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(data),
       });
@@ -118,7 +114,7 @@ const Result = () => {
     try {
       setLoadingExplain(index);
 
-      const url = `${backendURL}/ask/explain?question=${encodeURIComponent(
+      const url = `/ask/explain?question=${encodeURIComponent(
         item.question.question
       )}&correct=${encodeURIComponent(
         item.question.correctresponse
@@ -126,11 +122,7 @@ const Result = () => {
         item.yourAnswer || "Not Attempted"
       )}`;
 
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await authFetch(url);
 
       if (!res.ok) {
         throw new Error("Explain API failed");

@@ -8,7 +8,8 @@ export default function AddPost({ setPosts }) {
   const [inputPost, setinputPost] = useState("");
   const [file, setFile] = useState([]); // for image previews
 
-  const { darkmode, backendURL, accessToken, testSub } = useContext(Context);
+  const { darkmode, backendURL, accessToken, testSub, authFetch } =
+    useContext(Context);
   const dark = darkmode;
 
   const addNewPost = async () => {
@@ -17,15 +18,14 @@ export default function AddPost({ setPosts }) {
       return;
     }
 
-    const API_URL = `${backendURL}/discussions`;
+    const API_URL = `/discussions`;
     const token = accessToken;
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await authFetch(API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify({ content: inputPost, subject: testSub }),
       });
