@@ -23,7 +23,6 @@ const Navbar = () => {
     setmenu(!menu);
   };
 
-  // console.log("rerendering")
 
   const handleLogout = async () => {
     try {
@@ -34,6 +33,7 @@ const Navbar = () => {
       if (!res.ok) return toast.error(await res.text());
       toast.success(`user ${userName} has successfully signed out`);
       setAccessToken(null);
+      localStorage.setItem("accessToken", "");
       setuserName("");
       navigate("/login");
     } catch {

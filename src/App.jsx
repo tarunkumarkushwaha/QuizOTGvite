@@ -23,8 +23,12 @@ import ScrollToTop from "./components/ScrollToTop";
 import Leaderboard from "./routes/LeaderBoard";
 import Interview from "./routes/Interview";
 
+let sharedRefreshPromise = null;
+
 function App() {
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(() => {
+    return localStorage.getItem("accessToken") || null;
+  });
   const [testSub, settestSub] = useState("javascript");
   const [min, setmin] = useState(10);
   const [timeLeft, setTimeLeft] = useState(10);
@@ -38,113 +42,126 @@ function App() {
   const [start, setstart] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const accessTokenRef = useRef(null);
-
-  const backendURL = "http://localhost:3000";
-  // const backendURL = "https://quiztimequestionapi.onrender.com"
+  const accessTokenRef = useRef(accessToken);
+  const backendURL = "https://quiztimequestionapi.onrender.com";
 
   useEffect(() => {
     accessTokenRef.current = accessToken;
   }, [accessToken]);
 
   useEffect(() => {
-    const refresh = async () => {
+    if (!accessToken) {
+      setLoading(false);
+      return;
+    }
+
+    const silentRefresh = async () => {
       try {
-        // setLoading(true)
         const res = await fetch(`${backendURL}/refresh`, {
           method: "POST",
           credentials: "include",
         });
 
         if (!res.ok) {
-          setLoading(false);
-          if (accessToken) {
+          if (res.status === 401 || res.status === 403) {
+            handleLogout();
             toast.warn("Session expired. Please login again.");
           }
           return;
         }
 
         const data = await res.json();
-
         if (data?.accessToken) {
-          setAccessToken(data.accessToken);
-        } else {
-          console.log("No refresh token, user not logged in");
+          updateAuth(data.accessToken);
         }
       } catch (err) {
-        console.log("Error refreshing token:", err);
+        console.error(
+          "Background refresh error (network down or server asleep):",
+          err,
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    refresh();
-  }, []);
+    silentRefresh();
 
-  // wrapper fetch that handles auto refresh
+    const interval = setInterval(silentRefresh, 14 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [accessToken]);
+
+  const updateAuth = (newToken) => {
+    accessTokenRef.current = newToken;
+    setAccessToken(newToken);
+    localStorage.setItem("accessToken", newToken);
+  };
+
+  const handleLogout = () => {
+    accessTokenRef.current = null;
+    setAccessToken(null);
+    localStorage.removeItem("accessToken");
+    window.location.href = "/login";
+  };
+
   const authFetch = async (url, options = {}) => {
     let token = accessTokenRef.current;
 
-    let res = await fetch(backendURL + url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: token ? `Bearer ${token}` : "",
-      },
-      credentials: "include",
-    });
-
-    if (res.status === 401) {
-      const refreshRes = await fetch(`${backendURL}/refresh`, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!refreshRes.ok) {
-        setAccessToken(null);
-        return res;
-      }
-
-      const data = await refreshRes.json();
-
-      if (!data?.accessToken) {
-        setAccessToken(null);
-        return res;
-      }
-
-      setAccessToken(data.accessToken);
-
-      accessTokenRef.current = data.accessToken;
-
-      res = await fetch(backendURL + url, {
+    const makeRequest = async (currentToken) => {
+      return fetch(backendURL + url, {
         ...options,
         headers: {
           ...options.headers,
-          Authorization: `Bearer ${data.accessToken}`,
+          Authorization: currentToken ? `Bearer ${currentToken}` : "",
         },
         credentials: "include",
       });
+    };
+
+    let res = await makeRequest(token);
+
+    if (res.status !== 401) {
+      return res;
     }
 
-    return res;
+    try {
+      if (!sharedRefreshPromise) {
+        sharedRefreshPromise = fetch(`${backendURL}/refresh`, {
+          method: "POST",
+          credentials: "include",
+        })
+          .then(async (r) => {
+            if (!r.ok) throw new Error(`Refresh HTTP Error: ${r.status}`);
+            const data = await r.json();
+            if (!data?.accessToken) throw new Error("No token returned");
+            return data.accessToken;
+          })
+          .finally(() => {
+            sharedRefreshPromise = null;
+          });
+      }
+
+      const newToken = await sharedRefreshPromise;
+      updateAuth(newToken);
+
+      return await makeRequest(newToken);
+    } catch (err) {
+      console.error("Intercepted Auth refresh failed completely:", err);
+      handleLogout();
+      return res;
+    }
   };
 
   const themeChange = () => {
-    dark
-      ? localStorage.setItem("Theme", JSON.stringify(false))
-      : localStorage.setItem("Theme", JSON.stringify(true));
-    setdark((prevtheme) => !prevtheme);
+    const nextDark = !dark;
+    localStorage.setItem("Theme", JSON.stringify(nextDark));
+    setdark(nextDark);
   };
 
   useEffect(() => {
     const THEME = localStorage.getItem("Theme");
     const PERCENT = localStorage.getItem("result");
-    if (THEME) {
-      setdark(JSON.parse(THEME));
-    }
-    if (PERCENT) {
-      setpastresult(JSON.parse(PERCENT));
-    }
+    if (THEME) setdark(JSON.parse(THEME));
+    if (PERCENT) setpastresult(JSON.parse(PERCENT));
   }, []);
 
   return (
@@ -179,6 +196,7 @@ function App() {
           setTimeLeft,
           InterviewQuestions,
           setInterviewQuestions,
+          handleLogout,
         }}
       >
         <BrowserRouter>
