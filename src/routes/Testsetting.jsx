@@ -27,6 +27,7 @@ const Testsetting = () => {
     accessToken,
     min,
     setresponses,
+    authFetch,
     authauthFetch
   } = useContext(Context);
   const [file, setFile] = useState(null);
