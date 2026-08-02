@@ -28,7 +28,7 @@ const Testsetting = () => {
     min,
     setresponses,
     authFetch,
-    authauthFetch
+    authauthFetch,
   } = useContext(Context);
   const [file, setFile] = useState(null);
   const [questionLength, setquestionLength] = useState(10);
@@ -294,22 +294,20 @@ const Testsetting = () => {
                       </label>
 
                       <select
-                        value={testSub}
+                        value={
+                          ["generate question", "Your Questions"].includes(
+                            testSub,
+                          )
+                            ? ""
+                            : testSub
+                        }
                         onChange={(e) => settestSub(e.target.value)}
-                        className="w-full rounded-xl px-4 py-3
-      bg-slate-200 text-slate-900
-      border border-slate-300
-      focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full rounded-xl px-4 py-3 bg-slate-200 text-slate-900 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       >
                         <option disabled value="">
-                          Select subject
+                          Select Subject
                         </option>
-                        <option value="generate question">
-                          Generate Question (AI)
-                        </option>
-                        <option value="Your Questions">
-                          Your Custom Questions
-                        </option>
+
                         <option value="html">HTML</option>
                         <option value="css">CSS</option>
                         <option value="javascript">JavaScript</option>
@@ -509,6 +507,32 @@ const Testsetting = () => {
                     </button>
                   </div>
                 )}
+
+                <div className="grid grid-cols-2 mt-5 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => settestSub("generate question")}
+                    className={`w-full text-white my-4 font-semibold rounded-xl px-6 py-3 bg-gradient-to-r shadow-lg shadow-pink-500/30 transition-all duration-300 hover:shadow-pink-500/50 hover:-translate-y-0.5 active:scale-95 ${
+                      testSub === "generate question"
+                        ? "from-pink-500 to-purple-500"
+                        : "from-purple-700 to-pink-700"
+                    }`}
+                  >
+                    Generate Questions (AI)
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => settestSub("Your Questions")}
+                    className={`w-full text-white my-4 font-semibold rounded-xl px-6 py-3 bg-gradient-to-r shadow-lg shadow-pink-500/30 transition-all duration-300 hover:shadow-pink-500/50 hover:-translate-y-0.5 active:scale-95 ${
+                      testSub === "Your Questions"
+                        ? "from-pink-500 to-purple-500"
+                        : "from-purple-700 to-pink-700"
+                    }`}
+                  >
+                    Your Custom Questions
+                  </button>
+                </div>
 
                 <div className="mt-10 flex justify-center gap-4">
                   <button

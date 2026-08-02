@@ -1,15 +1,23 @@
-import { Link, useNavigate } from "react-router-dom"
-import { useEffect, useState } from "react"
-import { useContext } from 'react';
-import { Context } from '../MyContext';
-import { toast } from "react-toastify"
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { Context } from "../MyContext";
+import { toast } from "react-toastify";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 
 const Login = () => {
-  const [password, setpassword] = useState("")
-  const { userName, setuserName, backendURL, setAccessToken, loading, setLoading, accessToken } = useContext(Context);
+  const [password, setpassword] = useState("");
+  const {
+    userName,
+    setuserName,
+    backendURL,
+    setAccessToken,
+    loading,
+    setLoading,
+    accessToken,
+  } = useContext(Context);
 
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const handleSignin = async () => {
     if (!userName || !password) {
@@ -24,7 +32,15 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: userName,
-          password: password.trim()
+          password: password.trim(),
+          // extrainfo 
+          page: window.location.pathname,
+          screen: `${window.screen.width}x${window.screen.height}`,
+          language: navigator.language,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent,
+          // infoend 
         }),
         credentials: "include",
       });
@@ -40,7 +56,6 @@ const Login = () => {
 
       toast.success(`User ${userName} signed in successfully`);
       navigate("/testsetting");
-
     } catch (err) {
       toast.error("Server error");
     } finally {
@@ -50,19 +65,16 @@ const Login = () => {
 
   // console.log(accessToken)
 
-
   return (
     <>
       <div className="mainbg bg-no-repeat bg-left min-h-screen">
         <div className="min-h-screen bg-gradient-to-br from-slate-950/80 via-slate-900/70 to-slate-950/80 flex items-center justify-center px-4">
-
           <section className="smooth-entry w-full max-w-md">
-
-            <div className="rounded-2xl bg-white/10 backdrop-blur-xl 
-          border border-white/10 shadow-2xl shadow-black/40">
-
+            <div
+              className="rounded-2xl bg-white/10 backdrop-blur-xl 
+          border border-white/10 shadow-2xl shadow-black/40"
+            >
               <div className="p-8 space-y-6">
-
                 <div className="text-center">
                   <h1 className="text-2xl md:text-3xl font-extrabold text-white">
                     Welcome Back <EmojiEmotionsIcon />
@@ -72,9 +84,7 @@ const Login = () => {
                   </p>
                 </div>
 
-
                 <div className="space-y-5">
-
                   <div>
                     <label
                       htmlFor="email"
@@ -142,17 +152,14 @@ const Login = () => {
                       Sign up
                     </Link>
                   </p>
-
                 </div>
               </div>
             </div>
-
           </section>
         </div>
       </div>
     </>
+  );
+};
 
-  )
-}
-
-export default Login
+export default Login;
