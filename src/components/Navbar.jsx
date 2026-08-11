@@ -4,6 +4,7 @@ import logo from "/assets/logo.png";
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../MyContext";
 import { toast } from "react-toastify";
+import ProfileDropdown from "./ProfileDropDown";
 
 const Navbar = () => {
   const [menu, setmenu] = useState(false);
@@ -15,6 +16,7 @@ const Navbar = () => {
     setAccessToken,
     setuserName,
     accessToken,
+    user,
   } = useContext(Context);
   let navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +24,6 @@ const Navbar = () => {
   const changemenu = () => {
     setmenu(!menu);
   };
-
 
   const handleLogout = async () => {
     try {
@@ -137,13 +138,19 @@ const Navbar = () => {
               </div>
               <div className="my-5 mr-0 md:mr-10">
                 {accessToken ? (
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                  >
-                    log out
-                  </button>
+                  // <button
+                  //   type="button"
+                  //   onClick={handleLogout}
+                  //   className="h-10 text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  // >
+                  //   log out
+                  // </button>
+                  <ProfileDropdown
+                    user={user}
+                    dark={dark}
+                    themeChange={themeChange}
+                    onLogout={handleLogout}
+                  />
                 ) : (
                   <button
                     type="button"
@@ -156,7 +163,7 @@ const Navbar = () => {
               </div>
             </div>
           )}
-          <button
+          {/* <button
             className={`${style.btnMode} absolute right-2 top-5 h-10 text-white bg-gradient-to-br hover:bg-gradient-to-bl font-medium rounded-lg text-sm px-2 text-center`}
             onClick={themeChange}
           >
@@ -190,7 +197,7 @@ const Navbar = () => {
                 <path d="M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36c-0.98,1.37-2.58,2.26-4.4,2.26 c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z" />
               </svg>
             )}
-          </button>
+          </button> */}
         </nav>
       </header>
     </>

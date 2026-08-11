@@ -22,10 +22,14 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
 import Leaderboard from "./routes/LeaderBoard";
 import Interview from "./routes/Interview";
+import ProfileApiTester from "./routes/ProfileApiTester";
+import Profile from "./routes/Profile";
+import ProfileUpdate from "./routes/ProfileUpdate";
 
 let sharedRefreshPromise = null;
 
 function App() {
+  const [user, setuser] = useState(null);
   const [accessToken, setAccessToken] = useState(() => {
     return localStorage.getItem("accessToken") || null;
   });
@@ -165,10 +169,41 @@ function App() {
     if (PERCENT) setpastresult(JSON.parse(PERCENT));
   }, []);
 
+useEffect(() => {
+  // no token get out you idiot 
+  if (!accessToken) return;
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(`${backendURL}/profile`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch profile: ${res.statusText}`);
+      }
+
+      const data = await res.json();
+      setuser(data);
+    } catch (error) {
+      console.error("Profile fetch error:", error);
+      setuser(null); 
+    }
+  };
+
+  fetchProfile();
+}, [accessToken, backendURL]);
+
   return (
     <>
       <Context.Provider
         value={{
+          user,
           accessToken,
           authFetch,
           setAccessToken,
@@ -280,6 +315,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Discussions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile-api-test"
+              element={
+                <ProtectedRoute>
+                  <ProfileApiTester />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profileupdate"
+              element={
+                <ProtectedRoute>
+                  <ProfileUpdate/>
                 </ProtectedRoute>
               }
             />
